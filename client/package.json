@@ -10,6 +10,7 @@
     "node-sass": "^4.0.0",
     "react": "16.11.0",
     "react-bootstrap": "^1.6.1",
+    "react-bootstrap-icons": "^1.5.0",
     "react-dom": "16.11.0",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
