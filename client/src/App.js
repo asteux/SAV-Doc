@@ -6,6 +6,7 @@ import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
 
 import "./App.css";
+import Home from "./pages/home/Home";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -40,7 +41,7 @@ const App = () => {
 
   return (
     <Switch>
-      <Route exact path="/" render={() => (<div>Home</div>)} />
+      <Route exact path="/" component={Home} />
       <Route>
         <Redirect to="/" />
       </Route>
