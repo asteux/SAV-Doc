@@ -7,6 +7,7 @@ import { loadThemeMode } from './common/theme/themeSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
+import Documents from "./pages/documents/Documents";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const App = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
+      <Route exact path="/documents" component={Documents} />
       <Route>
         <Redirect to="/" />
       </Route>
