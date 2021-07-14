@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
+import { loadThemeMode } from './common/theme/themeSlice';
 
 import "./App.css";
 
@@ -14,6 +15,7 @@ const App = () => {
   useEffect(() => {
     // Load Web3
     dispatch(loadWeb3());
+    dispatch(loadThemeMode());
   }, [dispatch]);
 
   useEffect(() => {
