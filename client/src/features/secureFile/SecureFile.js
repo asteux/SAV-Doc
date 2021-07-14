@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 import UploadFileForm from './uploadFileForm/UploadFileForm';
+import PasswordForm from './passwordForm/PasswordForm';
 
 const SecureFile = () => {
   const originalFile = useSelector((state) => state.secureFile.originalFile);
@@ -15,7 +16,10 @@ const SecureFile = () => {
     );
   } else if (null === originalPasswordFile) {
     return (
-      <>TODO: Show form to set password</>
+      <>
+        {/* TODO: show file */}
+        <PasswordForm />
+      </>
     );
   } else {
     return (
