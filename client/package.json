@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
+    "bootstrap": "^4.6.0",
     "connected-react-router": "^6.9.1",
     "history": "^4.0.0",
+    "node-sass": "^4.0.0",
     "react": "16.11.0",
+    "react-bootstrap": "^1.6.1",
     "react-dom": "16.11.0",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
