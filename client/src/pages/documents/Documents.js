@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Container, Nav, Navbar } from "react-bootstrap";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
+import SecureFile from "../../features/secureFile/SecureFile";
 
 const Documents = () => {
   const themeMode = useSelector((state) => state.theme.mode);
@@ -28,6 +29,7 @@ const Documents = () => {
 
       <main className="py-3">
         <Container>
+          <SecureFile />
         </Container>
       </main>
     </>
