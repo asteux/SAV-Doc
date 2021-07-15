@@ -10,14 +10,16 @@ export const decryptWithPassword = (encryptedData, password) => {
   return AES.decrypt(encryptedData, password);
 };
 
-export const encryptWithPublicKey = async (data, account) => {
-  const encryptionPublicKey = await window.ethereum
+export const getEncryptionPublicKey = async (account) => {
+  return await window.ethereum
     .request({
       method: 'eth_getEncryptionPublicKey',
       params: [account],
     })
   ;
+};
 
+export const encryptWithPublicKey = async (data, encryptionPublicKey) => {
   return bufferToHex(
     Buffer.from(
       JSON.stringify(

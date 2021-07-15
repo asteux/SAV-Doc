@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { Step, StepLabel, Stepper } from '@material-ui/core';
 
 import UploadFileForm from './uploadFileForm/UploadFileForm';
 import PasswordForm from './passwordForm/PasswordForm';
-import { encryptFile, encryptPassword, nextStep, previousStep, reset } from './secureFileSlice';
+import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, setOriginalIpfsCid } from './secureFileSlice';
+import { storeBlob } from '../../utils/ipfs';
 
 const SecureFile = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const SecureFile = () => {
   const originalPasswordFile = useSelector((state) => state.secureFile.originalPasswordFile);
   const encryptedFile = useSelector((state) => state.secureFile.encryptedFile);
   const encryptedPasswordFile = useSelector((state) => state.secureFile.encryptedPasswordFile);
+  const encryptedIpfsCid = useSelector((state) => state.secureFile.encryptedIpfsCid);
 
   useEffect(() => {
     if (null !== originalFile) {
@@ -30,13 +32,28 @@ const SecureFile = () => {
   }, [dispatch, originalPasswordFile]);
 
   useEffect(() => {
+    if (null !== encryptedFile) {
+      dispatch(nextStep());
+
+      (async () => {
+        const cid = await storeBlob(encryptedFile);
+
+        dispatch(setOriginalIpfsCid(cid));
+        dispatch(encryptIpfsCidAndPassword(cid, originalPasswordFile, accounts[0]));
+      })();
+    }
+  }, [dispatch, encryptedFile, originalPasswordFile, accounts]);
+
+  useEffect(() => {
     if (
-      null !== encryptedFile
+      null !== encryptedIpfsCid
       && null !== encryptedPasswordFile
     ) {
       dispatch(nextStep());
+
+      // TODO: mint NFT
     }
-  }, [dispatch, encryptedFile, encryptedPasswordFile]);
+  }, [dispatch, encryptedIpfsCid, encryptedPasswordFile, accounts]);
 
   const handleBack = () => {
     dispatch(previousStep());
@@ -48,7 +65,6 @@ const SecureFile = () => {
 
   const handleEncrypt = () => {
     dispatch(encryptFile(originalFile, originalPasswordFile));
-    dispatch(encryptPassword(originalPasswordFile, accounts[0]));
   };
 
   const steps = [
@@ -71,20 +87,18 @@ const SecureFile = () => {
     ),
     (
       <>
-        <p className="lead text-center">En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer le document.</p>
+        <p className="lead text-center">En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</p>
         {/* TODO: show file */}
       </>
     ),
     (
       <>
-        {/* TODO: show file */}
-        {/* TODO: Upload du document */}
+        <p className="lead text-center">Votre document a été chiffré. Il est en cours d'upload</p>
       </>
     ),
     (
       <>
-        {/* TODO: show file */}
-        {/* TODO: Enregistrement dans la blockchain */}
+        <p className="lead text-center">Votre document a été uploadé. Il ne reste que l'enregistrement dans la blockchain</p>
       </>
     ),
     (
@@ -126,24 +140,31 @@ const SecureFile = () => {
         {stepsContent[activeStep]}
       </div>
 
-      {0 !== activeStep && steps.length - 2 > activeStep
-        ? (
-          <footer>
-              <div className="d-flex justify-content-between">
-                <Button variant="outline-primary" disabled={activeStep === 0} onClick={handleBack}>Back</Button>
-                {1 === activeStep
-                  ? <Button variant="primary" type="submit" form="secure-file-password-form">Utiliser ce mot de passe</Button>
-                  : <></>
-                }
-                {2 === activeStep
-                  ? <Button onClick={handleEncrypt}>Sécuriser ce document</Button>
-                  : <></>
-                }
-              </div>
-          </footer>
-        )
-        : <></>
-      }
+      <footer>
+        <Container>
+          <Row>
+            <Col className="p-0">
+              {0 !== activeStep && steps.length - 2 > activeStep
+                ? (
+                  <Button variant="outline-primary" disabled={activeStep === 0} onClick={handleBack}>Back</Button>
+                )
+                : <></>
+              }
+            </Col>
+
+            <Col className="p-0 text-right">
+              {1 === activeStep
+                ? <Button variant="primary" type="submit" form="secure-file-password-form">Utiliser ce mot de passe</Button>
+                : <></>
+              }
+              {2 === activeStep
+                ? <Button onClick={handleEncrypt}>Sécuriser ce document</Button>
+                : <></>
+              }
+            </Col>
+          </Row>
+        </Container>
+      </footer>
     </section>
   );
 };
