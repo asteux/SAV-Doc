@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Form } from 'react-bootstrap';
 
 import { setOriginalPasswordFile } from '../secureFileSlice';
@@ -7,6 +7,7 @@ import { setOriginalPasswordFile } from '../secureFileSlice';
 const PasswordForm = () => {
   const dispatch = useDispatch();
 
+  const themeContrast = useSelector((state) => state.theme.contrast);
   const [errors, setErrors] = useState(null);
 
   const validate = (formData) => {
@@ -51,7 +52,7 @@ const PasswordForm = () => {
   return (
     <Form id="secure-file-password-form" onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
-        <Form.Label>Mot de passe</Form.Label>
+        <Form.Label className={ `lead text-center text-${themeContrast}`}>Mot de passe</Form.Label>
         <Form.Control type="password" name="password" />
         {
           (errors && errors.password)
@@ -61,7 +62,7 @@ const PasswordForm = () => {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Confirmation du mot de passe</Form.Label>
+        <Form.Label className={ `lead text-center text-${themeContrast}`}>Confirmation du mot de passe</Form.Label>
         <Form.Control type="password" name="confirm_password" />
         {
           (errors && errors.confirm_password)

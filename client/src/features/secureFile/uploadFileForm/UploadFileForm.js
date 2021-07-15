@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDropzone } from 'react-dropzone';
 
 import { setOriginalFile } from '../secureFileSlice';
@@ -20,6 +20,11 @@ const baseDropzoneStyle = {
   transition: 'border .24s ease-in-out'
 };
 
+const baseDropzoneStyleDark = {
+  backgroundColor: 'var(--gray-dark)',
+  color: '#bdbdbd',
+};
+
 const activeDropzoneStyle = {
   borderColor: '#2196f3'
 };
@@ -35,6 +40,7 @@ const rejectDropzoneStyle = {
 const UploadFileForm = () => {
   const dispatch = useDispatch();
 
+  const themeMode = useSelector((state) => state.theme.mode);
   const [error, setError] = useState(null);
 
   const dropzoneOptions = {
@@ -64,8 +70,10 @@ const UploadFileForm = () => {
     ...baseDropzoneStyle,
     ...(isDragActive ? activeDropzoneStyle : {}),
     ...(isDragAccept ? acceptDropzoneStyle : {}),
-    ...(isDragReject ? rejectDropzoneStyle : {})
+    ...(isDragReject ? rejectDropzoneStyle : {}),
+    ...('dark' === themeMode ? baseDropzoneStyleDark : {}),
   }), [
+    themeMode,
     isDragActive,
     isDragReject,
     isDragAccept

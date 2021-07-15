@@ -11,6 +11,9 @@ import { storeBlob } from '../../utils/ipfs';
 const SecureFile = () => {
   const dispatch = useDispatch();
 
+  const themeMode = useSelector((state) => state.theme.mode);
+  const themeContrast = useSelector((state) => state.theme.contrast);
+
   const accounts = useSelector((state) => state.web3.accounts);
   const activeStep = useSelector((state) => state.secureFile.activeStep);
   const originalFile = useSelector((state) => state.secureFile.originalFile);
@@ -87,24 +90,24 @@ const SecureFile = () => {
     ),
     (
       <>
-        <p className="lead text-center">En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</p>
+        <p className={ `lead text-center text-${themeContrast}`}>En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</p>
         {/* TODO: show file */}
       </>
     ),
     (
       <>
-        <p className="lead text-center">Votre document a été chiffré. Il est en cours d'upload</p>
+        <p className={ `lead text-center text-${themeContrast}`}>Votre document a été chiffré. Il est en cours d'upload</p>
       </>
     ),
     (
       <>
-        <p className="lead text-center">Votre document a été uploadé. Il ne reste que l'enregistrement dans la blockchain</p>
+        <p className={ `lead text-center text-${themeContrast}`}>Votre document a été uploadé. Il ne reste que l'enregistrement dans la blockchain</p>
       </>
     ),
     (
       <div>
         {/* TODO: show file */}
-        <p className="text-center">Le document a été sécurisé</p>
+        <p className={ `lead text-center text-${themeContrast}`}>Le document a été sécurisé</p>
 
         <div>
           <div>
@@ -126,8 +129,8 @@ const SecureFile = () => {
   return (
     <section>
       <header>
-        <h2 className="text-center">Sécuriser un document</h2>
-        <Stepper alternativeLabel activeStep={activeStep}>
+        <h2 className={ `text-center text-${themeContrast}`}>Sécuriser un document</h2>
+        <Stepper alternativeLabel activeStep={activeStep} className={ `bg-${themeMode}` }>
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel>{label}</StepLabel>

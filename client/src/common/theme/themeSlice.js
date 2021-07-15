@@ -21,21 +21,30 @@ const themeSlice = createSlice({
 const themeActions = {
   loadThemeMode: () => {
     return (dispatch) => {
-      const switchMode = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const switchMode = (isDark)
         ? themeSlice.actions.switchToDarkMode
         : themeSlice.actions.switchToLightMode
       ;
+
+      document.body.classList.add((isDark) ? 'bg-dark' : 'bg-light');
 
       return dispatch(switchMode());
     };
   },
   switchToLightMode: () => {
     return (dispatch) => {
+      document.body.classList.remove('bg-dark');
+      document.body.classList.add('bg-light');
+
       return dispatch(themeSlice.actions.switchToLightMode());
     };
   },
   switchToDarkMode: () => {
     return (dispatch) => {
+      document.body.classList.remove('bg-light');
+      document.body.classList.add('bg-dark');
+
       return dispatch(themeSlice.actions.switchToDarkMode());
     };
   },
