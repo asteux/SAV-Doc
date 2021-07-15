@@ -6,12 +6,30 @@ import { readFileAsDataURL } from '../../utils/file';
 const secureFileSlice = createSlice({
   name: 'secureFile',
   initialState: {
+    activeStep: 0,
     originalFile: null,
     encryptedFile: null,
     originalPasswordFile: null,
     encryptedPasswordFile: null,
   },
   reducers: {
+    previousStep: (state) => {
+      state.activeStep--;
+
+      if (3 > state.activeStep) {
+        state.encryptedFile = null;
+        state.encryptedPasswordFile = null;
+        if (2 > state.activeStep) {
+          state.originalPasswordFile = null;
+          if (1 > state.activeStep) {
+            state.originalFile = null;
+          }
+        }
+      }
+    },
+    nextStep: (state) => {
+      state.activeStep++;
+    },
     setOriginalFile: (state, action) => {
       state.originalFile = action.payload;
     },
@@ -28,6 +46,16 @@ const secureFileSlice = createSlice({
 });
 
 const secureFileActions = {
+  previousStep: () => {
+    return (dispatch) => {
+      return dispatch(secureFileSlice.actions.previousStep());
+    };
+  },
+  nextStep: () => {
+    return (dispatch) => {
+      return dispatch(secureFileSlice.actions.nextStep());
+    };
+  },
   setOriginalFile: (file) => {
     return (dispatch) => {
       return dispatch(secureFileSlice.actions.setOriginalFile(file));
@@ -51,13 +79,25 @@ const secureFileActions = {
       dispatch(secureFileSlice.actions.setEncryptedPasswordFile(encryptedPasswordFile));
     };
   },
+  reset: () => {
+    return async (dispatch) => {
+      dispatch(secureFileSlice.actions.setActiveStep(0));
+      dispatch(secureFileSlice.actions.setOriginalFile(null));
+      dispatch(secureFileSlice.actions.setOriginalPasswordFile(null));
+      dispatch(secureFileSlice.actions.setEncryptedFile(null));
+      dispatch(secureFileSlice.actions.setEncryptedPasswordFile(null));
+    };
+  },
 };
 
 export const {
+  previousStep,
+  nextStep,
   setOriginalFile,
   setOriginalPasswordFile,
   encryptFile,
   encryptPassword,
+  reset,
 } = secureFileActions;
 
 export default secureFileSlice.reducer;

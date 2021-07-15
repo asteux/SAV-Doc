@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import { setOriginalPasswordFile } from '../secureFileSlice';
 
@@ -49,7 +49,7 @@ const PasswordForm = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form id="secure-file-password-form" onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Label>Mot de passe</Form.Label>
         <Form.Control type="password" name="password" />
@@ -69,8 +69,6 @@ const PasswordForm = () => {
             : <></>
         }
       </Form.Group>
-
-      <Button variant="primary" type="submit">Utiliser ce mot de passe</Button>
     </Form>
   );
 };
