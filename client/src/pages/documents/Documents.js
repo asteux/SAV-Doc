@@ -1,33 +1,28 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { AppBar, Container, makeStyles, Toolbar, Typography } from "@material-ui/core";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import SecureFile from "../../features/secureFile/SecureFile";
 
+const useStyles = makeStyles((theme) => ({
+  title: {
+    flexGrow: 1,
+  },
+}));
+
 const Documents = () => {
-  const themeMode = useSelector((state) => state.theme.mode);
+  const classes = useStyles();
 
   return (
     <>
-      <Navbar bg={themeMode} variant={themeMode} sticky="top">
-        <Container fluid>
-          <Navbar.Brand href="#home">Sav-Doc</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-            </Nav>
+      <AppBar color="default" position="sticky">
+        <Toolbar>
+          <Typography display="inline" variant="h6" className={classes.title}>SAV-Doc</Typography>
+          <ToggleThemeModeButton />
+        </Toolbar>
+      </AppBar>
 
-            <Nav>
-              <Nav.Item className="ml-2">
-                <ToggleThemeModeButton />
-              </Nav.Item>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
-      <main className="py-3">
+      <main className="py-4">
         <Container>
           <SecureFile />
         </Container>

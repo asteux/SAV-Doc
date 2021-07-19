@@ -8,11 +8,13 @@ import { loadThemeMode } from './common/theme/themeSlice';
 import "./App.css";
 import Home from "./pages/home/Home";
 import Documents from "./pages/documents/Documents";
+import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 const App = () => {
   const dispatch = useDispatch();
 
   const web3 = useSelector((state) => state.web3.web3);
+  const themeMode = useSelector((state) => state.theme.mode);
 
   useEffect(() => {
     // Load Web3
@@ -34,6 +36,13 @@ const App = () => {
     }
   }, [dispatch, web3]);
 
+
+  const theme = createTheme({
+    palette: {
+      type: themeMode,
+    }
+  });
+
   if (!web3) {
     return (
       <div>Loading Web3, accounts, and contract...</div>
@@ -41,13 +50,16 @@ const App = () => {
   }
 
   return (
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/documents" component={Documents} />
-      <Route>
-        <Redirect to="/" />
-      </Route>
-    </Switch>
+    <ThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/documents" component={Documents} />
+        <Route>
+          <Redirect to="/" />
+        </Route>
+      </Switch>
+    </ThemeProvider>
   );
 };
 

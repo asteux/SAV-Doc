@@ -1,26 +1,40 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import { Step, StepLabel, Stepper } from '@material-ui/core';
+import { Backdrop, Button, CircularProgress, Grid, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
 
 import UploadFileForm from './uploadFileForm/UploadFileForm';
 import PasswordForm from './passwordForm/PasswordForm';
-import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, setOriginalIpfsCid } from './secureFileSlice';
-import { storeBlob } from '../../utils/ipfs';
+import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, uploadFile } from './secureFileSlice';
+
+const useStyles = makeStyles((theme) => ({
+  stepper: {
+    backgroundColor: 'transparent',
+  },
+  backdrop: {
+    flexDirection: 'column',
+    zIndex: theme.zIndex.tooltip + 1,
+  },
+  loadingMessage: {
+    marginTop: '1rem',
+  }
+}));
 
 const SecureFile = () => {
   const dispatch = useDispatch();
 
-  const themeMode = useSelector((state) => state.theme.mode);
-  const themeContrast = useSelector((state) => state.theme.contrast);
+  const classes = useStyles();
 
   const accounts = useSelector((state) => state.web3.accounts);
+  const loadingMessage = useSelector((state) => state.secureFile.loadingMessage);
   const activeStep = useSelector((state) => state.secureFile.activeStep);
   const originalFile = useSelector((state) => state.secureFile.originalFile);
   const originalPasswordFile = useSelector((state) => state.secureFile.originalPasswordFile);
+  const originalIpfsCid = useSelector((state) => state.secureFile.originalIpfsCid);
   const encryptedFile = useSelector((state) => state.secureFile.encryptedFile);
   const encryptedPasswordFile = useSelector((state) => state.secureFile.encryptedPasswordFile);
   const encryptedIpfsCid = useSelector((state) => state.secureFile.encryptedIpfsCid);
+
+  const isLoading = null !== loadingMessage;
 
   useEffect(() => {
     if (null !== originalFile) {
@@ -36,16 +50,17 @@ const SecureFile = () => {
 
   useEffect(() => {
     if (null !== encryptedFile) {
-      dispatch(nextStep());
-
       (async () => {
-        const cid = await storeBlob(encryptedFile);
-
-        dispatch(setOriginalIpfsCid(cid));
-        dispatch(encryptIpfsCidAndPassword(cid, originalPasswordFile, accounts[0]));
+        dispatch(uploadFile(encryptedFile));
       })();
     }
   }, [dispatch, encryptedFile, originalPasswordFile, accounts]);
+
+  useEffect(() => {
+    if (null !== originalIpfsCid) {
+      dispatch(nextStep());
+    }
+  }, [dispatch, originalIpfsCid]);
 
   useEffect(() => {
     if (
@@ -66,15 +81,19 @@ const SecureFile = () => {
     dispatch(reset(0));
   };
 
-  const handleEncrypt = () => {
+  const handleEncryptFile = () => {
     dispatch(encryptFile(originalFile, originalPasswordFile));
+  };
+
+  const handleEncryptIpfsCidAndPassword = () => {
+    dispatch(encryptIpfsCidAndPassword(originalIpfsCid, originalPasswordFile, accounts[0]));
   };
 
   const steps = [
     'Choix du document',
     'Choix du mot de passe',
-    'Chiffrement',
-    'Upload',
+    'Chiffrement & Upload du document',
+    'Chiffrement des informations',
     'Enregistrement dans la blockchain',
   ];
   let stepsContent = [
@@ -90,24 +109,25 @@ const SecureFile = () => {
     ),
     (
       <>
-        <p className={ `lead text-center text-${themeContrast}`}>En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</p>
+        <Typography variant="h6" className="text-center">En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</Typography>
         {/* TODO: show file */}
       </>
     ),
     (
       <>
-        <p className={ `lead text-center text-${themeContrast}`}>Votre document a été chiffré. Il est en cours d'upload</p>
+        <Typography variant="h6" className="text-center">Votre document a été uploadé.</Typography>
+        <Typography variant="h6" className="text-center">Il ne reste que le chiffrement des différentes informations lié au document et à l'enregistrement dans la blockchain</Typography>
       </>
     ),
     (
       <>
-        <p className={ `lead text-center text-${themeContrast}`}>Votre document a été uploadé. Il ne reste que l'enregistrement dans la blockchain</p>
+        <Typography variant="h6" className="text-center">L'enregistrement dans la blockchain est en cours.</Typography>
       </>
     ),
     (
       <div>
         {/* TODO: show file */}
-        <p className={ `lead text-center text-${themeContrast}`}>Le document a été sécurisé</p>
+        <Typography variant="h6" className="text-center">Le document a été sécurisé</Typography>
 
         <div>
           <div>
@@ -127,48 +147,57 @@ const SecureFile = () => {
   ];
 
   return (
-    <section>
-      <header>
-        <h2 className={ `text-center text-${themeContrast}`}>Sécuriser un document</h2>
-        <Stepper alternativeLabel activeStep={activeStep} className={ `bg-${themeMode}` }>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </header>
+    <>
+      <section>
+        <header>
+          <Typography variant="h4" className="text-center mb-3">Sécuriser un document</Typography>
+          <Stepper className={classes.stepper} alternativeLabel activeStep={activeStep}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </header>
 
-      <div>
-        {stepsContent[activeStep]}
-      </div>
+        <div className="mt-3">
+          {stepsContent[activeStep]}
+        </div>
 
-      <footer>
-        <Container>
-          <Row>
-            <Col className="p-0">
+        <footer className="mt-5">
+          <Grid container>
+            <Grid item xs className="p-0">
               {0 !== activeStep && steps.length - 2 > activeStep
                 ? (
-                  <Button variant="outline-primary" disabled={activeStep === 0} onClick={handleBack}>Back</Button>
+                  <Button variant="outlined" color="default" disabled={activeStep === 0} onClick={handleBack}>Back</Button>
                 )
                 : <></>
               }
-            </Col>
+            </Grid>
 
-            <Col className="p-0 text-right">
+            <Grid item xs className="p-0 text-right">
               {1 === activeStep
-                ? <Button variant="primary" type="submit" form="secure-file-password-form">Utiliser ce mot de passe</Button>
+                ? <Button variant="contained" color="primary" type="submit" form="secure-file-password-form">Utiliser ce mot de passe</Button>
                 : <></>
               }
               {2 === activeStep
-                ? <Button onClick={handleEncrypt}>Sécuriser ce document</Button>
+                ? <Button variant="contained" color="primary" onClick={handleEncryptFile}>Sécuriser ce document</Button>
                 : <></>
               }
-            </Col>
-          </Row>
-        </Container>
-      </footer>
-    </section>
+              {3 === activeStep
+                ? <Button variant="contained" color="primary" onClick={handleEncryptIpfsCidAndPassword}>Chiffrer les informations</Button>
+                : <></>
+              }
+            </Grid>
+          </Grid>
+        </footer>
+      </section>
+
+      <Backdrop className={classes.backdrop} open={isLoading}>
+        <CircularProgress color="inherit" />
+        <Typography className={classes.loadingMessage}>{ loadingMessage }</Typography>
+      </Backdrop>
+    </>
   );
 };
 

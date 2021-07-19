@@ -19,7 +19,7 @@ export const getEncryptionPublicKey = async (account) => {
   ;
 };
 
-export const encryptWithPublicKey = async (data, encryptionPublicKey) => {
+export const encryptWithPublicKey = (data, encryptionPublicKey) => {
   return bufferToHex(
     Buffer.from(
       JSON.stringify(

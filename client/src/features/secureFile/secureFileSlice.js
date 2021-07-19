@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { encryptWithPassword, encryptWithPublicKey, getEncryptionPublicKey } from '../../utils/encryption';
 import { readFileAsDataURL } from '../../utils/file';
+import { storeBlob } from '../../utils/ipfs';
 
 const secureFileSlice = createSlice({
   name: 'secureFile',
   initialState: {
     activeStep: 0,
+    loadingMessage: null,
     originalFile: null,
     encryptedFile: null,
     originalPasswordFile: null,
@@ -31,6 +33,12 @@ const secureFileSlice = createSlice({
     },
     nextStep: (state) => {
       state.activeStep++;
+    },
+    showLoading: (state, action) => {
+      state.loadingMessage = (action.payload) ? action.payload : '';
+    },
+    hideLoading: (state) => {
+      state.loadingMessage = null;
     },
     setOriginalFile: (state, action) => {
       state.originalFile = action.payload;
@@ -74,27 +82,50 @@ const secureFileActions = {
       return dispatch(secureFileSlice.actions.setOriginalPasswordFile(password));
     };
   },
-  setOriginalIpfsCid: (password) => {
-    return (dispatch) => {
-      return dispatch(secureFileSlice.actions.setOriginalIpfsCid(password));
-    };
-  },
   encryptFile: (file, password) => {
     return async (dispatch) => {
-      const fileAsDataUrl = await readFileAsDataURL(file);
-      const encryptedFile = encryptWithPassword(fileAsDataUrl, password);
-      dispatch(secureFileSlice.actions.setEncryptedFile(encryptedFile));
+      dispatch(secureFileSlice.actions.showLoading('Chiffrement du document en cours'));
+
+      try {
+        const fileAsDataUrl = await readFileAsDataURL(file);
+        const encryptedFile = encryptWithPassword(fileAsDataUrl, password);
+        dispatch(secureFileSlice.actions.setEncryptedFile(encryptedFile));
+      } catch (error) {
+      } finally {
+        dispatch(secureFileSlice.actions.hideLoading());
+      }
+    };
+  },
+  uploadFile: (encryptedFile) => {
+    return async (dispatch) => {
+      dispatch(secureFileSlice.actions.showLoading('Upload du document en cours'));
+
+      try {
+        const cid = await storeBlob(encryptedFile);
+
+        dispatch(secureFileSlice.actions.setOriginalIpfsCid(cid));
+      } catch (error) {
+      } finally {
+        dispatch(secureFileSlice.actions.hideLoading());
+      }
     };
   },
   encryptIpfsCidAndPassword: (ipfsCid, password, account) => {
     return async (dispatch) => {
-      const encryptionPublicKey = await getEncryptionPublicKey(account);
+      dispatch(secureFileSlice.actions.showLoading('Chiffrement des informations en cours'));
 
-      const encryptedIpfsCid = await encryptWithPublicKey(ipfsCid, encryptionPublicKey);
-      dispatch(secureFileSlice.actions.setEncryptedIpfsCid(encryptedIpfsCid));
+      try {
+        const encryptionPublicKey = await getEncryptionPublicKey(account);
 
-      const encryptedPasswordFile = await encryptWithPublicKey(password, encryptionPublicKey);
-      dispatch(secureFileSlice.actions.setEncryptedPasswordFile(encryptedPasswordFile));
+        const encryptedIpfsCid = encryptWithPublicKey(ipfsCid, encryptionPublicKey);
+        dispatch(secureFileSlice.actions.setEncryptedIpfsCid(encryptedIpfsCid));
+
+        const encryptedPasswordFile = encryptWithPublicKey(password, encryptionPublicKey);
+        dispatch(secureFileSlice.actions.setEncryptedPasswordFile(encryptedPasswordFile));
+      } catch (error) {
+      } finally {
+        dispatch(secureFileSlice.actions.hideLoading());
+      }
     };
   },
   reset: () => {
@@ -114,8 +145,8 @@ export const {
   nextStep,
   setOriginalFile,
   setOriginalPasswordFile,
-  setOriginalIpfsCid,
   encryptFile,
+  uploadFile,
   encryptIpfsCidAndPassword,
   reset,
 } = secureFileActions;

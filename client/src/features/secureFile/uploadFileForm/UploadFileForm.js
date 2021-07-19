@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useDropzone } from 'react-dropzone';
 
 import { setOriginalFile } from '../secureFileSlice';
+import { useTheme } from "@material-ui/core";
 
 const baseDropzoneStyle = {
   flex: 1,
@@ -12,17 +13,9 @@ const baseDropzoneStyle = {
   padding: '20px',
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: '#eeeeee',
   borderStyle: 'dashed',
-  backgroundColor: '#fafafa',
-  color: '#bdbdbd',
   outline: 'none',
   transition: 'border .24s ease-in-out'
-};
-
-const baseDropzoneStyleDark = {
-  backgroundColor: 'var(--gray-dark)',
-  color: '#bdbdbd',
 };
 
 const activeDropzoneStyle = {
@@ -40,7 +33,14 @@ const rejectDropzoneStyle = {
 const UploadFileForm = () => {
   const dispatch = useDispatch();
 
-  const themeMode = useSelector((state) => state.theme.mode);
+  const theme = useTheme();
+
+  const dropzoneThemed = {
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary,
+    borderColor: theme.palette.text.primary,
+  };
+
   const [error, setError] = useState(null);
 
   const dropzoneOptions = {
@@ -68,12 +68,12 @@ const UploadFileForm = () => {
 
   const style = useMemo(() => ({
     ...baseDropzoneStyle,
+    ...dropzoneThemed,
     ...(isDragActive ? activeDropzoneStyle : {}),
     ...(isDragAccept ? acceptDropzoneStyle : {}),
     ...(isDragReject ? rejectDropzoneStyle : {}),
-    ...('dark' === themeMode ? baseDropzoneStyleDark : {}),
   }), [
-    themeMode,
+    dropzoneThemed,
     isDragActive,
     isDragReject,
     isDragAccept

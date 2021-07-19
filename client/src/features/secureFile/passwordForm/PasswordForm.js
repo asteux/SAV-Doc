@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Form } from 'react-bootstrap';
+import { useDispatch } from "react-redux";
 
 import { setOriginalPasswordFile } from '../secureFileSlice';
+import { TextField } from "@material-ui/core";
 
 const PasswordForm = () => {
   const dispatch = useDispatch();
 
-  const themeContrast = useSelector((state) => state.theme.contrast);
   const [errors, setErrors] = useState(null);
 
   const validate = (formData) => {
@@ -50,27 +49,59 @@ const PasswordForm = () => {
   }
 
   return (
-    <Form id="secure-file-password-form" onSubmit={handleSubmit}>
-      <Form.Group className="mb-3">
-        <Form.Label className={ `lead text-center text-${themeContrast}`}>Mot de passe</Form.Label>
-        <Form.Control type="password" name="password" />
-        {
-          (errors && errors.password)
-            ? <Form.Text className="text-danger" type="invalid">{errors.password}</Form.Text>
-            : <></>
-        }
-      </Form.Group>
+    <form id="secure-file-password-form" onSubmit={handleSubmit}>
+      <div>
+        <TextField
+          fullWidth
+          className="mb-2"
+          label="Mot de passe"
+          type="password"
+          name="password"
+          {
+            ...{
+              error: errors && errors.password,
+              helperText: (errors && errors.password) ? errors.password : null,
+            }
+          }
+        />
+      </div>
 
-      <Form.Group className="mb-3">
-        <Form.Label className={ `lead text-center text-${themeContrast}`}>Confirmation du mot de passe</Form.Label>
-        <Form.Control type="password" name="confirm_password" />
+      <TextField
+        fullWidth
+        className="mb-2"
+        label="Confirmation du mot de passe"
+        type="password"
+        name="confirm_password"
         {
-          (errors && errors.confirm_password)
-            ? <Form.Text className="text-danger" type="invalid">{errors.confirm_password}</Form.Text>
-            : <></>
+          ...{
+            error: errors && errors.password,
+            helperText: (errors && errors.password) ? errors.password : null,
+          }
         }
-      </Form.Group>
-    </Form>
+      />
+    </form>
+
+    // <Form id="secure-file-password-form" onSubmit={handleSubmit}>
+    //   <Form.Group className="mb-3">
+    //     <Form.Label className={ `lead text-center text-${themeContrast}`}>Mot de passe</Form.Label>
+    //     <Form.Control type="password" name="password" />
+    //     {
+    //       (errors && errors.password)
+    //         ? <Form.Text className="text-danger" type="invalid">{errors.password}</Form.Text>
+    //         : <></>
+    //     }
+    //   </Form.Group>
+
+    //   <Form.Group className="mb-3">
+    //     <Form.Label className={ `lead text-center text-${themeContrast}`}>Confirmation du mot de passe</Form.Label>
+    //     <Form.Control type="password" name="confirm_password" />
+    //     {
+    //       (errors && errors.confirm_password)
+    //         ? <Form.Text className="text-danger" type="invalid">{errors.confirm_password}</Form.Text>
+    //         : <></>
+    //     }
+    //   </Form.Group>
+    // </Form>
   );
 };
 
