@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const storage = window.localStorage;
+
 const themeSlice = createSlice({
   name: 'theme',
   initialState: {
@@ -8,9 +10,11 @@ const themeSlice = createSlice({
   reducers: {
     switchToLightMode: (state) => {
       state.mode = 'light';
+      storage.setItem('theme.mode', state.mode);
     },
     switchToDarkMode: (state) => {
       state.mode = 'dark';
+      storage.setItem('theme.mode', state.mode);
     },
   }
 });
@@ -18,7 +22,12 @@ const themeSlice = createSlice({
 const themeActions = {
   loadThemeMode: () => {
     return (dispatch) => {
-      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const themeMode = storage.getItem('theme.mode');
+
+      let isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (themeMode) {
+        isDark = 'dark' === themeMode;
+      }
 
       const switchMode = (isDark)
         ? themeSlice.actions.switchToDarkMode
