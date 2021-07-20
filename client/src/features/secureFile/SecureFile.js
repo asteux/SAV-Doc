@@ -5,6 +5,7 @@ import { Backdrop, Button, CircularProgress, Grid, makeStyles, Step, StepLabel, 
 import UploadFileForm from './uploadFileForm/UploadFileForm';
 import PasswordForm from './passwordForm/PasswordForm';
 import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, uploadFile } from './secureFileSlice';
+import FileViewer from "../FileViewer/components/file-viewer";
 
 const useStyles = makeStyles((theme) => ({
   stepper: {
@@ -104,29 +105,32 @@ const SecureFile = () => {
     ),
     (
       <>
+        <FileViewer file={originalFile} />
         <PasswordForm />
       </>
     ),
     (
       <>
+        <FileViewer file={originalFile} />
         <Typography variant="h6" className="text-center">En cliquant sur "Sécuriser ce document", SAV-Doc va chiffrer et uploader le document.</Typography>
-        {/* TODO: show file */}
       </>
     ),
     (
       <>
+        <FileViewer file={originalFile} />
         <Typography variant="h6" className="text-center">Votre document a été uploadé.</Typography>
         <Typography variant="h6" className="text-center">Il ne reste que le chiffrement des différentes informations lié au document et à l'enregistrement dans la blockchain</Typography>
       </>
     ),
     (
       <>
+        <FileViewer file={originalFile} />
         <Typography variant="h6" className="text-center">L'enregistrement dans la blockchain est en cours.</Typography>
       </>
     ),
     (
       <div>
-        {/* TODO: show file */}
+        <FileViewer file={originalFile} />
         <Typography variant="h6" className="text-center">Le document a été sécurisé</Typography>
 
         <div>
