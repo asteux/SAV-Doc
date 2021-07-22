@@ -6,11 +6,13 @@ const web3Slice = createSlice({
   name: 'web3',
   initialState: {
     web3: null,
+    networkId: null,
     accounts: [],
   },
   reducers: {
     loadWeb3: (state, action) => {
       state.web3 = action.payload.web3;
+      state.networkId = action.payload.networkId;
       state.accounts = action.payload.accounts;
     },
     updateAccounts: (state, action) => {
@@ -26,10 +28,13 @@ const web3Actions = {
         // Get network provider and web3 instance.
         const web3 = await getWeb3();
 
+        // Get network ID
+        const networkId = await web3.eth.net.getId();
+
         // Use web3 to get the user's accounts.
         const accounts = await web3.eth.getAccounts();
 
-        dispatch(web3Slice.actions.loadWeb3({ web3, accounts }));
+        dispatch(web3Slice.actions.loadWeb3({ web3, networkId, accounts }));
       } catch (error) {
         // Catch any errors for any of the above operations.
         alert(
