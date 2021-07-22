@@ -23,7 +23,7 @@ contract SecMyDoc is AccountManager, PasswordManager
        uint256 tokenLength;
        string tokenName;
        string tokenMime;
-       string dateAdd;
+       uint256 dateAdd;
        string filePath;
        bool isCertified;
        address certifying;
@@ -70,25 +70,25 @@ contract SecMyDoc is AccountManager, PasswordManager
         return token.balanceOf(msg.sender);
     }
 
-    function createNFT(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory dateAdd, string memory filePath) public returns (Nft memory)
+    function createNFT(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath) public returns (Nft memory)
     {
        uint256 tokenID;
        Nft memory nft;
 
        tokenID = token.addItem(msg.sender, tokenURI);
-       nft = Nft(tokenID, tokenLength, tokenName, tokenMime, dateAdd, filePath, false, address(0));
+       nft = Nft(tokenID, tokenLength, tokenName, tokenMime, block.timestamp, filePath, false, address(0));
 
        balance[msg.sender].push(nft);
        return nft;
     }
 
-    function createNFTCertified(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory dateAdd, string memory filePath) public onlyAuthority(msg.sender) returns(Nft memory)
+    function createNFTCertified(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath) public onlyAuthority(msg.sender) returns(Nft memory)
     {
        uint256 tokenID;
        Nft memory nft;
 
        tokenID = token.addItem(msg.sender, tokenURI);
-       nft = Nft(tokenID, tokenLength, tokenName, tokenMime, dateAdd, filePath, true, msg.sender);
+       nft = Nft(tokenID, tokenLength, tokenName, tokenMime, block.timestamp, filePath, true, msg.sender);
 
        balance[msg.sender].push(nft);
 
