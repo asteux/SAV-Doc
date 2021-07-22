@@ -7,11 +7,12 @@ SAV-doc est un projet blockchain qui permet de sécuriser, partager et sécurise
 ## Status
 
 - [] Sécuriser un document
-  - [] Développement du contact ERC721
-  - [] Développement de l'interface pour sécuriser un document
+  - [] Développement du contact ERC721 (95 %)
+  - [x] Développement de l'interface pour sécuriser un document
     - [x] Chiffrement du document
     - [x] Upload du document via IPFS
-    - [] Intéraction avec les contrats (création du NFT)
+    - [x] Intéraction avec les contrats (création du NFT)
+- [] Consulter un document
 - [] Partager un document
 - [] Certifier un document
 
@@ -25,6 +26,11 @@ Ce projet utilise les technologies suivantes
 - [Infura](https://infura.io/) pour le déploiement des contrats
 
 ### Smarts Contracts
+
+- AccountManager : permet de gérer les comptes utilisateurs de l'outil
+- SecMyDocToken : permet de gérer les NFT
+- PasswordManager : permet de gérer les mots de passes des utilisateurs
+- SecMyDoc : est le contrat principal, permet de gérer les documents
 
 ### DApp
 
@@ -70,3 +76,27 @@ Et démarrer le client
 # /client
 yarn start
 ```
+
+## Déploiement
+
+### Déploiement des Smarts Contracts
+
+Pour le déploiement du contrat, il faut migrer vers le réseau de votre choix (pour le moment, seul Ropsten et Rinkeby sont configurés)
+
+```bash
+truffle migrate --network ropsten
+```
+
+### Déploiement du la DApp
+
+Pour le client, le déploiement se fait avec [Heroku](https://www.heroku.com/))
+
+Il faut exécuter les commandes suivantes
+
+```bash
+heroku login
+heroku create --buildpack mars/create-react-app
+git subtree push --prefix client/ heroku main
+```
+
+Pour une mise à jour, il suffit de ré-exécuter la dernière commande. 
