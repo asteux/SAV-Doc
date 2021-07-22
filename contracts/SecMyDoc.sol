@@ -12,9 +12,9 @@ contract SecMyDoc is AccountManager, PasswordManager
     mapping(address => Nft[]) private balance;
     mapping(address => Request[]) private requests;
 
-    constructor()
+    constructor(SecMyDocToken _token)
     {
-        token = new SecMyDocToken();
+        token = _token;
     }
 
     struct Nft
