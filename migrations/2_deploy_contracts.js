@@ -1,5 +1,9 @@
-// var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+const SavDoc = artifacts.require("./SecMyDoc.sol");
+const SavDocToken = artifacts.require("./SecMyDocToken");
 
-module.exports = function(deployer) {
-  // deployer.deploy(SimpleStorage);
+module.exports = async (deployer) => {
+  const deploySavDocToken = await deployer.deploy(SavDocToken);
+  const deploySavDoc = await deployer.deploy(SavDoc, SavDocToken.address);
+
+  return [deploySavDocToken, deploySavDoc];
 };
