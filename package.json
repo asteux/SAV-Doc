@@ -4,6 +4,7 @@
   "description": "secure your documents with blockchain",
   "repository": "https://github.com/asteux/SAV-Doc.git",
   "dependencies": {
+    "@openzeppelin/contracts": "^4.2.0",
     "@truffle/hdwallet-provider": "^1.4.1",
     "dotenv": "^10.0.0"
   }
