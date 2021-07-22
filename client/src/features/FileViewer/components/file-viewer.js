@@ -64,7 +64,6 @@ const FileViewer = ({ file }) => {
   useEffect(() => {
     (async () => {
       const fileType = await getFileType(file);
-      console.log(fileType ?? file.type);
 
       setFileType(fileType ?? { ext: undefined, mime: file.type });
     })();

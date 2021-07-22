@@ -17,7 +17,6 @@ export const createContractSlice = (name, initialState, reducers) => {
 };
 
 export const createContractActions = (contractSlice, Contract) => {
-  console.log(contractSlice);
   return {
     loadContract: (web3, networkId) => {
       return async (dispatch) => {

@@ -193,9 +193,6 @@ const SecureFile = () => {
         default:
           break;
       }
-      console.log(secureDocumentState.status);
-      console.log('succeeded' === secureDocumentState.status);
-      console.log(afterStepperContent);
 
       return afterStepperContent;
     })(),
