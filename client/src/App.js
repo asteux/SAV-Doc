@@ -4,6 +4,7 @@ import { Redirect, Route, Switch } from 'react-router';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
+import { loadSavDocContract } from './features/contracts/saveDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
@@ -14,6 +15,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const web3 = useSelector((state) => state.web3.web3);
+  const networkId = useSelector((state) => state.web3.networkId);
   const themeMode = useSelector((state) => state.theme.mode);
 
   useEffect(() => {
@@ -36,6 +38,12 @@ const App = () => {
     }
   }, [dispatch, web3]);
 
+  useEffect(() => {
+    if (web3 && networkId) {
+      // Load Contracts
+      dispatch(loadSavDocContract(web3, networkId));
+    }
+  }, [dispatch, web3, networkId]);
 
   const theme = createTheme({
     palette: {

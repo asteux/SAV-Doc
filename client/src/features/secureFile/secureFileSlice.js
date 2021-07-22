@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { secureDocument } from '../contracts/saveDocContractSlice';
 import { encryptWithPassword, encryptWithPublicKey, getEncryptionPublicKey } from '../../utils/encryption';
-import { readFileAsDataURL } from '../../utils/file';
+import { getFileType, readFileAsDataURL } from '../../utils/file';
 import { storeBlob } from '../../utils/ipfs';
 
 const secureFileSlice = createSlice({
@@ -58,6 +59,16 @@ const secureFileSlice = createSlice({
     setEncryptedIpfsCid: (state, action) => {
       state.encryptedIpfsCid = action.payload;
     },
+    reset: (state) => {
+      state.activeStep = 0;
+      state.loadingMessage = null;
+      state.originalFile = null;
+      state.encryptedFile = null;
+      state.originalPasswordFile = null;
+      state.encryptedPasswordFile = null;
+      state.originalIpfsCid = null;
+      state.encryptedIpfsCid = null;
+    }
   }
 });
 
@@ -101,7 +112,8 @@ const secureFileActions = {
       dispatch(secureFileSlice.actions.showLoading('Upload du document en cours'));
 
       try {
-        const cid = await storeBlob(encryptedFile);
+        // const cid = await storeBlob(encryptedFile);
+        const cid = '123456789';
 
         dispatch(secureFileSlice.actions.setOriginalIpfsCid(cid));
       } catch (error) {
@@ -128,14 +140,22 @@ const secureFileActions = {
       }
     };
   },
+  sendTransactionToSecure: () => {
+    return async (dispatch, getState) => {
+      const { secureFile } = getState();
+
+      const tokenURI = secureFile.encryptedIpfsCid;
+      const directory = '/';
+      const fileName = secureFile.originalFile.name.replace(/^.*?([^\\\/]*)$/, '$1')
+      const fileMimeType = (await getFileType(secureFile.originalFile)).mime ?? secureFile.originalFile.type ?? 'application/octet-stream';
+      const fileSize = secureFile.originalFile.size;
+
+      dispatch(secureDocument(tokenURI, directory, fileName, fileMimeType, fileSize));
+    };
+  },
   reset: () => {
     return async (dispatch) => {
-      dispatch(secureFileSlice.actions.setActiveStep(0));
-      dispatch(secureFileSlice.actions.setOriginalFile(null));
-      dispatch(secureFileSlice.actions.setOriginalPasswordFile(null));
-      dispatch(secureFileSlice.actions.setEncryptedFile(null));
-      dispatch(secureFileSlice.actions.setEncryptedPasswordFile(null));
-      dispatch(secureFileSlice.actions.setEncryptedIpfsCid(null));
+      dispatch(secureFileSlice.actions.reset());
     };
   },
 };
@@ -148,6 +168,7 @@ export const {
   encryptFile,
   uploadFile,
   encryptIpfsCidAndPassword,
+  sendTransactionToSecure,
   reset,
 } = secureFileActions;
 
