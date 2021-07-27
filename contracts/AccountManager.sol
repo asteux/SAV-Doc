@@ -6,7 +6,7 @@ pragma solidity 0.8.6;
 contract AccountManager
 {
     address private owner;
-    mapping(address => User) users;
+    mapping(address => User) private users;
     mapping(address => string) private passwordMasters;
 
 
@@ -47,23 +47,23 @@ contract AccountManager
         bool exist;
     }
 
-    function addPasswordMaster(address userAddress, string memory hashPasswordMaster) onlyOwner() public
+    function addPasswordMaster(address userAddress, string memory hashPasswordMaster) private addressIsValid(userAddress) userExist(userAddress)
     {
         require(bytes(passwordMasters[userAddress]).length == 0, "PasswordManager: Cette address possede deja un mot de passe maitre");
-        passwordMasters[owner] = hashPasswordMaster;
+        passwordMasters[userAddress] = hashPasswordMaster;
     }
 
-    function getPasswordMaster(address userAddress) public view onlyOwner() returns(string memory)
+    function getPasswordMaster(address userAddress) public view returns(string memory)
     {
-        require(bytes(passwordMasters[userAddress]).length != 0, "Cette address n'a pas de mot de passe maitre");
+        require(bytes(passwordMasters[msg.sender]).length != 0, "Cette address n'a pas de mot de passe maitre");
         return passwordMasters[userAddress];
     }
 
-    function addUser(address userAddress, string memory name, string memory pubKey, string memory passwordMaster) public onlyOwner() addressIsValid(userAddress) userNotExist(userAddress) returns(User memory)
+    function addUser(string memory name, string memory pubKey, string memory passwordMaster) public userNotExist(msg.sender) returns(User memory)
     {
-        users[userAddress] = User(name, pubKey, false, true);
-        addPasswordMaster(userAddress, passwordMaster);
-        return users[userAddress];
+        users[msg.sender] = User(name, pubKey, false, true);
+        addPasswordMaster(msg.sender, passwordMaster);
+        return users[msg.sender];
     }
 
     function addAuthority(string memory passwordMaster, address authorityAddress, string memory name, string memory pubKey) public onlyOwner() addressIsValid(authorityAddress) userNotExist(authorityAddress) returns(User memory)
@@ -78,24 +78,25 @@ contract AccountManager
         return users[userAddress];
     }
 
-    function setUser(address userAddress, string memory name) public onlyOwner() returns(User memory)
+    function setUser(string memory name) public returns(User memory)
     {
-        users[userAddress].name = name;
-        return users[userAddress];
+        users[msg.sender].name = name;
+        return users[msg.sender];
     }
 
-    function delUser(address userAddress) public onlyOwner() addressIsValid(userAddress) userExist(userAddress)
+    function delUser() public userExist(msg.sender)
     {
-        delete passwordMasters[userAddress];
-        delete users[userAddress];
+
+        delete passwordMasters[msg.sender];
+        delete users[msg.sender];
     }
 
-    function isAuthority(address userAddress) public view returns(bool)
+    function isAuthority(address userAddress) public view addressIsValid(userAddress) userExist(userAddress) returns(bool)
     {
         return users[userAddress].isAuthority;
     }
 
-    function checkIfUserExist(address userAddress) public view onlyOwner() returns(bool)
+    function checkIfUserExist(address userAddress) public view  returns(bool)
     {
         return users[userAddress].exist;
     }
