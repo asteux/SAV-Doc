@@ -22,12 +22,24 @@ contract DocManager is NFT
         accountManager = _accountManager;
     }
 
+    modifier userExist(address addressUser)
+    {
+        require(accountManager.checkIfUserExist(addressUser), "DocManager: Cette utilisateur n'existe pas.");
+        _;
+    }
 
     modifier isMyToken(uint256 tokenID, address ownerNFT)
     {
         require(saveDocToken.ownerOf(tokenID) == ownerNFT, "TokenManager: Cet NFT ne vous appartient pas !");
         _;
     }
+
+    modifier addressesAreDifferent(address from, address to)
+    {
+        require(from != to, "SaveMyDoc: L'address source et de destination sont identique");
+        _;
+    }
+
 
     modifier onlyOwner()
     {
@@ -66,7 +78,8 @@ contract DocManager is NFT
 
     function createDoc(address ownerNFT, string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
     {
-       require(!isOfficielDoc(hashNFT), "TokenManager: Ce hash correspond a un NFT officiel.");
+        //check que l'utilisateur existe
+       require(!isOfficielDoc(hashNFT), "TokenManager: Ce document correspond a un NFT officiel.");
        uint256 tokenID;
        Document memory nft;
        address[] memory certifyings;
@@ -94,12 +107,13 @@ contract DocManager is NFT
     //   return nft;
     // }
 
-    function getDocs(address ownerNFT) public view returns(Document[] memory)
+    function getDocs() public view returns(Document[] memory)
     {
-      return balance[ownerNFT];
+        //check que l'utilisateur existe
+      return balance[msg.sender];
     }
 
-    function deleteDoc(address ownerDoc, uint256 tokenID, bool isCopyDoc) public onlyOwner() isMyToken(tokenID, ownerDoc) returns(bool)
+    function deleteDoc(address ownerDoc, uint256 tokenID, bool isCopyDoc) external onlyOwner() isMyToken(tokenID, ownerDoc) returns(bool)
     {
         uint256 index = getIndexNFT(ownerDoc, tokenID, false);
 
@@ -119,7 +133,7 @@ contract DocManager is NFT
         delete balance[msg.sender];
     }
 
-    function createCopyDoc(address provider, address ownerCopyNFT, uint256 tokenID, string memory tokenURI, TypeDoc typeNft) onlyOwner() isMyToken(tokenID, provider) public
+    function createCopyDoc(address provider, address ownerCopyNFT, uint256 tokenID, string memory tokenURI, TypeDoc typeNft) onlyOwner() addressesAreDifferent(provider, ownerCopyNFT) isMyToken(tokenID, provider) userExist(provider) userExist(ownerCopyNFT) public
     {
         //TODO
         // check qu'une copie avec le meme tokenID n'exite pas deja
@@ -210,7 +224,7 @@ contract DocManager is NFT
         balance[dest][index].certifying.push(certifying);
     }
 
-    function copyDocToOriginal(address ownerCopyNFT, string memory passwordEncrypted, uint256 tokenID) public onlyOwner()
+    function copyDocToOriginal(address ownerCopyNFT, string memory passwordEncrypted, uint256 tokenID) public isMyToken(tokenID, ownerCopyNFT) onlyOwner()
     {
         Document memory newNFT;
         uint256 index;

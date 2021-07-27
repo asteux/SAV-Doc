@@ -24,6 +24,5 @@ contract NFT
        string tokenURI;
        string passwordEncrypted;
        TypeDoc typeNft;
-    }
-
+    }  
 }

@@ -53,10 +53,10 @@ contract AccountManager
         passwordMasters[userAddress] = hashPasswordMaster;
     }
 
-    function getPasswordMaster(address userAddress) public view returns(string memory)
+    function getPasswordMaster() public view returns(string memory)
     {
         require(bytes(passwordMasters[msg.sender]).length != 0, "Cette address n'a pas de mot de passe maitre");
-        return passwordMasters[userAddress];
+        return passwordMasters[msg.sender];
     }
 
     function addUser(string memory name, string memory pubKey, string memory passwordMaster) public userNotExist(msg.sender) returns(User memory)
@@ -86,7 +86,7 @@ contract AccountManager
 
     function delUser() public userExist(msg.sender)
     {
-
+        // TODO delete les Docs de l'user
         delete passwordMasters[msg.sender];
         delete users[msg.sender];
     }

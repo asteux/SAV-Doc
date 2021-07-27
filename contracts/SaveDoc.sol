@@ -3,7 +3,6 @@
 pragma solidity 0.8.6;
 
 import "./DocManager.sol";
-import "./AccountManager.sol";
 import "./SaveDocToken.sol";
 import "./NFT.sol";
 
@@ -13,13 +12,11 @@ contract SaveMyDoc is NFT
     mapping(address => CertificationRequest[]) private requests;
     SaveDocToken private saveDocToken;
     DocManager private docManager;
-    AccountManager private accountManager;
 
 
-    constructor(DocManager _docManager, AccountManager  _accountManager, SaveDocToken _saveDocToken)
+    constructor(DocManager _docManager, SaveDocToken _saveDocToken)
     {
         docManager = _docManager;
-        accountManager = _accountManager;
         saveDocToken = _saveDocToken;
     }
 
@@ -30,46 +27,26 @@ contract SaveMyDoc is NFT
         uint256 index;
     }
 
-
-    modifier isMyToken(uint256 tokenID)
-    {
-        require(docManager.getOwnerToken(tokenID) == msg.sender, "SaveMyDoc: Cet NFT ne vous appartient pas !");
-        _;
-    }
-
-    modifier addressesAreDifferent(address from, address to)
-    {
-        require(from != to, "SaveMyDoc: L'address source et de destination sont identique");
-        _;
-    }
-
-    modifier userExist(address addressUser)
-    {
-        require(accountManager.checkIfUserExist(addressUser), "SaveMyDoc: Cette utilisateur n'existe pas.");
-        _;
-    }
-
-    function transferNFT(address to, uint256 tokenID, string memory tokenURITmp) addressesAreDifferent(msg.sender, to) isMyToken(tokenID) userExist(to) public
+    function transferNFT(address to, uint256 tokenID, string memory tokenURITmp) public
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURITmp, TypeDoc.CopyPendingTransfer);
         saveDocToken.transferFrom(msg.sender, to, tokenID);
-        docManager.deleteDoc(msg.sender, tokenID, true);
+        deleteDoc(tokenID, true);
     }
 
     function acceptNewNFT(uint256 tokenID, string memory newTokenURI, string memory passwordEncrypted) public
     {
-        // check si msg.sender est proprietaire du tokenID
         // check si msg.sender a bien déja une copie du Document
         docManager.copyDocToOriginal(msg.sender, passwordEncrypted, tokenID);
         saveDocToken.setTokenURI(tokenID, newTokenURI, msg.sender);
     }
 
-    function shareNFT(uint256 tokenID, address to, string memory tokenURI) public isMyToken(tokenID) userExist(to) addressesAreDifferent(msg.sender, to)
+    function shareNFT(uint256 tokenID, address to, string memory tokenURI) public
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURI, TypeDoc.CopyShared);
     }
 
-    function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) public addressesAreDifferent(msg.sender, certifying) userExist(certifying) isMyToken(tokenID)
+    function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) public
     {
         CertificationRequest memory request;
 
@@ -108,8 +85,14 @@ contract SaveMyDoc is NFT
         docManager.delCopyDoc(msg.sender, docManager.getIndexNFT(msg.sender, request.tokenID, true));
     }
 
-    function getTokenURI(uint256 tokenID) public view isMyToken(tokenID) returns(string memory)
+    function getTokenURI(uint256 tokenID) public view returns(string memory)
     {
+        require(docManager.getOwnerToken(tokenID) == msg.sender, "SaveMyDoc: Cet NFT ne vous appartient pas !");
         return saveDocToken.tokenURI(tokenID);
+    }
+
+    function deleteDoc(uint256 tokenID, bool isCopyDoc) public
+    {
+        docManager.deleteDoc(msg.sender, tokenID, isCopyDoc);
     }
 }
