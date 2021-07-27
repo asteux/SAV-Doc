@@ -2,30 +2,40 @@
 
 pragma solidity 0.8.6;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AccountManager is Ownable
+contract AccountManager
 {
+    address private owner;
     mapping(address => User) users;
+    mapping(address => string) private passwordMasters;
 
-    modifier checkAddressValid(address _address)
+
+    constructor()
     {
-        require(_address != address(0), "Cette addresse n'existe pas !");
+        owner = msg.sender;
+    }
+
+    modifier addressIsValid(address _address)
+    {
+        require(_address != address(0), "AccountManager: Cette addresse n'existe pas !");
         _;
     }
 
-    modifier onlyAuthority(address _address)
+    modifier onlyOwner()
     {
-        User memory user = getUser(_address);
-        require(user.isAuthority, "Vous n'avez pas le droit d'utiliser cette fonction");
+        require(owner == msg.sender, "AccountManager: Vous n'avez pas les droits !");
         _;
+    }
 
+    modifier userNotExist(address _address)
+    {
+        require(!users[_address].exist, "AccountManager: Ce compte existe deja !");
+        _;
     }
 
     modifier userExist(address _address)
     {
-        User memory user = users[_address];
-        require(user.exist, "Ce compte n'existe pas !");
+        require(users[_address].exist, "AccountManager: Ce compte n'existe pas !");
         _;
     }
 
@@ -37,37 +47,56 @@ contract AccountManager is Ownable
         bool exist;
     }
 
-
-    function addUser(address _address, string memory name, string memory pubKey) public checkAddressValid(_address) returns(User memory)
+    function addPasswordMaster(address userAddress, string memory hashPasswordMaster) onlyOwner() public
     {
-        require(_address != address(0), "Cette addresse n'existe pas !");
-        User memory user = User(name, pubKey, false, true);
-
-        users[_address] = user;
-        return user;
+        require(bytes(passwordMasters[userAddress]).length == 0, "PasswordManager: Cette address possede deja un mot de passe maitre");
+        passwordMasters[owner] = hashPasswordMaster;
     }
 
-    function addAuthority(address _address, string memory name, string memory pubKey) public onlyOwner() checkAddressValid(_address) returns(User memory)
+    function getPasswordMaster(address userAddress) public view onlyOwner() returns(string memory)
     {
-        User memory user = User(name, pubKey, true, true);
-
-        users[_address] = user;
-        return user;
+        require(bytes(passwordMasters[userAddress]).length != 0, "Cette address n'a pas de mot de passe maitre");
+        return passwordMasters[userAddress];
     }
 
-    function getUser(address _address) public view returns(User memory)
+    function addUser(address userAddress, string memory name, string memory pubKey, string memory passwordMaster) public onlyOwner() addressIsValid(userAddress) userNotExist(userAddress) returns(User memory)
     {
-        return users[_address];
+        users[userAddress] = User(name, pubKey, false, true);
+        addPasswordMaster(userAddress, passwordMaster);
+        return users[userAddress];
     }
 
-    function delUser(address _address) public onlyOwner() checkAddressValid(_address) returns(bool)
+    function addAuthority(string memory passwordMaster, address authorityAddress, string memory name, string memory pubKey) public onlyOwner() addressIsValid(authorityAddress) userNotExist(authorityAddress) returns(User memory)
     {
-        delete users[_address];
-        return true;
+        users[authorityAddress] = User(name, pubKey, true, true);
+        addPasswordMaster(authorityAddress, passwordMaster);
+        return users[authorityAddress];
     }
 
-    function isAuthority(address _address) view public returns(bool)
+    function getUser(address userAddress) public view addressIsValid(userAddress) userExist(userAddress) returns(User memory)
     {
-        return users[_address].isAuthority;
+        return users[userAddress];
+    }
+
+    function setUser(address userAddress, string memory name) public onlyOwner() returns(User memory)
+    {
+        users[userAddress].name = name;
+        return users[userAddress];
+    }
+
+    function delUser(address userAddress) public onlyOwner() addressIsValid(userAddress) userExist(userAddress)
+    {
+        delete passwordMasters[userAddress];
+        delete users[userAddress];
+    }
+
+    function isAuthority(address userAddress) public view returns(bool)
+    {
+        return users[userAddress].isAuthority;
+    }
+
+    function checkIfUserExist(address userAddress) public view onlyOwner() returns(bool)
+    {
+        return users[userAddress].exist;
     }
 }

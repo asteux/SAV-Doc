@@ -5,7 +5,7 @@ pragma solidity 0.8.6;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract SecMyDocToken is ERC721URIStorage
+contract SaveMyDocToken is ERC721URIStorage
 {
     using Counters for Counters.Counter;
     Counters.Counter public _tokenIDs;
@@ -22,10 +22,17 @@ contract SecMyDocToken is ERC721URIStorage
         return newItemID;
     }
 
-    function delItem(uint256 tokenID, address owner) public returns(bool)
+    function modifItem(uint256 tokenID, string memory tokenURI, address owner) public
     {
         require(ownerOf(tokenID) == owner, "Cet NFT ne vous appartient pas !");
+
+        _setTokenURI(tokenID, tokenURI);
+    }
+
+    function delItem(uint256 tokenID, address owner) public
+    {
+        require(_exists(tokenID), "Ce token n'existe pas !");
+        require(ownerOf(tokenID) == owner, "Cet NFT ne vous appartient pas !");
         _burn(tokenID);
-        return true;
     }
 }
