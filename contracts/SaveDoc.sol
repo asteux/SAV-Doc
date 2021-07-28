@@ -37,7 +37,7 @@ contract SaveMyDoc is NFT
     function acceptNewNFT(uint256 tokenID, string memory newTokenURI, string memory passwordEncrypted) public
     {
         // check si msg.sender a bien déja une copie du Document
-        docManager.copyDocToOriginal(msg.sender, passwordEncrypted, tokenID);
+        docManager.copyDocToOriginal(msg.sender, TypeDoc.CopyPendingTransfer, passwordEncrypted, tokenID);
         saveDocToken.setTokenURI(tokenID, newTokenURI, msg.sender);
     }
 
@@ -75,14 +75,14 @@ contract SaveMyDoc is NFT
         // check si msg.sender a bien déja une copie du Document
         docManager.certify(msg.sender, request.applicant, request.tokenID, hashNFT);
         delRequest(msg.sender, request.index);
-        docManager.delCopyDoc(msg.sender, docManager.getIndexNFT(msg.sender, request.tokenID, true));
+        docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
     }
 
     function rejectCertificationRequest(CertificationRequest memory request) public
     {
         // check si msg.sender à bien déja une copie du Document
         delRequest(msg.sender, request.index);
-        docManager.delCopyDoc(msg.sender, docManager.getIndexNFT(msg.sender, request.tokenID, true));
+        docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
     }
 
     function getTokenURI(uint256 tokenID) public view returns(string memory)

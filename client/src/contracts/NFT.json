@@ -1,0 +1,791 @@
+{
+  "contractName": "NFT",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/NFT.sol\":\"NFT\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/NFT.sol\":{\"keccak256\":\"0x3631606e3ac29e77ed82e4c521ae18b250c42d87f3c209f4c9c8ad57bafdd6c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92afb9dc34af38b2b6795f01144bdd76c32d95d42121b76d980463ddc05e775a\",\"dweb:/ipfs/Qma9HvhziGAn1Xq73fyyifKZYTHhHxiEqqdAvMmjUMtyXs\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212204a79f5cda7689a01f4a9330d61dc97cb342bcc19c84101ce2377fba67062019964736f6c63430008060033",
+  "deployedBytecode": "0x6080604052600080fdfea26469706673582212204a79f5cda7689a01f4a9330d61dc97cb342bcc19c84101ce2377fba67062019964736f6c63430008060033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "56:428:15:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "56:428:15:-:0;;;;;",
+  "source": "//SPDX-License-Identifier: MIT\n\npragma solidity 0.8.6;\n\ncontract NFT\n{\n    enum TypeDoc\n    {\n        Original,\n        CopyShared,\n        CopyCertified,\n        CopyPendingTransfer\n    }\n\n    struct Document\n    {\n       uint256 tokenID;\n       uint256 fileSize;\n       string filename;\n       string fileMimeType;\n       uint256 dateAdd;\n       string filePath;\n       address[] certifying;\n       string tokenURI;\n       string passwordEncrypted;\n       TypeDoc typeNft;\n    }  \n}\n",
+  "sourcePath": "/home/traore/projects/SAV-Doc/contracts/NFT.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/NFT.sol",
+    "exportedSymbols": {
+      "NFT": [
+        2945
+      ]
+    },
+    "id": 2946,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2916,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:15"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2945,
+        "linearizedBaseContracts": [
+          2945
+        ],
+        "name": "NFT",
+        "nameLocation": "65:3:15",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "NFT.TypeDoc",
+            "id": 2921,
+            "members": [
+              {
+                "id": 2917,
+                "name": "Original",
+                "nameLocation": "102:8:15",
+                "nodeType": "EnumValue",
+                "src": "102:8:15"
+              },
+              {
+                "id": 2918,
+                "name": "CopyShared",
+                "nameLocation": "120:10:15",
+                "nodeType": "EnumValue",
+                "src": "120:10:15"
+              },
+              {
+                "id": 2919,
+                "name": "CopyCertified",
+                "nameLocation": "140:13:15",
+                "nodeType": "EnumValue",
+                "src": "140:13:15"
+              },
+              {
+                "id": 2920,
+                "name": "CopyPendingTransfer",
+                "nameLocation": "163:19:15",
+                "nodeType": "EnumValue",
+                "src": "163:19:15"
+              }
+            ],
+            "name": "TypeDoc",
+            "nameLocation": "80:7:15",
+            "nodeType": "EnumDefinition",
+            "src": "75:113:15"
+          },
+          {
+            "canonicalName": "NFT.Document",
+            "id": 2944,
+            "members": [
+              {
+                "constant": false,
+                "id": 2923,
+                "mutability": "mutable",
+                "name": "tokenID",
+                "nameLocation": "231:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "223:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2922,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2925,
+                "mutability": "mutable",
+                "name": "fileSize",
+                "nameLocation": "255:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "247:16:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2924,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "247:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2927,
+                "mutability": "mutable",
+                "name": "filename",
+                "nameLocation": "279:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "272:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2926,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "272:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2929,
+                "mutability": "mutable",
+                "name": "fileMimeType",
+                "nameLocation": "303:12:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "296:19:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2928,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "296:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2931,
+                "mutability": "mutable",
+                "name": "dateAdd",
+                "nameLocation": "332:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "324:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2930,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "324:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2933,
+                "mutability": "mutable",
+                "name": "filePath",
+                "nameLocation": "355:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "348:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2932,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "348:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2936,
+                "mutability": "mutable",
+                "name": "certifying",
+                "nameLocation": "382:10:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "372:20:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 2934,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "372:7:15",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 2935,
+                  "nodeType": "ArrayTypeName",
+                  "src": "372:9:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2938,
+                "mutability": "mutable",
+                "name": "tokenURI",
+                "nameLocation": "408:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "401:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2937,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "401:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2940,
+                "mutability": "mutable",
+                "name": "passwordEncrypted",
+                "nameLocation": "432:17:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "425:24:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2939,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "425:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2943,
+                "mutability": "mutable",
+                "name": "typeNft",
+                "nameLocation": "466:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "458:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_TypeDoc_$2921",
+                  "typeString": "enum NFT.TypeDoc"
+                },
+                "typeName": {
+                  "id": 2942,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 2941,
+                    "name": "TypeDoc",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2921,
+                    "src": "458:7:15"
+                  },
+                  "referencedDeclaration": 2921,
+                  "src": "458:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_TypeDoc_$2921",
+                    "typeString": "enum NFT.TypeDoc"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Document",
+            "nameLocation": "201:8:15",
+            "nodeType": "StructDefinition",
+            "scope": 2945,
+            "src": "194:286:15",
+            "visibility": "public"
+          }
+        ],
+        "scope": 2946,
+        "src": "56:428:15",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:453:15"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/NFT.sol",
+    "exportedSymbols": {
+      "NFT": [
+        2945
+      ]
+    },
+    "id": 2946,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2916,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:15"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "id": 2945,
+        "linearizedBaseContracts": [
+          2945
+        ],
+        "name": "NFT",
+        "nameLocation": "65:3:15",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "NFT.TypeDoc",
+            "id": 2921,
+            "members": [
+              {
+                "id": 2917,
+                "name": "Original",
+                "nameLocation": "102:8:15",
+                "nodeType": "EnumValue",
+                "src": "102:8:15"
+              },
+              {
+                "id": 2918,
+                "name": "CopyShared",
+                "nameLocation": "120:10:15",
+                "nodeType": "EnumValue",
+                "src": "120:10:15"
+              },
+              {
+                "id": 2919,
+                "name": "CopyCertified",
+                "nameLocation": "140:13:15",
+                "nodeType": "EnumValue",
+                "src": "140:13:15"
+              },
+              {
+                "id": 2920,
+                "name": "CopyPendingTransfer",
+                "nameLocation": "163:19:15",
+                "nodeType": "EnumValue",
+                "src": "163:19:15"
+              }
+            ],
+            "name": "TypeDoc",
+            "nameLocation": "80:7:15",
+            "nodeType": "EnumDefinition",
+            "src": "75:113:15"
+          },
+          {
+            "canonicalName": "NFT.Document",
+            "id": 2944,
+            "members": [
+              {
+                "constant": false,
+                "id": 2923,
+                "mutability": "mutable",
+                "name": "tokenID",
+                "nameLocation": "231:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "223:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2922,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2925,
+                "mutability": "mutable",
+                "name": "fileSize",
+                "nameLocation": "255:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "247:16:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2924,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "247:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2927,
+                "mutability": "mutable",
+                "name": "filename",
+                "nameLocation": "279:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "272:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2926,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "272:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2929,
+                "mutability": "mutable",
+                "name": "fileMimeType",
+                "nameLocation": "303:12:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "296:19:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2928,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "296:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2931,
+                "mutability": "mutable",
+                "name": "dateAdd",
+                "nameLocation": "332:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "324:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2930,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "324:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2933,
+                "mutability": "mutable",
+                "name": "filePath",
+                "nameLocation": "355:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "348:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2932,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "348:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2936,
+                "mutability": "mutable",
+                "name": "certifying",
+                "nameLocation": "382:10:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "372:20:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 2934,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "372:7:15",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 2935,
+                  "nodeType": "ArrayTypeName",
+                  "src": "372:9:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2938,
+                "mutability": "mutable",
+                "name": "tokenURI",
+                "nameLocation": "408:8:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "401:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2937,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "401:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2940,
+                "mutability": "mutable",
+                "name": "passwordEncrypted",
+                "nameLocation": "432:17:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "425:24:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2939,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "425:6:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2943,
+                "mutability": "mutable",
+                "name": "typeNft",
+                "nameLocation": "466:7:15",
+                "nodeType": "VariableDeclaration",
+                "scope": 2944,
+                "src": "458:15:15",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_TypeDoc_$2921",
+                  "typeString": "enum NFT.TypeDoc"
+                },
+                "typeName": {
+                  "id": 2942,
+                  "nodeType": "UserDefinedTypeName",
+                  "pathNode": {
+                    "id": 2941,
+                    "name": "TypeDoc",
+                    "nodeType": "IdentifierPath",
+                    "referencedDeclaration": 2921,
+                    "src": "458:7:15"
+                  },
+                  "referencedDeclaration": 2921,
+                  "src": "458:7:15",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_TypeDoc_$2921",
+                    "typeString": "enum NFT.TypeDoc"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Document",
+            "nameLocation": "201:8:15",
+            "nodeType": "StructDefinition",
+            "scope": 2945,
+            "src": "194:286:15",
+            "visibility": "public"
+          }
+        ],
+        "scope": 2946,
+        "src": "56:428:15",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:453:15"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.6+commit.11564f7e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-07-29T07:34:25.319Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

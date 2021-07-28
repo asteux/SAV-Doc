@@ -1,0 +1,2135 @@
+{
+  "contractName": "IAccountManager",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getPasswordMaster",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "pubKey",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "passwordMaster",
+          "type": "string"
+        }
+      ],
+      "name": "addUser",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "publicKey",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAuthority",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "exist",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IAccountManager.User",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "passwordMaster",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "authorityAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "pubKey",
+          "type": "string"
+        }
+      ],
+      "name": "addAuthority",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "publicKey",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAuthority",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "exist",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IAccountManager.User",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getUser",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "publicKey",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAuthority",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "exist",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IAccountManager.User",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "name": "setUser",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "publicKey",
+              "type": "string"
+            },
+            {
+              "internalType": "bool",
+              "name": "isAuthority",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "exist",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IAccountManager.User",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "delUser",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isAuthority",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "userAddress",
+          "type": "address"
+        }
+      ],
+      "name": "checkIfUserExist",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"string\",\"name\":\"passwordMaster\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"authorityAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"pubKey\",\"type\":\"string\"}],\"name\":\"addAuthority\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"publicKey\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"isAuthority\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"exist\",\"type\":\"bool\"}],\"internalType\":\"struct IAccountManager.User\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"pubKey\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"passwordMaster\",\"type\":\"string\"}],\"name\":\"addUser\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"publicKey\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"isAuthority\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"exist\",\"type\":\"bool\"}],\"internalType\":\"struct IAccountManager.User\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"checkIfUserExist\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"delUser\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPasswordMaster\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"getUser\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"publicKey\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"isAuthority\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"exist\",\"type\":\"bool\"}],\"internalType\":\"struct IAccountManager.User\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"isAuthority\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"}],\"name\":\"setUser\",\"outputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"publicKey\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"isAuthority\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"exist\",\"type\":\"bool\"}],\"internalType\":\"struct IAccountManager.User\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/IAccountManager.sol\":\"IAccountManager\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x6bb804a310218875e89d12c053e94a13a4607cdf7cc2052f3e52bd32a0dc50a1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2ebbbe6d0011175bd9e7268b83de3f9c2f9d8d4cbfbaef12aff977d7d727163\",\"dweb:/ipfs/Qmd5c7Vxtis9wzkDNhxwc6A2QT5H9xn9kfjhx7qx44vpro\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0x95098bd1d9c8dec4d80d3dedb88a0d949fa0d740ee99f2aa466bc308216ca6d5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7fec968dcd68e13961521fa3c7dd87baecad91a2653b19240e81f21cc4f3ba85\",\"dweb:/ipfs/QmaXtsYt4Mphm8XHNUfk2me1cF3ssS2SqDBNFpYAzMjomC\"]},\"project:/contracts/IAccountManager.sol\":{\"keccak256\":\"0x57264f117c409c1eb22d614aca3d23913c49934550f630e89a09412ea491f969\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bf6e2e03c2f1a3fd185b64472a14f6771793305108f36a6729219d23f45bf641\",\"dweb:/ipfs/QmUUQKqv1Kr5VEAgksTfYZe9woVdvvkcX3jZho18ww9ijT\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "//SPDX-License-Identifier: MIT\n\npragma solidity 0.8.6;\n\nimport \"@openzeppelin/contracts/access/Ownable.sol\";\n\nabstract contract IAccountManager\n{\n    struct User\n    {\n        string name;\n        string publicKey;\n        bool isAuthority;\n        bool exist;\n    }\n\n    function getPasswordMaster() public virtual view returns(string memory);\n\n    function addUser(string memory name, string memory pubKey, string memory passwordMaster) public virtual returns(User memory);\n\n    function addAuthority(string memory passwordMaster, address authorityAddress, string memory name, string memory pubKey) public virtual returns(User memory);\n\n    function getUser(address userAddress) public virtual view returns(User memory);\n\n    function setUser(string memory name) public virtual returns(User memory);\n\n    function delUser() public virtual;\n\n    function isAuthority(address userAddress) public virtual view returns(bool);\n\n    function checkIfUserExist(address userAddress) public virtual view  returns(bool);\n}\n",
+  "sourcePath": "/home/oumar/projects/SAV-Doc/contracts/IAccountManager.sol",
+  "ast": {
+    "absolutePath": "project:/contracts/IAccountManager.sol",
+    "exportedSymbols": {
+      "Context": [
+        1527
+      ],
+      "IAccountManager": [
+        2749
+      ],
+      "Ownable": [
+        103
+      ]
+    },
+    "id": 2750,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2674,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:13"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
+        "file": "@openzeppelin/contracts/access/Ownable.sol",
+        "id": 2675,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 2750,
+        "sourceUnit": 104,
+        "src": "56:52:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "id": 2749,
+        "linearizedBaseContracts": [
+          2749
+        ],
+        "name": "IAccountManager",
+        "nameLocation": "128:15:13",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "IAccountManager.User",
+            "id": 2684,
+            "members": [
+              {
+                "constant": false,
+                "id": 2677,
+                "mutability": "mutable",
+                "name": "name",
+                "nameLocation": "183:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "176:11:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2676,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "176:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2679,
+                "mutability": "mutable",
+                "name": "publicKey",
+                "nameLocation": "204:9:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "197:16:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2678,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "197:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2681,
+                "mutability": "mutable",
+                "name": "isAuthority",
+                "nameLocation": "228:11:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "223:16:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 2680,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2683,
+                "mutability": "mutable",
+                "name": "exist",
+                "nameLocation": "254:5:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "249:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 2682,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "249:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "User",
+            "nameLocation": "157:4:13",
+            "nodeType": "StructDefinition",
+            "scope": 2749,
+            "src": "150:116:13",
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "10edb2cb",
+            "id": 2689,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPasswordMaster",
+            "nameLocation": "281:17:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2685,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "298:2:13"
+            },
+            "returnParameters": {
+              "id": 2688,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2687,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2689,
+                  "src": "329:13:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2686,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "329:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "328:15:13"
+            },
+            "scope": 2749,
+            "src": "272:72:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "95c5fed4",
+            "id": 2701,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addUser",
+            "nameLocation": "359:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2696,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2691,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "381:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "367:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2690,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "367:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2693,
+                  "mutability": "mutable",
+                  "name": "pubKey",
+                  "nameLocation": "401:6:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "387:20:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2692,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "387:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2695,
+                  "mutability": "mutable",
+                  "name": "passwordMaster",
+                  "nameLocation": "423:14:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "409:28:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2694,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "409:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "366:72:13"
+            },
+            "returnParameters": {
+              "id": 2700,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2699,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "462:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2698,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2697,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "462:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "462:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "461:13:13"
+            },
+            "scope": 2749,
+            "src": "350:125:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "bacf99da",
+            "id": 2715,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addAuthority",
+            "nameLocation": "490:12:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2710,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2703,
+                  "mutability": "mutable",
+                  "name": "passwordMaster",
+                  "nameLocation": "517:14:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "503:28:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2702,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "503:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2705,
+                  "mutability": "mutable",
+                  "name": "authorityAddress",
+                  "nameLocation": "541:16:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "533:24:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2704,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "533:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2707,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "573:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "559:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2706,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "559:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2709,
+                  "mutability": "mutable",
+                  "name": "pubKey",
+                  "nameLocation": "593:6:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "579:20:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2708,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "579:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "502:98:13"
+            },
+            "returnParameters": {
+              "id": 2714,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2713,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "624:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2712,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2711,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "624:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "624:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "623:13:13"
+            },
+            "scope": 2749,
+            "src": "481:156:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "6f77926b",
+            "id": 2723,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getUser",
+            "nameLocation": "652:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2718,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2717,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "668:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "660:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2716,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "660:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "659:21:13"
+            },
+            "returnParameters": {
+              "id": 2722,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2721,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "709:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2720,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2719,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "709:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "709:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "708:13:13"
+            },
+            "scope": 2749,
+            "src": "643:79:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "d0020fad",
+            "id": 2731,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setUser",
+            "nameLocation": "737:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2726,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2725,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "759:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2731,
+                  "src": "745:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2724,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "745:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "744:20:13"
+            },
+            "returnParameters": {
+              "id": 2730,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2729,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2731,
+                  "src": "788:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2728,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2727,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "788:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "788:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "787:13:13"
+            },
+            "scope": 2749,
+            "src": "728:73:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "899478a6",
+            "id": 2734,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "delUser",
+            "nameLocation": "816:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2732,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "823:2:13"
+            },
+            "returnParameters": {
+              "id": 2733,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "840:0:13"
+            },
+            "scope": 2749,
+            "src": "807:34:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "2330f247",
+            "id": 2741,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isAuthority",
+            "nameLocation": "856:11:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2737,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2736,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "876:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2741,
+                  "src": "868:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2735,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "868:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "867:21:13"
+            },
+            "returnParameters": {
+              "id": 2740,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2739,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2741,
+                  "src": "917:4:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2738,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "917:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "916:6:13"
+            },
+            "scope": 2749,
+            "src": "847:76:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "a1abffee",
+            "id": 2748,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "checkIfUserExist",
+            "nameLocation": "938:16:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2744,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2743,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "963:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2748,
+                  "src": "955:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2742,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "955:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "954:21:13"
+            },
+            "returnParameters": {
+              "id": 2747,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2746,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2748,
+                  "src": "1005:4:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2745,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1005:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1004:6:13"
+            },
+            "scope": 2749,
+            "src": "929:82:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2750,
+        "src": "110:903:13",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:982:13"
+  },
+  "legacyAST": {
+    "absolutePath": "project:/contracts/IAccountManager.sol",
+    "exportedSymbols": {
+      "Context": [
+        1527
+      ],
+      "IAccountManager": [
+        2749
+      ],
+      "Ownable": [
+        103
+      ]
+    },
+    "id": 2750,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2674,
+        "literals": [
+          "solidity",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:22:13"
+      },
+      {
+        "absolutePath": "@openzeppelin/contracts/access/Ownable.sol",
+        "file": "@openzeppelin/contracts/access/Ownable.sol",
+        "id": 2675,
+        "nameLocation": "-1:-1:-1",
+        "nodeType": "ImportDirective",
+        "scope": 2750,
+        "sourceUnit": 104,
+        "src": "56:52:13",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "id": 2749,
+        "linearizedBaseContracts": [
+          2749
+        ],
+        "name": "IAccountManager",
+        "nameLocation": "128:15:13",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "IAccountManager.User",
+            "id": 2684,
+            "members": [
+              {
+                "constant": false,
+                "id": 2677,
+                "mutability": "mutable",
+                "name": "name",
+                "nameLocation": "183:4:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "176:11:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2676,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "176:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2679,
+                "mutability": "mutable",
+                "name": "publicKey",
+                "nameLocation": "204:9:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "197:16:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 2678,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "197:6:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2681,
+                "mutability": "mutable",
+                "name": "isAuthority",
+                "nameLocation": "228:11:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "223:16:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 2680,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "223:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2683,
+                "mutability": "mutable",
+                "name": "exist",
+                "nameLocation": "254:5:13",
+                "nodeType": "VariableDeclaration",
+                "scope": 2684,
+                "src": "249:10:13",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 2682,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "249:4:13",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "User",
+            "nameLocation": "157:4:13",
+            "nodeType": "StructDefinition",
+            "scope": 2749,
+            "src": "150:116:13",
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "10edb2cb",
+            "id": 2689,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getPasswordMaster",
+            "nameLocation": "281:17:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2685,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "298:2:13"
+            },
+            "returnParameters": {
+              "id": 2688,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2687,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2689,
+                  "src": "329:13:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2686,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "329:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "328:15:13"
+            },
+            "scope": 2749,
+            "src": "272:72:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "95c5fed4",
+            "id": 2701,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addUser",
+            "nameLocation": "359:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2696,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2691,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "381:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "367:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2690,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "367:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2693,
+                  "mutability": "mutable",
+                  "name": "pubKey",
+                  "nameLocation": "401:6:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "387:20:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2692,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "387:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2695,
+                  "mutability": "mutable",
+                  "name": "passwordMaster",
+                  "nameLocation": "423:14:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "409:28:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2694,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "409:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "366:72:13"
+            },
+            "returnParameters": {
+              "id": 2700,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2699,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2701,
+                  "src": "462:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2698,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2697,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "462:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "462:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "461:13:13"
+            },
+            "scope": 2749,
+            "src": "350:125:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "bacf99da",
+            "id": 2715,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addAuthority",
+            "nameLocation": "490:12:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2710,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2703,
+                  "mutability": "mutable",
+                  "name": "passwordMaster",
+                  "nameLocation": "517:14:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "503:28:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2702,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "503:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2705,
+                  "mutability": "mutable",
+                  "name": "authorityAddress",
+                  "nameLocation": "541:16:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "533:24:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2704,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "533:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2707,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "573:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "559:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2706,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "559:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2709,
+                  "mutability": "mutable",
+                  "name": "pubKey",
+                  "nameLocation": "593:6:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "579:20:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2708,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "579:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "502:98:13"
+            },
+            "returnParameters": {
+              "id": 2714,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2713,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2715,
+                  "src": "624:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2712,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2711,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "624:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "624:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "623:13:13"
+            },
+            "scope": 2749,
+            "src": "481:156:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "6f77926b",
+            "id": 2723,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getUser",
+            "nameLocation": "652:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2718,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2717,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "668:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "660:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2716,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "660:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "659:21:13"
+            },
+            "returnParameters": {
+              "id": 2722,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2721,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2723,
+                  "src": "709:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2720,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2719,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "709:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "709:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "708:13:13"
+            },
+            "scope": 2749,
+            "src": "643:79:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "d0020fad",
+            "id": 2731,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setUser",
+            "nameLocation": "737:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2726,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2725,
+                  "mutability": "mutable",
+                  "name": "name",
+                  "nameLocation": "759:4:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2731,
+                  "src": "745:18:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 2724,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "745:6:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "744:20:13"
+            },
+            "returnParameters": {
+              "id": 2730,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2729,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2731,
+                  "src": "788:11:13",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$2684_memory_ptr",
+                    "typeString": "struct IAccountManager.User"
+                  },
+                  "typeName": {
+                    "id": 2728,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 2727,
+                      "name": "User",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 2684,
+                      "src": "788:4:13"
+                    },
+                    "referencedDeclaration": 2684,
+                    "src": "788:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_User_$2684_storage_ptr",
+                      "typeString": "struct IAccountManager.User"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "787:13:13"
+            },
+            "scope": 2749,
+            "src": "728:73:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "899478a6",
+            "id": 2734,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "delUser",
+            "nameLocation": "816:7:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2732,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "823:2:13"
+            },
+            "returnParameters": {
+              "id": 2733,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "840:0:13"
+            },
+            "scope": 2749,
+            "src": "807:34:13",
+            "stateMutability": "nonpayable",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "2330f247",
+            "id": 2741,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "isAuthority",
+            "nameLocation": "856:11:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2737,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2736,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "876:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2741,
+                  "src": "868:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2735,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "868:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "867:21:13"
+            },
+            "returnParameters": {
+              "id": 2740,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2739,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2741,
+                  "src": "917:4:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2738,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "917:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "916:6:13"
+            },
+            "scope": 2749,
+            "src": "847:76:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          },
+          {
+            "functionSelector": "a1abffee",
+            "id": 2748,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "checkIfUserExist",
+            "nameLocation": "938:16:13",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2744,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2743,
+                  "mutability": "mutable",
+                  "name": "userAddress",
+                  "nameLocation": "963:11:13",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2748,
+                  "src": "955:19:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2742,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "955:7:13",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "954:21:13"
+            },
+            "returnParameters": {
+              "id": 2747,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2746,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 2748,
+                  "src": "1005:4:13",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 2745,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1005:4:13",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1004:6:13"
+            },
+            "scope": 2749,
+            "src": "929:82:13",
+            "stateMutability": "view",
+            "virtual": true,
+            "visibility": "public"
+          }
+        ],
+        "scope": 2750,
+        "src": "110:903:13",
+        "usedErrors": []
+      }
+    ],
+    "src": "32:982:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.6+commit.11564f7e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-07-28T18:23:27.920Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

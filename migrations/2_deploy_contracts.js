@@ -1,9 +1,18 @@
-const SavDoc = artifacts.require("./SecMyDoc.sol");
-const SavDocToken = artifacts.require("./SecMyDocToken");
+const AccountManager = artifacts.require("./AccountManager.sol");
+const DocManager = artifacts.require("./DocManager.sol");
+const SavDoc = artifacts.require("./SaveMyDoc.sol");
+const SavDocToken = artifacts.require("./SaveDocToken");
 
 module.exports = async (deployer) => {
+  const deployAccountManager = await deployer.deploy(AccountManager);
   const deploySavDocToken = await deployer.deploy(SavDocToken);
-  const deploySavDoc = await deployer.deploy(SavDoc, SavDocToken.address);
+  const deployDocManager = await deployer.deploy(DocManager, SavDocToken.address, AccountManager.address);
+  const deploySavDoc = await deployer.deploy(SavDoc, DocManager.address, SavDocToken.address);
 
-  return [deploySavDocToken, deploySavDoc];
+  return [
+    deployAccountManager,
+    deploySavDocToken,
+    deployDocManager,
+    deploySavDoc,
+  ];
 };

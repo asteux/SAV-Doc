@@ -2,28 +2,16 @@
 
 pragma solidity 0.8.6;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AccountManager
+contract AccountManager is Ownable
 {
-    address private owner;
     mapping(address => User) private users;
     mapping(address => string) private passwordMasters;
-
-
-    constructor()
-    {
-        owner = msg.sender;
-    }
 
     modifier addressIsValid(address _address)
     {
         require(_address != address(0), "AccountManager: Cette addresse n'existe pas !");
-        _;
-    }
-
-    modifier onlyOwner()
-    {
-        require(owner == msg.sender, "AccountManager: Vous n'avez pas les droits !");
         _;
     }
 
