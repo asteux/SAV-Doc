@@ -1,7 +1,7 @@
 import { createContractSlice, createContractActions } from './createContractSlice';
 import SavDocContract from '../../contracts/SaveMyDoc.json';
 
-const saveDocContractSlice = createContractSlice(
+const savDocContractSlice = createContractSlice(
   'savDocContract',
   {
     secureDocument: {
@@ -37,28 +37,28 @@ const saveDocContractSlice = createContractSlice(
 const savDocContractActions = {
   secureDocument: (tokenURI, directory, fileName, fileMimeType, fileSize, password, hashFile) => {
     return async (dispatch, getState) => {
-      const { web3, saveDocContract } = getState();
+      const { web3, savDocContract } = getState();
 
-      saveDocContract.contract.methods
+      savDocContract.contract.methods
         .secureDocument(fileName, tokenURI, fileMimeType, fileSize, directory, password, hashFile)
         .send({ from: web3.accounts[0] })
         .once('transactionHash', () => {
-          dispatch(saveDocContractSlice.actions.secureDocumentSent());
+          dispatch(savDocContractSlice.actions.secureDocumentSent());
         })
         .once('receipt', () => {
-          dispatch(saveDocContractSlice.actions.secureDocumentSucceeded());
+          dispatch(savDocContractSlice.actions.secureDocumentSucceeded());
         })
         .once('error', (error) => {
           if (!error.code || 4001 !== error.code) {
-            dispatch(saveDocContractSlice.actions.secureDocumentFailed(error));
+            dispatch(savDocContractSlice.actions.secureDocumentFailed(error));
           }
         })
       ;
     }
   },
-  ...createContractActions(saveDocContractSlice, SavDocContract),
+  ...createContractActions(savDocContractSlice, SavDocContract),
 };
 
 export const { loadContract: loadSavDocContract, secureDocument } = savDocContractActions;
 
-export default saveDocContractSlice.reducer;
+export default savDocContractSlice.reducer;

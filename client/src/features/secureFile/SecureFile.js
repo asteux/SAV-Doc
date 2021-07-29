@@ -26,7 +26,7 @@ const SecureFile = () => {
   const classes = useStyles();
 
   const accounts = useSelector((state) => state.web3.accounts);
-  const secureDocumentState = useSelector((state) => state.saveDocContract.secureDocument);
+  const secureDocumentState = useSelector((state) => state.savDocContract.secureDocument);
   const loadingMessage = useSelector((state) => state.secureFile.loadingMessage);
   const activeStep = useSelector((state) => state.secureFile.activeStep);
   const originalFile = useSelector((state) => state.secureFile.originalFile);

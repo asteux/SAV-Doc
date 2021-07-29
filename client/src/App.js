@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
-import { loadSavDocContract } from './features/contracts/saveDocContractSlice';
+import { loadSavDocContract } from './features/contracts/savDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
