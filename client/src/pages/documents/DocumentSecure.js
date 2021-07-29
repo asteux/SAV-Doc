@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Documents = () => {
+const DocumentSecure = () => {
   const classes = useStyles();
 
   return (
@@ -31,4 +31,4 @@ const Documents = () => {
   );
 };
 
-export default Documents;
+export default DocumentSecure;

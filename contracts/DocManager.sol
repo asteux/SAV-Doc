@@ -67,16 +67,13 @@ contract DocManager is Ownable, NFT
         return index;
     }
 
-    function createDoc(address ownerNFT, string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
+    function createDoc(address ownerNFT, uint256 tokenID, string memory tokenName, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
     {
         //check que l'utilisateur existe
        require(!isOfficielDoc(hashNFT), "TokenManager: Ce document correspond a un NFT officiel.");
-       uint256 tokenID;
        Document memory nft;
        address[] memory certifyings;
 
-
-       tokenID = saveDocToken.mint(ownerNFT, tokenURI);
        nft = Document(tokenID, tokenLength, tokenName, tokenMime, block.timestamp, filePath, certifyings, "", passwordEncrypted, TypeDoc.Original);
 
        documents[ownerNFT][TypeDoc.Original].push(nft);

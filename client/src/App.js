@@ -8,7 +8,7 @@ import { loadSavDocContract } from './features/contracts/saveDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
-import Documents from "./pages/documents/Documents";
+import DocumentSecure from "./pages/documents/DocumentSecure";
 import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 const App = () => {
@@ -62,7 +62,7 @@ const App = () => {
       <CssBaseline/>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/documents" component={Documents} />
+        <Route exact path="/documents/secure" component={DocumentSecure} />
         <Route>
           <Redirect to="/" />
         </Route>

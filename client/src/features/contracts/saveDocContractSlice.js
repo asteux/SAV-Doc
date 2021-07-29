@@ -1,5 +1,5 @@
 import { createContractSlice, createContractActions } from './createContractSlice';
-import SavDocContract from '../../contracts/SecMyDoc.json';
+import SavDocContract from '../../contracts/SaveMyDoc.json';
 
 const saveDocContractSlice = createContractSlice(
   'savDocContract',
@@ -7,7 +7,7 @@ const saveDocContractSlice = createContractSlice(
     secureDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
-    }
+    },
   },
   {
     secureDocumentSent: (state) => {
@@ -35,12 +35,12 @@ const saveDocContractSlice = createContractSlice(
 );
 
 const savDocContractActions = {
-  secureDocument: (tokenURI, directory, fileName, fileMimeType, fileSize) => {
+  secureDocument: (tokenURI, directory, fileName, fileMimeType, fileSize, password, hashFile) => {
     return async (dispatch, getState) => {
       const { web3, saveDocContract } = getState();
 
       saveDocContract.contract.methods
-        .createNFT(fileName, tokenURI, fileMimeType, fileSize, directory)
+        .secureDocument(fileName, tokenURI, fileMimeType, fileSize, directory, password, hashFile)
         .send({ from: web3.accounts[0] })
         .once('transactionHash', () => {
           dispatch(saveDocContractSlice.actions.secureDocumentSent());

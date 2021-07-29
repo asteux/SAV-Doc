@@ -27,6 +27,17 @@ contract SaveMyDoc is NFT
         uint256 index;
     }
 
+    function secureDocument(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
+    {
+       uint256 tokenID;
+       Document memory document;
+
+       tokenID = saveDocToken.mint(msg.sender, tokenURI);
+       document = docManager.createDoc(msg.sender, tokenID, tokenName, tokenMime, tokenLength, filePath, passwordEncrypted, hashNFT);
+
+       return document;
+    }
+
     function transferNFT(address to, uint256 tokenID, string memory tokenURITmp) public
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURITmp, TypeDoc.CopyPendingTransfer);

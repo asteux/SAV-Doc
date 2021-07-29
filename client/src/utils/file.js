@@ -1,3 +1,4 @@
+import { SHA256 } from 'crypto-js';
 import { fromBuffer, minimumBytes } from 'file-type';
 
 export const readFileAsArrayBuffer = (file) => {
@@ -17,6 +18,26 @@ export const readFileAsArrayBuffer = (file) => {
     };
 
     reader.readAsArrayBuffer(file);
+  });
+};
+
+export const readFileAsBinaryString = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      resolve(event.target.result);
+    };
+
+    reader.onerror = (event) => {
+      reject(event.target.error);
+    };
+
+    reader.onabort = (event) => {
+      reject('abort');
+    };
+
+    reader.readAsBinaryString(file);
   });
 };
 
@@ -73,4 +94,10 @@ export const getFileType = async (data) => {
   }
 
   return await fromBuffer(dataSliced);
+};
+
+export const hashWithSha256 = async (file) => {
+  const data = await readFileAsBinaryString(file);
+
+  return SHA256(data).toString();
 };

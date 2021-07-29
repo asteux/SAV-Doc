@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { secureDocument } from '../contracts/saveDocContractSlice';
 import { encryptWithPassword, encryptWithPublicKey, getEncryptionPublicKey } from '../../utils/encryption';
-import { getFileType, readFileAsDataURL } from '../../utils/file';
+import { getFileType, hashWithSha256, readFileAsDataURL } from '../../utils/file';
 import { storeBlob } from '../../utils/ipfs';
 
 const secureFileSlice = createSlice({
@@ -148,8 +148,10 @@ const secureFileActions = {
       const fileName = secureFile.originalFile.name.replace(/^.*?([^\\\/]*)$/, '$1')
       const fileMimeType = (await getFileType(secureFile.originalFile)).mime ?? secureFile.originalFile.type ?? 'application/octet-stream';
       const fileSize = secureFile.originalFile.size;
+      const password = secureFile.encryptedPasswordFile;
+      const hash = await hashWithSha256(secureFile.originalFile);
 
-      dispatch(secureDocument(tokenURI, directory, fileName, fileMimeType, fileSize));
+      dispatch(secureDocument(tokenURI, directory, fileName, fileMimeType, fileSize, password, hash));
     };
   },
   reset: () => {
