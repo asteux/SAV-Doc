@@ -4,11 +4,13 @@ import { Redirect, Route, Switch } from 'react-router';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
+import { loadDocManagerContract } from "./features/contracts/docManagerContractSlice";
 import { loadSavDocContract } from './features/contracts/savDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
 import DocumentSecure from "./pages/documents/DocumentSecure";
+import DocumentsViewer from "./pages/documents/DocumentsViewer";
 import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
 
 const App = () => {
@@ -41,6 +43,7 @@ const App = () => {
   useEffect(() => {
     if (web3 && networkId) {
       // Load Contracts
+      dispatch(loadDocManagerContract(web3, networkId));
       dispatch(loadSavDocContract(web3, networkId));
     }
   }, [dispatch, web3, networkId]);
@@ -62,6 +65,7 @@ const App = () => {
       <CssBaseline/>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/documents" component={DocumentsViewer} />
         <Route exact path="/documents/secure" component={DocumentSecure} />
         <Route>
           <Redirect to="/" />
