@@ -15,6 +15,13 @@ const fileManagerSlice = createSlice({
       state.history = [[state.root]];
       state.historyIndex = 0;
     },
+    currentDirectoryChanged: (state, action) => {
+      state.history = [...(state.history.slice(0, state.historyIndex + 1)), action.payload];
+      state.historyIndex = state.history.length - 1;
+    },
+    historyIndexChanged: (state, action) => {
+      state.historyIndex = action.payload;
+    },
   },
 });
 
@@ -26,10 +33,41 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.isLoaded({ root, fileMap }));
     };
   },
+  goToParentDirectory: () => {
+    return (dispatch, getState) => {
+      const { fileManager } = getState();
+
+      const currentDirectory = [...fileManager.history[fileManager.historyIndex]];
+      if (1 < currentDirectory.length) {
+        currentDirectory.pop();
+
+        dispatch(fileManagerSlice.actions.currentDirectoryChanged(currentDirectory));
+      }
+    };
+  },
+  goToPreviousDirectory: () => {
+    return (dispatch, getState) => {
+      const { fileManager } = getState();
+
+      const newHistoryIndex = Math.max(0, fileManager.historyIndex - 1);
+      dispatch(fileManagerSlice.actions.historyIndexChanged(newHistoryIndex));
+    };
+  },
+  goToNextDirectory: () => {
+    return (dispatch, getState) => {
+      const { fileManager } = getState();
+
+      const newHistoryIndex = Math.min(fileManager.history.length - 1, fileManager.historyIndex + 1);
+      dispatch(fileManagerSlice.actions.historyIndexChanged(newHistoryIndex));
+    };
+  },
 };
 
 export const {
   load,
+  goToParentDirectory,
+  goToPreviousDirectory,
+  goToNextDirectory,
 } = fileManagerActions;
 
 export default fileManagerSlice.reducer;
