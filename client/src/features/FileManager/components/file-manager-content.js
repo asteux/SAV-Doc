@@ -18,7 +18,11 @@ const FileManagerContent = () => {
   const currentDirectory = useMemo(() => history[historyIndex] ?? [""], [history, historyIndex]);
   const directoryContent = useMemo(() => {
     const data = fileMap[currentDirectory.join('/')] ?? [];
-    return stableSort(data, getComparator((sortReversedOrder) ? 'desc' : 'asc', sortBy));
+    const sortedData = stableSort(data, getComparator((sortReversedOrder) ? 'desc' : 'asc', sortBy));
+    return [
+      ...sortedData.filter((data) => data.isDir),
+      ...sortedData.filter((data) => !data.isDir),
+    ]
   }, [fileMap, currentDirectory, sortBy, sortReversedOrder]);
 
   const components = useMemo(() => {
