@@ -10,6 +10,7 @@ const FileManagerContent = () => {
   const fileMap = useSelector(state => state.fileManager.fileMap);
   const history = useSelector((state => state.fileManager.history));
   const historyIndex = useSelector((state => state.fileManager.historyIndex));
+  const querySearch = useSelector((state => state.fileManager.querySearch));
   const viewMode = useSelector((state => state.fileManager.viewMode));
   const sortBy = useSelector((state => state.fileManager.sortBy));
   const sortReversedOrder = useSelector((state => state.fileManager.sortReversedOrder));
@@ -23,16 +24,19 @@ const FileManagerContent = () => {
   const components = useMemo(() => {
     return (directoryContent)
         ? directoryContent.map((item) => {
-          let content = (item.isDir)
+          let content = <></>;
+          if (!querySearch || item.name.includes(querySearch)) {
+            content = (item.isDir)
               ? <FileManagerFolder data={item} />
               : <FileManagerFile data={item} />
             ;
+          }
 
           return <>{content}</>;
         })
         : []
     ;
-  }, [directoryContent]);
+  }, [directoryContent, querySearch]);
 
   let content = <></>;
   switch (viewMode) {
