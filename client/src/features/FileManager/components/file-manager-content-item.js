@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import RemoveIcon from '@material-ui/icons/Remove';
+
 import { setCurrentDirectory } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
@@ -39,8 +41,8 @@ const FileManagerContentItem = ({ data, icon }) => {
             <TableCell>
               <Typography className={classes.link} onDoubleClick={handleDoubleClick}>{data.name}</Typography>
             </TableCell>
-            <TableCell>{humanFileSize(data.size, true)}</TableCell>
-            <TableCell>{(new Date(data.createdAt * 1000)).toLocaleString()}</TableCell>
+            <TableCell>{(!data.isDir) ? humanFileSize(data.size, true) : (<RemoveIcon />)}</TableCell>
+            <TableCell>{(!data.isDir) ? (new Date(data.createdAt * 1000)).toLocaleString() : (<RemoveIcon />)}</TableCell>
           </TableRow>
         </>
       );
