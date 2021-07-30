@@ -4,17 +4,21 @@ import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, Ta
 
 import FileManagerFile from "./file-manager-file";
 import FileManagerFolder from "./file-manager-folder";
+import { getComparator, stableSort } from "../../../utils/array";
 
 const FileManagerContent = () => {
   const fileMap = useSelector(state => state.fileManager.fileMap);
   const history = useSelector((state => state.fileManager.history));
   const historyIndex = useSelector((state => state.fileManager.historyIndex));
   const viewMode = useSelector((state => state.fileManager.viewMode));
+  const sortBy = useSelector((state => state.fileManager.sortBy));
+  const sortReversedOrder = useSelector((state => state.fileManager.sortReversedOrder));
 
   const currentDirectory = useMemo(() => history[historyIndex] ?? [""], [history, historyIndex]);
   const directoryContent = useMemo(() => {
-    return fileMap[currentDirectory.join('/')] ?? [];
-  }, [fileMap, currentDirectory]);
+    const data = fileMap[currentDirectory.join('/')] ?? [];
+    return stableSort(data, getComparator((sortReversedOrder) ? 'desc' : 'asc', sortBy));
+  }, [fileMap, currentDirectory, sortBy, sortReversedOrder]);
 
   const components = useMemo(() => {
     return (directoryContent)
