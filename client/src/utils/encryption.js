@@ -1,4 +1,4 @@
-import AES from 'crypto-js/aes';
+import { AES, enc } from 'crypto-js';
 import { bufferToHex } from 'ethereumjs-util';
 import { encrypt } from 'eth-sig-util';
 
@@ -7,7 +7,7 @@ export const encryptWithPassword = (data, password) => {
 };
 
 export const decryptWithPassword = (encryptedData, password) => {
-  return AES.decrypt(encryptedData, password);
+  return AES.decrypt(encryptedData, password).toString(enc.Utf8);
 };
 
 export const getEncryptionPublicKey = async (account) => {

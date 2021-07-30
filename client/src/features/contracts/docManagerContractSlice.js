@@ -72,6 +72,7 @@ const docManagerContractActions = {
                 isDir: true,
                 size: 0,
                 createdAt: null,
+                data: null,
               });
             }
           }
@@ -82,6 +83,7 @@ const docManagerContractActions = {
             isDir: false,
             size: doc.fileSize,
             createdAt: parseInt(doc.dateAdd),
+            data: doc,
           });
         }
 

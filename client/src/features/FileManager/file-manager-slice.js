@@ -11,6 +11,7 @@ const fileManagerSlice = createSlice({
     viewMode: 'grid', // 'grid' | 'list'
     sortBy: 'name', // 'name' | 'size' | 'createdAt'
     sortReversedOrder: false,
+    fileToShow: null,
   },
   reducers: {
     isLoaded: (state, action) => {
@@ -37,6 +38,9 @@ const fileManagerSlice = createSlice({
     },
     sortReversedOrderToggled: (state) => {
       state.sortReversedOrder = !state.sortReversedOrder;
+    },
+    fileToShowChanged: (state, action) => {
+      state.fileToShow = action.payload;
     },
   },
 });
@@ -102,6 +106,16 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.sortReversedOrderToggled());
     };
   },
+  showFile: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToShowChanged(fileData));
+    };
+  },
+  hideFile: () => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToShowChanged(null));
+    };
+  },
 };
 
 export const {
@@ -114,6 +128,8 @@ export const {
   setViewMode,
   setSortBy,
   toggleSortReversedOrder,
+  showFile,
+  hideFile,
 } = fileManagerActions;
 
 export default fileManagerSlice.reducer;

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
 import RemoveIcon from '@material-ui/icons/Remove';
 
-import { setCurrentDirectory } from "../file-manager-slice";
+import { setCurrentDirectory, showFile } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
 export const useStyles = makeStyles((theme) => ({
@@ -27,7 +27,7 @@ const FileManagerContentItem = ({ data, icon }) => {
     if (data.isDir) {
       dispatch(setCurrentDirectory([...data.directory, data.name]));
     } else {
-      // TODO: Print document
+      dispatch(showFile(data));
     }
   };
 
