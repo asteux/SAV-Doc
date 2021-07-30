@@ -2,32 +2,74 @@
 
 pragma solidity 0.8.6;
 
+import "./AccountManager.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./DocManager.sol";
 import "./SaveDocToken.sol";
-import "./NFT.sol";
+import "./SaveDocStruct.sol";
 
 
-contract SaveMyDoc is NFT
+contract SaveMyDoc is Ownable, SaveDocStruct
 {
     mapping(address => CertificationRequest[]) private requests;
     SaveDocToken private saveDocToken;
     DocManager private docManager;
+    AccountManager private accountManager;
 
 
-    constructor(DocManager _docManager, SaveDocToken _saveDocToken)
+    constructor(DocManager _docManager, SaveDocToken _saveDocToken, AccountManager _accountManager)
     {
         docManager = _docManager;
         saveDocToken = _saveDocToken;
+        accountManager = _accountManager;
     }
 
-    struct CertificationRequest
+    modifier isMyToken(uint256 tokenID)
     {
-        address applicant;
-        uint256 tokenID;
-        uint256 index;
+        require(saveDocToken.ownerOf(tokenID) == msg.sender, "TokenManager: Cet NFT ne vous appartient pas !");
+        _;
     }
 
-    function secureDocument(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
+    modifier userExist(address addressUser)
+    {
+        require(accountManager.checkIfUserExist(addressUser), "DocManager: Cette utilisateur n'existe pas.");
+        _;
+    }
+
+    function subscribe(string memory name, string memory pubKey, string memory passwordMaster) external
+    {
+        accountManager.addUser(msg.sender, name, pubKey, passwordMaster);
+    }
+
+    function subscribeAuthority(string memory name, string memory pubKey, string memory passwordMaster) onlyOwner() external
+    {
+        accountManager.addUser(msg.sender, name, pubKey, passwordMaster);
+    }
+
+    function viewMyProfil() view external returns(User memory)
+    {
+        return accountManager.getUser(msg.sender);
+    }
+
+    function getMyPasswordMaster() view external returns(string memory)
+    {
+        return accountManager.getPasswordMaster(msg.sender);
+    }
+
+    function changeMyName(string memory name) external
+    {
+        accountManager.setUser(msg.sender, name);
+    }
+
+    function unsubscribe() external userExist(msg.sender)
+    {
+        // Voir comment supprimer tout ces fichiers
+        docManager.deleteAllDocs(msg.sender);
+        docManager.delAllCopyDoc(msg.sender);
+        accountManager.delUser(msg.sender);
+    }
+
+    function secureDocument(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) external returns (Document memory)
     {
        uint256 tokenID;
        Document memory document;
@@ -38,26 +80,49 @@ contract SaveMyDoc is NFT
        return document;
     }
 
-    function transferNFT(address to, uint256 tokenID, string memory tokenURITmp) public
+    // TODO Review
+    function delMyDocument(uint256 tokenID, bool forTransfer) isMyToken(tokenID) public
+    {
+        docManager.deleteDoc(msg.sender, tokenID);
+
+        if (!forTransfer)
+        {
+            saveDocToken.burn(tokenID, msg.sender);
+        }
+    }
+
+
+    function getTokenURI(uint256 tokenID) external view isMyToken(tokenID) returns(string memory)
+    {
+        return saveDocToken.tokenURI(tokenID);
+    }
+
+    function transferDoc(address to, uint256 tokenID, string memory tokenURITmp) isMyToken(tokenID) userExist(to) external
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURITmp, TypeDoc.CopyPendingTransfer);
         saveDocToken.transferFrom(msg.sender, to, tokenID);
-        deleteDoc(tokenID, true);
+        delMyDocument(tokenID, true);
     }
 
-    function acceptNewNFT(uint256 tokenID, string memory newTokenURI, string memory passwordEncrypted) public
-    {
-        // check si msg.sender a bien déja une copie du Document
-        docManager.copyDocToOriginal(msg.sender, TypeDoc.CopyPendingTransfer, passwordEncrypted, tokenID);
-        saveDocToken.setTokenURI(tokenID, newTokenURI, msg.sender);
-    }
-
-    function shareNFT(uint256 tokenID, address to, string memory tokenURI) public
+    function shareDoc(uint256 tokenID, address to, string memory tokenURI) isMyToken(tokenID) userExist(to) external
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURI, TypeDoc.CopyShared);
     }
 
-    function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) public
+    function acceptNewDoc(uint256 tokenID, string memory newTokenURI, string memory passwordEncrypted) isMyToken(tokenID) external
+    {
+        // check si msg.sender a bien déja une copie du Document
+        docManager.convertTypeDoc(msg.sender, TypeDoc.CopyPendingTransfer, TypeDoc.Original, tokenID, passwordEncrypted);
+        saveDocToken.setTokenURI(tokenID, newTokenURI, msg.sender);
+    }
+
+
+    function delCopyDocShared(uint tokenID) external isMyToken(tokenID)
+    {
+        docManager.delCopyDoc(msg.sender, TypeDoc.CopyShared, docManager.getIndexNFT(msg.sender, TypeDoc.CopyShared, tokenID));
+    }
+
+    function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) isMyToken(tokenID) userExist(certifying) external
     {
         CertificationRequest memory request;
 
@@ -66,7 +131,27 @@ contract SaveMyDoc is NFT
         requests[certifying].push(request);
     }
 
-    function getRequests() public view returns(CertificationRequest[] memory)
+    function viewMyDocs() view external returns(Document[] memory)
+    {
+        return docManager.getDocs(msg.sender);
+    }
+
+    function viewMyCopyDocs() view external returns(Document[] memory)
+    {
+        return docManager.getAllCopyShared(msg.sender);
+    }
+
+    function viewDocPendingTransfer() view external returns(Document[] memory)
+    {
+        return docManager.getAllCopyPendingTransfer(msg.sender);
+    }
+
+    function viewDocCertified() view external returns(Document[] memory)
+    {
+        return docManager.getAllCopyCertified(msg.sender);
+    }
+
+    function viewCertificationRequest() external view returns(CertificationRequest[] memory)
     {
         return requests[msg.sender];
     }
@@ -81,29 +166,34 @@ contract SaveMyDoc is NFT
         requests[owner].pop();
     }
 
-    function acceptCertificationRequest(CertificationRequest memory request, string memory hashNFT) public
+    function certifyDocument(address applicant, uint256 tokenID, string memory hashNFT) private
     {
-        // check si msg.sender a bien déja une copie du Document
-        docManager.certify(msg.sender, request.applicant, request.tokenID, hashNFT);
-        delRequest(msg.sender, request.index);
-        docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
+        bool isAuthority;
+
+        isAuthority = accountManager.isAuthority(msg.sender);
+        docManager.certify(msg.sender, isAuthority, applicant, tokenID, hashNFT);
     }
 
-    function rejectCertificationRequest(CertificationRequest memory request) public
+    function acceptCertificationRequest(CertificationRequest memory request, string memory hashNFT, bool keepCopyDoc) public
+    {
+        // check si msg.sender a bien déja une copie du Document
+        certifyDocument(request.applicant, request.tokenID, hashNFT);
+        delRequest(msg.sender, request.index);
+
+        if (keepCopyDoc)
+        {
+            docManager.convertTypeDoc(msg.sender, TypeDoc.CopyCertified, TypeDoc.CopyShared, request.tokenID, "");
+        }
+        else
+        {
+            docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
+        }
+    }
+
+    function rejectCertificationRequest(CertificationRequest memory request) external
     {
         // check si msg.sender à bien déja une copie du Document
         delRequest(msg.sender, request.index);
         docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
-    }
-
-    function getTokenURI(uint256 tokenID) public view returns(string memory)
-    {
-        require(docManager.getOwnerToken(tokenID) == msg.sender, "SaveMyDoc: Cet NFT ne vous appartient pas !");
-        return saveDocToken.tokenURI(tokenID);
-    }
-
-    function deleteDoc(uint256 tokenID, bool isCopyDoc) public
-    {
-        docManager.deleteDoc(msg.sender, tokenID, isCopyDoc);
     }
 }

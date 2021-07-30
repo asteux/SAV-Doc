@@ -3,34 +3,13 @@
 pragma solidity 0.8.6;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./SaveDocToken.sol";
-import "./AccountManager.sol";
-import "./NFT.sol";
+import "./SaveDocStruct.sol";
 
-contract DocManager is Ownable, NFT
+contract DocManager is Ownable, SaveDocStruct
 {
     mapping(string => bool) hashDocs;
-    SaveDocToken private saveDocToken;
-    AccountManager private accountManager;
     mapping(address => mapping(TypeDoc => Document[])) private documents;
 
-    constructor(SaveDocToken _saveDocToken, AccountManager _accountManager)
-    {
-        saveDocToken = _saveDocToken;
-        accountManager = _accountManager;
-    }
-
-    modifier userExist(address addressUser)
-    {
-        require(accountManager.checkIfUserExist(addressUser), "DocManager: Cette utilisateur n'existe pas.");
-        _;
-    }
-
-    modifier isMyToken(uint256 tokenID, address ownerNFT)
-    {
-        require(saveDocToken.ownerOf(tokenID) == ownerNFT, "TokenManager: Cet NFT ne vous appartient pas !");
-        _;
-    }
 
     modifier addressesAreDifferent(address from, address to)
     {
@@ -42,16 +21,6 @@ contract DocManager is Ownable, NFT
     {
         bool found;
         uint256 index;
-        // Document[] memory nft;
-
-        // if (isCopy)
-        // {
-        //     nft = documents[ownerNFT][typeNft];
-        // }
-        // else
-        // {
-        //     nft = documents[ownerNFT][TypeDoc.Original];
-        // }
 
         for (uint256 i = 0; i < documents[ownerNFT][typeNft].length; i++)
         {
@@ -67,7 +36,7 @@ contract DocManager is Ownable, NFT
         return index;
     }
 
-    function createDoc(address ownerNFT, uint256 tokenID, string memory tokenName, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) public returns (Document memory)
+    function createDoc(address ownerNFT, uint256 tokenID, string memory tokenName, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT)onlyOwner() external returns (Document memory)
     {
         //check que l'utilisateur existe
        require(!isOfficielDoc(hashNFT), "TokenManager: Ce document correspond a un NFT officiel.");
@@ -80,48 +49,44 @@ contract DocManager is Ownable, NFT
        return nft;
     }
 
-    // function createNFTCertified(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted) public returns(Nft memory)
-    // {
-    //   uint256 tokenID;
-    //   Nft memory nft;
-    //   address[] memory certifyings;
+/*    function createNFTCertified(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted) public returns(Document memory)
+    {
+       uint256 tokenID;
+       Nft memory nft;
+       address[] memory certifyings;
 
-    //   certifyings[0] = msg.sender;
-    //   tokenID = saveMyDocToken.addItem(ownerNFT, tokenURI);
-    //   nft = Nft(tokenID, tokenLength, tokenName, tokenMime, block.timestamp, filePath, certifyings , "", passwordEncrypted, TypeNFT.Original, true);
+       certifyings[0] = msg.sender;
+       tokenID = saveMyDocToken.addItem(ownerNFT, tokenURI);
+       nft = Nft(tokenID, tokenLength, tokenName, tokenMime, block.timestamp, filePath, certifyings , "", passwordEncrypted, TypeNFT.Original, true);
 
-    //   balance[ownerNFT].push(nft);
+       balance[ownerNFT].push(nft);
 
-    //   return nft;
-    // }
+       return nft;
+     }*/
 
-    function getDocs() public view returns(Document[] memory)
+    function getDocs(address addressUser) external view onlyOwner() returns(Document[] memory)
+
     {
         //check que l'utilisateur existe
-      return documents[msg.sender][TypeDoc.Original];
+      return documents[addressUser][TypeDoc.Original];
     }
 
-    function deleteDoc(address ownerDoc, uint256 tokenID, bool isCopyDoc) external onlyOwner() isMyToken(tokenID, ownerDoc) returns(bool)
+    function deleteDoc(address ownerDoc, uint256 tokenID) external onlyOwner() returns(bool)
     {
         uint256 index = getIndexNFT(ownerDoc, TypeDoc.Original, tokenID);
 
         documents[ownerDoc][TypeDoc.Original][index] = documents[ownerDoc][TypeDoc.Original][documents[ownerDoc][TypeDoc.Original].length - 1];
         documents[ownerDoc][TypeDoc.Original].pop();
-
-        if (!isCopyDoc)
-        {
-            saveDocToken.burn(tokenID, msg.sender);
-        }
         return true;
     }
 
     // TODO how burn tokens
-    function deleteAllDocs() public
+    function deleteAllDocs(address addressUser) external onlyOwner()
     {
-        delete documents[msg.sender][TypeDoc.Original];
+        delete documents[addressUser][TypeDoc.Original];
     }
 
-    function createCopyDoc(address provider, address ownerCopyNFT, uint256 tokenID, string memory tokenURI, TypeDoc typeNft) onlyOwner() addressesAreDifferent(provider, ownerCopyNFT) isMyToken(tokenID, provider) userExist(provider) userExist(ownerCopyNFT) public
+    function createCopyDoc(address provider, address ownerCopyNFT, uint256 tokenID, string memory tokenURI, TypeDoc typeNft) onlyOwner() addressesAreDifferent(provider, ownerCopyNFT) external
     {
         //TODO
         // check qu'une copie avec le meme tokenID n'exite pas deja
@@ -133,22 +98,43 @@ contract DocManager is Ownable, NFT
         documents[ownerCopyNFT][typeNft].push(nftCopy);
     }
 
-    function getAllCopyShared() public view returns(Document[] memory)
+    function getAllCopyShared(address addressUser) public view onlyOwner() returns(Document[] memory)
     {
         // check si user exist
-        return documents[msg.sender][TypeDoc.CopyShared];
+        return documents[addressUser][TypeDoc.CopyShared];
     }
 
-    function getAllCopyPendingTransfer() public view returns(Document[] memory)
+    function getAllCopyPendingTransfer(address addressUser) public view onlyOwner() returns(Document[] memory)
     {
         // check si user exist
-        return documents[msg.sender][TypeDoc.CopyPendingTransfer];
+        return documents[addressUser][TypeDoc.CopyPendingTransfer];
     }
 
-    function getAllCopyCertified() public view returns(Document[] memory)
+    function getAllCopyCertified(address addressUser) public view onlyOwner() returns(Document[] memory)
     {
         // check si user exist
-        return documents[msg.sender][TypeDoc.CopyCertified];
+        return documents[addressUser][TypeDoc.CopyCertified];
+    }
+
+    function convertTypeDoc(address ownerCopyNFT, TypeDoc typeDocSc, TypeDoc typeDocDst, uint256 tokenID, string memory passwordEncrypted) external onlyOwner()
+    {
+        require(bytes(passwordEncrypted).length != 0 && typeDocDst == TypeDoc.Original, "DocManager: Vous ne pouvez pas convertir ce documment");
+        Document memory doc;
+        uint256 index;
+
+        index = getIndexNFT(ownerCopyNFT, typeDocSc, tokenID);
+        doc = documents[ownerCopyNFT][typeDocSc][index];
+        doc.typeNft = typeDocDst;
+
+        if (bytes(passwordEncrypted).length != 0 && typeDocDst == TypeDoc.Original)
+        {
+            doc.tokenURI = "";
+            doc.dateAdd = block.timestamp;
+            doc.passwordEncrypted = passwordEncrypted;
+        }
+
+        documents[ownerCopyNFT][typeDocDst].push(doc);
+        delCopyDoc(ownerCopyNFT, typeDocSc, index);
     }
 
     function delCopyDoc(address ownerNFT, TypeDoc typeNft, uint256 index) public onlyOwner()
@@ -161,7 +147,7 @@ contract DocManager is Ownable, NFT
         documents[ownerNFT][typeNft].pop();
     }
 
-    function delAllCopyNFT(address ownerNFT) public onlyOwner()
+    function delAllCopyDoc(address ownerNFT) external onlyOwner()
     {
         // check si user exist
         delete documents[ownerNFT][TypeDoc.CopyShared];
@@ -169,11 +155,12 @@ contract DocManager is Ownable, NFT
         delete documents[ownerNFT][TypeDoc.CopyPendingTransfer];
     }
 
-    function certify(address certifying, address dest, uint256 tokenID, string memory hashNFT) onlyOwner() public
+    function certify(address certifying, bool isAuthority, address dest, uint256 tokenID, string memory hashNFT) onlyOwner() external
     {
+        // check certifiant existe
         uint256 index;
 
-        if (accountManager.isAuthority(certifying))
+        if (isAuthority)
         {
             hashDocs[hashNFT] = true;
         }
@@ -181,27 +168,7 @@ contract DocManager is Ownable, NFT
         documents[dest][TypeDoc.Original][index].certifying.push(certifying);
     }
 
-    function copyDocToOriginal(address ownerCopyNFT, TypeDoc typeNft, string memory passwordEncrypted, uint256 tokenID) public isMyToken(tokenID, ownerCopyNFT) onlyOwner()
-    {
-        Document memory newNFT;
-        uint256 index;
-
-        index = getIndexNFT(ownerCopyNFT, typeNft, tokenID);
-        newNFT = documents[ownerCopyNFT][typeNft][index];
-        newNFT.tokenURI = "";
-        newNFT.typeNft = TypeDoc.Original;
-        newNFT.dateAdd = block.timestamp;
-        newNFT.passwordEncrypted = passwordEncrypted;
-        documents[ownerCopyNFT][TypeDoc.Original].push(newNFT);
-        delCopyDoc(ownerCopyNFT, typeNft, index);
-    }
-
-    function getOwnerToken(uint256 tokenID) public view returns(address)
-    {
-        return saveDocToken.ownerOf(tokenID);
-    }
-
-    function isOfficielDoc(string memory hashNFT) public view returns(bool)
+    function isOfficielDoc(string memory hashNFT) private onlyOwner() view returns(bool)
     {
         return hashDocs[hashNFT];
     }

@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.6;
 
-contract NFT
+contract SaveDocStruct
 {
     enum TypeDoc
     {
@@ -24,5 +24,20 @@ contract NFT
        string tokenURI;
        string passwordEncrypted;
        TypeDoc typeNft;
-    }  
+    }
+
+    struct CertificationRequest
+    {
+        address applicant;
+        uint256 tokenID;
+        uint256 index;
+    }
+
+    struct User
+    {
+        string name;
+        string publicKey;
+        bool isAuthority;
+        bool exist;
+    }
 }

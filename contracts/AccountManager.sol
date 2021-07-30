@@ -3,8 +3,9 @@
 pragma solidity 0.8.6;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "./SaveDocStruct.sol";
 
-contract AccountManager is Ownable
+contract AccountManager is Ownable, SaveDocStruct
 {
     mapping(address => User) private users;
     mapping(address => string) private passwordMasters;
@@ -27,13 +28,6 @@ contract AccountManager is Ownable
         _;
     }
 
-    struct User
-    {
-        string name;
-        string publicKey;
-        bool isAuthority;
-        bool exist;
-    }
 
     function addPasswordMaster(address userAddress, string memory hashPasswordMaster) private addressIsValid(userAddress) userExist(userAddress)
     {
@@ -41,17 +35,17 @@ contract AccountManager is Ownable
         passwordMasters[userAddress] = hashPasswordMaster;
     }
 
-    function getPasswordMaster() public view returns(string memory)
+    function getPasswordMaster(address addressUser) external view onlyOwner() returns(string memory)
     {
-        require(bytes(passwordMasters[msg.sender]).length != 0, "Cette address n'a pas de mot de passe maitre");
-        return passwordMasters[msg.sender];
+        require(bytes(passwordMasters[addressUser]).length != 0, "Cette address n'a pas de mot de passe maitre");
+        return passwordMasters[addressUser];
     }
 
-    function addUser(string memory name, string memory pubKey, string memory passwordMaster) public userNotExist(msg.sender) returns(User memory)
+    function addUser(address userAddress, string memory name, string memory pubKey, string memory passwordMaster) external onlyOwner() userNotExist(userAddress) returns(User memory)
     {
-        users[msg.sender] = User(name, pubKey, false, true);
-        addPasswordMaster(msg.sender, passwordMaster);
-        return users[msg.sender];
+        users[userAddress] = User(name, pubKey, false, true);
+        addPasswordMaster(userAddress, passwordMaster);
+        return users[userAddress];
     }
 
     function addAuthority(string memory passwordMaster, address authorityAddress, string memory name, string memory pubKey) public onlyOwner() addressIsValid(authorityAddress) userNotExist(authorityAddress) returns(User memory)
@@ -61,22 +55,21 @@ contract AccountManager is Ownable
         return users[authorityAddress];
     }
 
-    function getUser(address userAddress) public view addressIsValid(userAddress) userExist(userAddress) returns(User memory)
+    function getUser(address userAddress) public view addressIsValid(userAddress) onlyOwner() userExist(userAddress) returns(User memory)
     {
         return users[userAddress];
     }
 
-    function setUser(string memory name) public returns(User memory)
+    function setUser(address addressUser, string memory name) public onlyOwner() userExist(addressUser) returns(User memory)
     {
-        users[msg.sender].name = name;
-        return users[msg.sender];
+        users[addressUser].name = name;
+        return users[addressUser];
     }
 
-    function delUser() public userExist(msg.sender)
+    function delUser(address addressUser) public onlyOwner() userExist(addressUser)
     {
-        // TODO delete les Docs de l'user
-        delete passwordMasters[msg.sender];
-        delete users[msg.sender];
+        delete passwordMasters[addressUser];
+        delete users[addressUser];
     }
 
     function isAuthority(address userAddress) public view addressIsValid(userAddress) userExist(userAddress) returns(bool)
