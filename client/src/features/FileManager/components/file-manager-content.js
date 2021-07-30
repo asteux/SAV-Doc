@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Grid } from "@material-ui/core";
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 
 import FileManagerFile from "./file-manager-file";
 import FileManagerFolder from "./file-manager-folder";
@@ -33,6 +33,29 @@ const FileManagerContent = () => {
   let content = <></>;
   switch (viewMode) {
     case 'list':
+      content = (
+        <TableContainer component={Paper}>
+          <Table aria-label="caption table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Type</TableCell>
+                <TableCell>Nom</TableCell>
+                <TableCell>Taille</TableCell>
+                <TableCell>Date de création</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {components.map((component) => {
+                return (
+                  <>
+                    {component}
+                  </>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      );
       break;
 
     default: // = grid

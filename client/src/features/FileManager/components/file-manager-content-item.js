@@ -1,6 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { makeStyles, Typography } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { makeStyles, TableCell, TableRow, Typography } from "@material-ui/core";
+import { setCurrentDirectory } from "../file-manager-slice";
+import { humanFileSize } from "../../../utils/file";
 
 export const useStyles = makeStyles((theme) => ({
   link: {
@@ -15,11 +17,13 @@ export const useStyles = makeStyles((theme) => ({
 const FileManagerContentItem = ({ data, icon }) => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
   const viewMode = useSelector((state => state.fileManager.viewMode));
 
   const handleDoubleClick = (event) => {
     if (data.isDir) {
-      // TODO: Change current directory
+      dispatch(setCurrentDirectory([...data.directory, data.name]));
     } else {
       // TODO: Print document
     }
@@ -28,6 +32,18 @@ const FileManagerContentItem = ({ data, icon }) => {
   let content = <></>;
   switch (viewMode) {
     case 'list':
+      content = (
+        <>
+          <TableRow key={data.name}>
+            <TableCell component="th" padding="checkbox" scope="row">{icon}</TableCell>
+            <TableCell>
+              <Typography className={classes.link} onDoubleClick={handleDoubleClick}>{data.name}</Typography>
+            </TableCell>
+            <TableCell>{humanFileSize(data.size, true)}</TableCell>
+            <TableCell>{(new Date(data.createdAt * 1000)).toLocaleString()}</TableCell>
+          </TableRow>
+        </>
+      );
       break;
 
     default: // = grid
