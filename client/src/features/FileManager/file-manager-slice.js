@@ -7,6 +7,10 @@ const fileManagerSlice = createSlice({
     fileMap: {},
     history: [[""]],
     historyIndex: 0,
+    querySearch: '',
+    viewMode: 'grid', // 'grid' | 'list'
+    sortBy: 'name', // 'name' | 'size' | 'createdAt'
+    sortReversedOrder: false,
   },
   reducers: {
     isLoaded: (state, action) => {
@@ -21,6 +25,18 @@ const fileManagerSlice = createSlice({
     },
     historyIndexChanged: (state, action) => {
       state.historyIndex = action.payload;
+    },
+    querySearchChanged: (state, action) => {
+      state.querySearch = action.payload;
+    },
+    viewModeChanged: (state, action) => {
+      state.viewMode = action.payload;
+    },
+    sortByChanged: (state, action) => {
+      state.sortBy = action.payload;
+    },
+    sortReversedOrderToggled: (state) => {
+      state.sortReversedOrder = !state.sortReversedOrder;
     },
   },
 });
@@ -66,6 +82,26 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.historyIndexChanged(newHistoryIndex));
     };
   },
+  setSearchQuery: (query) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.querySearchChanged(query));
+    };
+  },
+  setViewMode: (viewMode) => {
+    return (dispatch, getState) => {
+      dispatch(fileManagerSlice.actions.viewModeChanged(viewMode));
+    };
+  },
+  setSortBy: (sortBy) => {
+    return (dispatch, getState) => {
+      dispatch(fileManagerSlice.actions.sortByChanged(sortBy));
+    };
+  },
+  toggleSortReversedOrder: () => {
+    return (dispatch, getState) => {
+      dispatch(fileManagerSlice.actions.sortReversedOrderToggled());
+    };
+  },
 };
 
 export const {
@@ -74,6 +110,10 @@ export const {
   goToParentDirectory,
   goToPreviousDirectory,
   goToNextDirectory,
+  setSearchQuery,
+  setViewMode,
+  setSortBy,
+  toggleSortReversedOrder,
 } = fileManagerActions;
 
 export default fileManagerSlice.reducer;
