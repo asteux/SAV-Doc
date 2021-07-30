@@ -6,6 +6,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import { goToParentDirectory, goToPreviousDirectory, goToNextDirectory } from "../file-manager-slice";
+import FileManagerBreadcrumbs from "./file-manager-breadcrumbs";
 
 const useStyles = makeStyles((theme) => ({
   line: {
@@ -51,6 +52,8 @@ const FileManagerNavigation = () => {
       <IconButton onClick={handleClickParentDirectory} disabled={(currentDirectory) ? 1 === currentDirectory.length : true}>
         <ArrowUpwardIcon />
       </IconButton>
+
+      <FileManagerBreadcrumbs />
     </div>
   );
 };

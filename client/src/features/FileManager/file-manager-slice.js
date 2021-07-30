@@ -33,6 +33,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.isLoaded({ root, fileMap }));
     };
   },
+  setCurrentDirectory: (currentDirectory) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.currentDirectoryChanged(currentDirectory));
+    };
+  },
   goToParentDirectory: () => {
     return (dispatch, getState) => {
       const { fileManager } = getState();
@@ -65,6 +70,7 @@ const fileManagerActions = {
 
 export const {
   load,
+  setCurrentDirectory,
   goToParentDirectory,
   goToPreviousDirectory,
   goToNextDirectory,
