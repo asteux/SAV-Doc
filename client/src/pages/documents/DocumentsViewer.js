@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppBar, makeStyles, Toolbar, Typography } from "@material-ui/core";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
+import FileManager from "../../features/FileManager/components/file-manager";
 import { fetchDocumentsOriginals } from "../../features/contracts/docManagerContractSlice";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +36,7 @@ const DocumentsViewer = () => {
       </AppBar>
 
       <main>
-        {/* TODO: add File Manager */}
+        <FileManager fileMap={fetchDocumentsOriginalsState.fileMap} />
       </main>
     </>
   );
