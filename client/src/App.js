@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from 'react-router';
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
 import { loadDocManagerContract } from "./features/contracts/docManagerContractSlice";
-import { loadSavDocContract } from './features/contracts/savDocContractSlice';
+import { loadSavDocContract, fetchUserAndPassword } from './features/contracts/savDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
@@ -18,7 +18,10 @@ const App = () => {
 
   const web3 = useSelector((state) => state.web3.web3);
   const networkId = useSelector((state) => state.web3.networkId);
+  const accounts = useSelector((state) => state.web3.accounts);
   const themeMode = useSelector((state) => state.theme.mode);
+
+  const savDocContract = useSelector((state) => state.savDocContract.contract);
 
   useEffect(() => {
     // Load Web3
@@ -47,6 +50,12 @@ const App = () => {
       dispatch(loadSavDocContract(web3, networkId));
     }
   }, [dispatch, web3, networkId]);
+
+  useEffect(() => {
+    if (savDocContract && accounts) {
+      dispatch(fetchUserAndPassword());
+    }
+  }, [dispatch, savDocContract, accounts]);
 
   const theme = createTheme({
     palette: {

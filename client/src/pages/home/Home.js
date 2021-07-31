@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
-import { AppBar, Button, Container, Grid, Link, makeStyles, Toolbar, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import {
+  AppBar, Button, Container, Grid, Link, makeStyles,
+  Toolbar, Typography, useMediaQuery, useTheme
+} from "@material-ui/core";
 import { Image } from "react-bootstrap";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
+import { useSelector } from "react-redux";
+import RegistrationDialog from "../../features/registration/RegistrationDialog";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,6 +28,20 @@ const Home = () => {
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const userInformationsState = useSelector((state) => state.savDocContract.userInformations);
+  const logged = useMemo(() => {
+    return !!userInformationsState.data;
+  }, [userInformationsState]);
+
+  const [openRegistrationDialog, setOpenRegistrationDialog] = useState(false);
+  const handleOpenRegistrationDialog = (event) => setOpenRegistrationDialog(true);
+  const handleCloseRegistrationDialog = (event) => setOpenRegistrationDialog(false);
+
+  const buttonMainAction = (logged)
+    ? <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+    : <Button variant="contained" color="primary" onClick={handleOpenRegistrationDialog}>S'inscrire</Button>
+  ;
 
   return (
     <>
@@ -48,7 +67,7 @@ const Home = () => {
                 </Typography>
               </div>
               <ToggleThemeModeButton />
-              <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+              {buttonMainAction}
             </Toolbar>
           )
         }
@@ -61,7 +80,7 @@ const Home = () => {
               <div className="p-lg-5 my-5">
                 <Typography variant="h2" className="mb-3">SAV-Doc</Typography>
                 <Typography variant="h5" className="mb-4">Texte introduction SAV-Doc</Typography>
-                <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+                {buttonMainAction}
               </div>
             </div>
           </Container>
@@ -120,10 +139,20 @@ const Home = () => {
 
         <div className="py-5">
           <Container fixed className="text-center">
-            <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+            {buttonMainAction}
           </Container>
         </div>
       </main>
+
+      {(!logged)
+        ? (
+          <RegistrationDialog
+            open={openRegistrationDialog}
+            handleClose={handleCloseRegistrationDialog}
+          />
+        )
+        : <></>
+      }
     </>
   );
 };
