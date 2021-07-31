@@ -13,6 +13,7 @@ const fileManagerSlice = createSlice({
     sortBy: 'name', // 'name' | 'size' | 'createdAt'
     sortReversedOrder: false,
     fileToShow: null,
+    fileToDelete: null,
   },
   reducers: {
     isLoaded: (state, action) => {
@@ -45,6 +46,9 @@ const fileManagerSlice = createSlice({
     },
     fileToShowChanged: (state, action) => {
       state.fileToShow = action.payload;
+    },
+    fileToDeleteChanged: (state, action) => {
+      state.fileToDelete = action.payload;
     },
   },
 });
@@ -125,6 +129,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToShowChanged(null));
     };
   },
+  deleteFile: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToDeleteChanged(fileData));
+    };
+  },
 };
 
 export const {
@@ -140,6 +149,7 @@ export const {
   toggleSortReversedOrder,
   showFile,
   hideFile,
+  deleteFile,
 } = fileManagerActions;
 
 export default fileManagerSlice.reducer;

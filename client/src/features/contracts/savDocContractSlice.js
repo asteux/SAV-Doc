@@ -36,6 +36,10 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    deleteDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
   },
   {
     subscriptionSent: (state) => {
@@ -185,6 +189,27 @@ const savDocContractSlice = createContractSlice(
     secureDocumentFailed: (state, action) => {
       state.secureDocument = {
         ...state.secureDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    deleteDocumentSent: (state) => {
+      state.deleteDocument = {
+        ...state.deleteDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    deleteDocumentSucceeded: (state) => {
+      state.deleteDocument = {
+        ...state.deleteDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    deleteDocumentFailed: (state, action) => {
+      state.deleteDocument = {
+        ...state.deleteDocument,
         status: 'failed',
         error: action.payload,
       };
@@ -355,6 +380,27 @@ const savDocContractActions = {
       ;
     }
   },
+  deleteDocument: (tokenID, forTransfer) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .delMyDocument(tokenID, forTransfer)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.deleteDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.deleteDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.deleteDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
   ...createContractActions(savDocContractSlice, SavDocContract),
 };
 
@@ -366,6 +412,7 @@ export const {
   fetchDocumentsOriginals,
   decryptedFile,
   secureDocument,
+  deleteDocument,
 } = savDocContractActions;
 
 export default savDocContractSlice.reducer;

@@ -4,9 +4,9 @@ import { AppBar, Backdrop, CircularProgress, makeStyles, Toolbar, Typography } f
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import FileManager from "../../features/FileManager/components/file-manager";
-import { hideFile, setAction } from "../../features/FileManager/file-manager-slice";
+import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
-import { decryptedFile, fetchDocumentsOriginals } from "../../features/contracts/savDocContractSlice";
+import { decryptedFile, deleteDocument, fetchDocumentsOriginals } from "../../features/contracts/savDocContractSlice";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,17 +25,68 @@ const DocumentsViewer = () => {
   const history = useHistory();
 
   const [file, setFile] = useState(null);
+  const web3 = useSelector(state => state.web3.web3);
   const savDocContract = useSelector(state => state.savDocContract.contract);
   const fetchDocumentsOriginalsState = useSelector(state => state.savDocContract.fetchDocumentsOriginalsState);
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
   const fileManagerAction = useSelector(state => state.fileManager.action);
   const fileToShow = useSelector(state => state.fileManager.fileToShow);
+  const fileToDelete = useSelector(state => state.fileManager.fileToDelete);
 
   useEffect(() => {
+    const callbacks = [];
     if (savDocContract) {
       dispatch(fetchDocumentsOriginals());
+
+      // Manage savDocContract events
+      const eventSecureDocumentEmitter = savDocContract.events.SecureDocument()
+        .on('data', async (event) => {
+          // address user, uint256 tokenID
+          const userAddress = event.returnValues.user;
+          // const tokenID = parseInt(event.returnValues.tokenID);
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (userAddress === accounts[0]) {
+            dispatch(fetchDocumentsOriginals());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventSecureDocumentEmitter.removeAllListeners(); });
+
+      const eventDeleteDocummentEmitter = savDocContract.events.DeleteDocumment()
+        .on('data', async (event) => {
+          // address ownerDoc, uint256 tokenID, bool forTransfer
+          const userAddress = event.returnValues.ownerDoc;
+          // const tokenID = parseInt(event.returnValues.tokenID);
+          // const isForTransfer = event.returnValues.forTransfer;
+
+          const accounts = await web3.eth.getAccounts();
+
+          console.log(userAddress);
+          console.log(accounts[0]);
+          if (userAddress === accounts[0]) {
+            dispatch(fetchDocumentsOriginals());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventDeleteDocummentEmitter.removeAllListeners(); });
     }
-  }, [dispatch, savDocContract]);
+
+    return () => {
+      for (let i = 0; i < callbacks.length; i++) {
+        callbacks[i]();
+      }
+    }
+  }, [dispatch, web3, savDocContract]);
 
   useEffect(() => {
     if (fileManagerAction) {
@@ -66,6 +117,14 @@ const DocumentsViewer = () => {
       setFile(decryptedFiles[fileToShow.data.tokenID].data);
     }
   }, [dispatch, fileToShow, decryptedFiles]);
+
+  useEffect(() => {
+    if (fileToDelete) {
+      dispatch(deleteDocument(fileToDelete.data.tokenID, false));
+    } else {
+      deleteFile(null);
+    }
+  }, [dispatch, fileToDelete]);
 
   const handleClose = () => {
     dispatch(hideFile());
