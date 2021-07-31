@@ -93,8 +93,13 @@ const secureFileActions = {
       return dispatch(secureFileSlice.actions.setOriginalPasswordFile(password));
     };
   },
-  encryptFile: (file, password) => {
-    return async (dispatch) => {
+  encryptFile: () => {
+    return async (dispatch, getState) => {
+      const { secureFile } = getState();
+
+      const file = secureFile.originalFile;
+      const password = secureFile.originalPasswordFile;
+
       dispatch(secureFileSlice.actions.showLoading('Chiffrement du document en cours'));
 
       try {
@@ -107,12 +112,17 @@ const secureFileActions = {
       }
     };
   },
-  uploadFile: (encryptedFile) => {
-    return async (dispatch) => {
+  uploadFile: () => {
+    return async (dispatch, getState) => {
+      const { secureFile } = getState();
+
+      const encryptedFile = secureFile.encryptedFile;
+
       dispatch(secureFileSlice.actions.showLoading('Upload du document en cours'));
 
       try {
-        const cid = await storeBlob(encryptedFile);
+        // const cid = await storeBlob(encryptedFile);
+        const cid = 'bafkreidwwqgqpiqkqnttcr35gnv7uth5ew7rksug4tsqekrcxiqx7btccq';
 
         dispatch(secureFileSlice.actions.setOriginalIpfsCid(cid));
       } catch (error) {
@@ -121,8 +131,13 @@ const secureFileActions = {
       }
     };
   },
-  encryptIpfsCidAndPassword: (ipfsCid, password, account) => {
-    return async (dispatch) => {
+  encryptIpfsCidAndPassword: (passwordMaster) => {
+    return async (dispatch, getState) => {
+      const { web3, secureFile } = getState();
+
+      const ipfsCid = secureFile.originalIpfsCid;
+      const account = web3.accounts[0];
+
       dispatch(secureFileSlice.actions.showLoading('Chiffrement des informations en cours'));
 
       try {
@@ -131,7 +146,8 @@ const secureFileActions = {
         const encryptedIpfsCid = encryptWithPublicKey(ipfsCid, encryptionPublicKey);
         dispatch(secureFileSlice.actions.setEncryptedIpfsCid(encryptedIpfsCid));
 
-        const encryptedPasswordFile = encryptWithPublicKey(password, encryptionPublicKey);
+        const password = secureFile.originalPasswordFile;
+        const encryptedPasswordFile = encryptWithPublicKey(encryptWithPassword(password, passwordMaster), encryptionPublicKey);
         dispatch(secureFileSlice.actions.setEncryptedPasswordFile(encryptedPasswordFile));
       } catch (error) {
       } finally {

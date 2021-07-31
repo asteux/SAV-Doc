@@ -4,10 +4,10 @@ import { AppBar, Backdrop, CircularProgress, makeStyles, Toolbar, Typography } f
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import FileManager from "../../features/FileManager/components/file-manager";
-import { hideFile } from "../../features/FileManager/file-manager-slice";
+import { hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
-import { fetchDocumentsOriginals } from "../../features/contracts/docManagerContractSlice";
-import { decryptedFile } from "../../features/contracts/savDocContractSlice";
+import { decryptedFile, fetchDocumentsOriginals } from "../../features/contracts/savDocContractSlice";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -22,22 +22,40 @@ const DocumentsViewer = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [file, setFile] = useState(null);
-  const docManagerContract = useSelector(state => state.docManagerContract.contract);
-  const fetchDocumentsOriginalsState = useSelector(state => state.docManagerContract.fetchDocumentsOriginalsState);
+  const savDocContract = useSelector(state => state.savDocContract.contract);
+  const fetchDocumentsOriginalsState = useSelector(state => state.savDocContract.fetchDocumentsOriginalsState);
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
+  const fileManagerAction = useSelector(state => state.fileManager.action);
   const fileToShow = useSelector(state => state.fileManager.fileToShow);
 
   useEffect(() => {
-    if (docManagerContract) {
+    if (savDocContract) {
       dispatch(fetchDocumentsOriginals());
     }
-  }, [dispatch, docManagerContract]);
+  }, [dispatch, savDocContract]);
+
+  useEffect(() => {
+    if (fileManagerAction) {
+      switch (fileManagerAction) {
+        case 'addFile':
+          history.push('/documents/secure');
+          dispatch(setAction(null));
+          break;
+
+        default:
+          break;
+      }
+    } else {
+      setFile(null);
+    }
+  }, [dispatch, history, fileManagerAction]);
 
   useEffect(() => {
     if (fileToShow) {
-      // dispatch(decryptedFile(fileToShow.data, passwordMaster)); // TODO: uncomment when password master is implemented
+      dispatch(decryptedFile(fileToShow.data));
     } else {
       setFile(null);
     }

@@ -1,6 +1,8 @@
+import { SHA256 } from 'crypto-js';
+
 import { createContractSlice, createContractActions } from './createContractSlice';
-import SavDocContract from '../../contracts/SaveMyDoc.json';
-import { decryptWithPassword, decryptWithPrivateKey } from '../../utils/encryption';
+import SavDocContract from '../../contracts/SaveDoc.json';
+import { decryptWithPassword, decryptWithPrivateKey, encryptWithPublicKey } from '../../utils/encryption';
 import { dataURLtoBlob } from '../../utils/file';
 import { download } from '../../utils/ipfs';
 
@@ -19,6 +21,13 @@ const savDocContractSlice = createContractSlice(
     },
     userEncryptedPasswordMaster: {
       data: null,
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
+    passwordMaster: null,
+    fetchDocumentsOriginalsState: {
+      data: [],
+      fileMap: {},
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
@@ -94,6 +103,32 @@ const savDocContractSlice = createContractSlice(
         error: action.payload,
       };
     },
+    passwordMasterDefined: (state, action) => {
+      state.passwordMaster = action.payload;
+    },
+    fetchDocumentsOriginalsSent: (state) => {
+      state.fetchDocumentsOriginalsState = {
+        ...state.fetchDocumentsOriginalsState,
+        status: 'loading',
+        error: null,
+      };
+    },
+    fetchDocumentsOriginalsSucceeded: (state, action) => {
+      state.fetchDocumentsOriginalsState = {
+        ...state.fetchDocumentsOriginalsState,
+        data: action.payload.documents,
+        fileMap: action.payload.fileMap,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    fetchDocumentsOriginalsFailed: (state, action) => {
+      state.fetchDocumentsOriginalsState = {
+        ...state.fetchDocumentsOriginalsState,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
     unencryptFileStart: (state, action) => {
       const decryptedFiles = {
         ...state.decryptedFiles,
@@ -158,9 +193,11 @@ const savDocContractSlice = createContractSlice(
 );
 
 const savDocContractActions = {
-  subscribe: (name, publicKey, encryptedPasswordMaster) => {
+  subscribe: (name, publicKey, passwordMaster) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
+
+      const encryptedPasswordMaster = encryptWithPublicKey(SHA256(passwordMaster).toString(), publicKey);
 
       savDocContract.contract.methods
         .subscribe(name, publicKey, encryptedPasswordMaster)
@@ -210,7 +247,69 @@ const savDocContractActions = {
       }
     }
   },
-  decryptedFile: (doc, password) => {
+  definePasswordMaster: (password) => {
+    return async (dispatch, getState) => {
+      dispatch(savDocContractSlice.actions.passwordMasterDefined(password));
+    }
+  },
+  fetchDocumentsOriginals: () => {
+    return async (dispatch, getState) => {
+      const { savDocContract } = getState();
+
+      dispatch(savDocContractSlice.actions.fetchDocumentsOriginalsSent());
+
+      try {
+        const documents = await savDocContract.contract.methods
+          .viewMyDocs()
+          .call()
+        ;
+
+        const fileMap = {};
+
+        for (const doc of documents) {
+          let directory = doc.filePath.split('/')
+          if ('/' === doc.filePath) {
+            directory = [''];
+          }
+
+          for (let i = 0; i < directory.length; i++) {
+            const key = directory.slice(0, i + 1).join('/');
+            if (!Object.hasOwnProperty.call(fileMap, key)) {
+              fileMap[key] = [];
+            }
+
+            if (directory.length - 1 !== i) {
+              fileMap[key].push({
+                name: directory[i + 1],
+                directory: directory.slice(0, i + 1),
+                isDir: true,
+                size: 0,
+                createdAt: null,
+                data: null,
+              });
+            }
+          }
+
+          fileMap[directory.join('/')].push({
+            name: doc.filename,
+            directory: directory,
+            isDir: false,
+            size: doc.fileSize,
+            createdAt: parseInt(doc.dateAdd),
+            data: doc,
+          });
+        }
+
+        // root: string[]
+        // fileMap: { [directory: string]: { name: string, directory: string, isDir: bool, size: string }[] }
+
+        dispatch(savDocContractSlice.actions.fetchDocumentsOriginalsSucceeded({ documents, fileMap }));
+      } catch (error) {
+        dispatch(savDocContractSlice.actions.fetchDocumentsOriginalsFailed(error));
+      }
+    }
+  },
+  decryptedFile: (doc) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
 
@@ -224,6 +323,8 @@ const savDocContractActions = {
 
         const ipfsCid = await decryptWithPrivateKey(tokenURI, web3.accounts[0]);
         const encryptedFile = await download(ipfsCid);
+        const encryptedPasswordWithMaster = await decryptWithPrivateKey(doc.passwordEncrypted, web3.accounts[0]);
+        const password = decryptWithPassword(encryptedPasswordWithMaster, savDocContract.passwordMaster);
         const decryptedFile = decryptWithPassword(encryptedFile, password);
         const file = dataURLtoBlob(decryptedFile);
 
@@ -261,6 +362,8 @@ export const {
   loadContract: loadSavDocContract,
   subscribe,
   fetchUserAndPassword,
+  definePasswordMaster,
+  fetchDocumentsOriginals,
   decryptedFile,
   secureDocument,
 } = savDocContractActions;

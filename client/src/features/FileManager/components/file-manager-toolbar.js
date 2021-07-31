@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { alpha, Checkbox, FormControlLabel, IconButton, InputBase, makeStyles, Menu, MenuList, MenuItem, Typography } from "@material-ui/core";
+import AddIcon from '@material-ui/icons/Add';
 import AppsIcon from '@material-ui/icons/Apps';
 import ListIcon from '@material-ui/icons/List';
 import SearchIcon from '@material-ui/icons/Search';
 import SortIcon from '@material-ui/icons/Sort';
 import { debounce } from "lodash";
 
-import { setViewMode, setSortBy, toggleSortReversedOrder, setSearchQuery } from "../file-manager-slice";
+import { setAction, setViewMode, setSortBy, toggleSortReversedOrder, setSearchQuery } from "../file-manager-slice";
 
 const useStyles = makeStyles((theme) => ({
   line: {
@@ -66,6 +67,10 @@ const FileManagerToolbar = () => {
   const sortBy = useSelector((state => state.fileManager.sortBy));
   const sortReversedOrder = useSelector((state => state.fileManager.sortReversedOrder));
 
+  const handleClickAdd = () => {
+    dispatch(setAction('addFile'));
+  };
+
   const handleSeachQuery = useCallback(debounce((query) => {
     dispatch(setSearchQuery(query));
   }, 500), []);
@@ -114,6 +119,10 @@ const FileManagerToolbar = () => {
       </div>
 
       <div className={ classes.line }>
+        <IconButton onClick={handleClickAdd}>
+          <AddIcon />
+        </IconButton>
+
         <IconButton onClick={handleClickGridView} color={('grid' === viewMode) ? 'primary' : 'default'}>
           <AppsIcon />
         </IconButton>

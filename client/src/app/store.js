@@ -4,7 +4,6 @@ import { createBrowserHistory } from 'history';
 
 import web3Reducer from '../common/web3/web3Slice';
 import themeReducer from '../common/theme/themeSlice';
-import docManagerContractReducer from '../features/contracts/docManagerContractSlice';
 import savDocContractReducer from '../features/contracts/savDocContractSlice';
 import secureFileReducer from '../features/secureFile/secureFileSlice';
 import fileManagerReducer from '../features/FileManager/file-manager-slice';
@@ -16,7 +15,6 @@ export default configureStore({
     router: connectRouter(history),
     web3: web3Reducer,
     theme: themeReducer,
-    docManagerContract: docManagerContractReducer,
     savDocContract: savDocContractReducer,
     secureFile: secureFileReducer,
     fileManager: fileManagerReducer,

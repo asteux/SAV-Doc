@@ -7,6 +7,7 @@ const fileManagerSlice = createSlice({
     fileMap: {},
     history: [[""]],
     historyIndex: 0,
+    action: '', // null | 'addFile'
     querySearch: '',
     viewMode: 'grid', // 'grid' | 'list'
     sortBy: 'name', // 'name' | 'size' | 'createdAt'
@@ -26,6 +27,9 @@ const fileManagerSlice = createSlice({
     },
     historyIndexChanged: (state, action) => {
       state.historyIndex = action.payload;
+    },
+    actionChanged: (state, action) => {
+      state.action = action.payload;
     },
     querySearchChanged: (state, action) => {
       state.querySearch = action.payload;
@@ -86,6 +90,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.historyIndexChanged(newHistoryIndex));
     };
   },
+  setAction: (action) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.actionChanged(action));
+    };
+  },
   setSearchQuery: (query) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.querySearchChanged(query));
@@ -124,6 +133,7 @@ export const {
   goToParentDirectory,
   goToPreviousDirectory,
   goToNextDirectory,
+  setAction,
   setSearchQuery,
   setViewMode,
   setSortBy,

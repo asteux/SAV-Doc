@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
-import { loadDocManagerContract } from "./features/contracts/docManagerContractSlice";
 import { loadSavDocContract, fetchUserAndPassword } from './features/contracts/savDocContractSlice';
 
 import "./App.css";
@@ -22,6 +21,15 @@ const App = () => {
   const themeMode = useSelector((state) => state.theme.mode);
 
   const savDocContract = useSelector((state) => state.savDocContract.contract);
+  const userInformationsState = useSelector((state) => state.savDocContract.userInformations);
+  const passwordMaster = useSelector((state) => state.savDocContract.passwordMaster);
+
+  const registered = useMemo(() => {
+    return ('idle' === userInformationsState.status || 'loading' === userInformationsState.status) ? true : !!userInformationsState.data;
+  }, [userInformationsState]);
+  const logged = useMemo(() => {
+    return !!registered && !!passwordMaster;
+  }, [registered, passwordMaster]);
 
   useEffect(() => {
     // Load Web3
@@ -46,7 +54,6 @@ const App = () => {
   useEffect(() => {
     if (web3 && networkId) {
       // Load Contracts
-      dispatch(loadDocManagerContract(web3, networkId));
       dispatch(loadSavDocContract(web3, networkId));
     }
   }, [dispatch, web3, networkId]);
@@ -74,8 +81,16 @@ const App = () => {
       <CssBaseline/>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/documents" component={DocumentsViewer} />
-        <Route exact path="/documents/secure" component={DocumentSecure} />
+        <Route exact path="/documents" render={(props) => (
+            logged === true
+                ? <DocumentsViewer />
+                : <Redirect to='/' />
+        )} />
+        <Route exact path="/documents/secure" render={(props) => (
+            logged === true
+                ? <DocumentSecure />
+                : <Redirect to='/' />
+        )} />
         <Route>
           <Redirect to="/" />
         </Route>

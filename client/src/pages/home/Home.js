@@ -8,6 +8,7 @@ import { Image } from "react-bootstrap";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import { useSelector } from "react-redux";
+import PasswordMasterDialog from "../../features/password-master/PasswordMasterDialog";
 import RegistrationDialog from "../../features/registration/RegistrationDialog";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,16 +31,29 @@ const Home = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const userInformationsState = useSelector((state) => state.savDocContract.userInformations);
-  const logged = useMemo(() => {
+  const passwordMaster = useSelector((state) => state.savDocContract.passwordMaster);
+
+  const registered = useMemo(() => {
     return !!userInformationsState.data;
   }, [userInformationsState]);
+  const logged = useMemo(() => {
+    return registered && passwordMaster;
+  }, [registered, passwordMaster]);
+
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+  const handleOpenLoginDialog = (event) => setOpenLoginDialog(true);
+  const handleCloseLoginDialog = (event) => setOpenLoginDialog(false);
 
   const [openRegistrationDialog, setOpenRegistrationDialog] = useState(false);
   const handleOpenRegistrationDialog = (event) => setOpenRegistrationDialog(true);
   const handleCloseRegistrationDialog = (event) => setOpenRegistrationDialog(false);
 
-  const buttonMainAction = (logged)
-    ? <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+  const buttonMainAction = (registered)
+    ? (
+      (logged)
+        ? <Button component={RouterLink} variant="contained" color="primary" to="/documents">Accéder à mes documents</Button>
+        : <Button variant="contained" color="primary" onClick={handleOpenLoginDialog}>Se connecter</Button>
+    )
     : <Button variant="contained" color="primary" onClick={handleOpenRegistrationDialog}>S'inscrire</Button>
   ;
 
@@ -144,14 +158,23 @@ const Home = () => {
         </div>
       </main>
 
-      {(!logged)
+      {(!registered)
         ? (
           <RegistrationDialog
             open={openRegistrationDialog}
             handleClose={handleCloseRegistrationDialog}
           />
         )
-        : <></>
+        : (
+          (!logged)
+            ? (
+              <PasswordMasterDialog
+                open={openLoginDialog}
+                handleClose={handleCloseLoginDialog}
+              />
+            )
+            : <></>
+        )
       }
     </>
   );

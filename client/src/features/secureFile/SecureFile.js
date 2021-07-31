@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink } from 'react-router-dom';
 import { Backdrop, Button, CircularProgress, Grid, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
 
 import UploadFileForm from './uploadFileForm/UploadFileForm';
-import PasswordForm from './passwordForm/PasswordForm';
-import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, sendTransactionToSecure, uploadFile } from './secureFileSlice';
+import { encryptFile, encryptIpfsCidAndPassword, nextStep, previousStep, reset, sendTransactionToSecure, setOriginalPasswordFile, uploadFile } from './secureFileSlice';
 import FileViewer from "../FileViewer/components/file-viewer";
+import { generatePassword } from '../../utils/password';
 
 const useStyles = makeStyles((theme) => ({
   stepper: {
@@ -26,6 +27,7 @@ const SecureFile = () => {
   const classes = useStyles();
 
   const accounts = useSelector((state) => state.web3.accounts);
+  const passwordMaster = useSelector((state) => state.savDocContract.passwordMaster);
   const secureDocumentState = useSelector((state) => state.savDocContract.secureDocument);
   const loadingMessage = useSelector((state) => state.secureFile.loadingMessage);
   const activeStep = useSelector((state) => state.secureFile.activeStep);
@@ -39,21 +41,25 @@ const SecureFile = () => {
   const isLoading = null !== loadingMessage;
 
   useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (null !== originalFile) {
-      dispatch(nextStep());
+      dispatch(setOriginalPasswordFile(generatePassword(32)));
     }
   }, [dispatch, originalFile]);
 
   useEffect(() => {
-    if (null !== originalPasswordFile) {
+    if (null !== originalFile && null !== originalPasswordFile) {
       dispatch(nextStep());
     }
-  }, [dispatch, originalPasswordFile]);
+  }, [dispatch, originalFile, originalPasswordFile]);
 
   useEffect(() => {
     if (null !== encryptedFile) {
       (async () => {
-        dispatch(uploadFile(encryptedFile));
+        dispatch(uploadFile());
       })();
     }
   }, [dispatch, encryptedFile, originalPasswordFile, accounts]);
@@ -91,11 +97,11 @@ const SecureFile = () => {
   };
 
   const handleEncryptFile = () => {
-    dispatch(encryptFile(originalFile, originalPasswordFile));
+    dispatch(encryptFile());
   };
 
   const handleEncryptIpfsCidAndPassword = () => {
-    dispatch(encryptIpfsCidAndPassword(originalIpfsCid, originalPasswordFile, accounts[0]));
+    dispatch(encryptIpfsCidAndPassword(passwordMaster));
   };
 
   const handleSendTransaction = () => {
@@ -104,7 +110,6 @@ const SecureFile = () => {
 
   const steps = [
     'Choix du document',
-    'Choix du mot de passe',
     'Chiffrement & Upload du document',
     'Chiffrement des informations',
     'Enregistrement dans la blockchain',
@@ -113,14 +118,6 @@ const SecureFile = () => {
     (
       <>
         <UploadFileForm />
-      </>
-    ),
-    (
-      <>
-        <FileViewer file={originalFile} />
-        <div className="mt-5">
-          <PasswordForm />
-        </div>
       </>
     ),
     (
@@ -177,7 +174,7 @@ const SecureFile = () => {
                   </Grid>
 
                   <Grid item xs className="text-center">
-                    <Button variant="contained" color="primary">
+                    <Button component={RouterLink} variant="contained" color="primary" to="/documents">
                       Consulter le document
                     </Button>
                   </Grid>
@@ -229,18 +226,14 @@ const SecureFile = () => {
 
             <Grid item xs className="p-0 text-right">
               {1 === activeStep
-                ? <Button variant="contained" color="primary" type="submit" form="secure-file-password-form">Utiliser ce mot de passe</Button>
-                : <></>
-              }
-              {2 === activeStep
                 ? <Button variant="contained" color="primary" onClick={handleEncryptFile}>Sécuriser ce document</Button>
                 : <></>
               }
-              {3 === activeStep
+              {2 === activeStep
                 ? <Button variant="contained" color="primary" onClick={handleEncryptIpfsCidAndPassword}>Chiffrer les informations</Button>
                 : <></>
               }
-              {4 === activeStep
+              {3 === activeStep
                 ? <Button variant="contained" color="primary" onClick={handleSendTransaction}>Envoyer les informations</Button>
                 : <></>
               }
