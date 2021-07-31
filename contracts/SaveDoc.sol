@@ -9,7 +9,7 @@ import "./SaveDocToken.sol";
 import "./SaveDocStruct.sol";
 
 
-contract SaveMyDoc is Ownable, SaveDocStruct
+contract SaveDoc is Ownable, SaveDocStruct
 {
     mapping(address => CertificationRequest[]) private requests;
     SaveDocToken private saveDocToken;
@@ -23,6 +23,20 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         saveDocToken = _saveDocToken;
         accountManager = _accountManager;
     }
+
+    event Subscribe(address newUser, string name, string pubkey);
+    event SubscribeAuthority(address newUser, string pubkey);
+    event ChangeUsername(address user, string newUsername);
+    event Unsubcribe(address user);
+    event SecureDocument(address user, uint256 tokenID);
+    event DeleteDocumment(address ownerDoc, uint256 tokenID, bool forTransfer);
+    event TransferDocument(address from, address to, uint256 tokenID);
+    event ShareDoc(address from, address to, uint256 tokenID);
+    event AcceptTransferDoc(address newOwner, uint256 tokenID);
+    event DeleteMyDocCopy(address ownerDoc, uint256 tokenID);
+    event RequestCertification(address applicant, uint256 tokenID);
+    event AcceptCertificationRequest(address certifying, address applicant, uint256 tokenID, bool keepCopy);
+    event RejectCertificationRequest(address certifying, address applicant, uint256 tokenID);
 
     modifier isMyToken(uint256 tokenID)
     {
@@ -39,11 +53,14 @@ contract SaveMyDoc is Ownable, SaveDocStruct
     function subscribe(string memory name, string memory pubKey, string memory passwordMaster) external
     {
         accountManager.addUser(msg.sender, name, pubKey, passwordMaster);
+        emit Subscribe(msg.sender, name, pubKey);
     }
 
-    function subscribeAuthority(string memory name, string memory pubKey, string memory passwordMaster) onlyOwner() external
+    function subscribeAuthority(address authority,string memory name, string memory pubKey, string memory passwordMaster) onlyOwner() external
     {
-        accountManager.addUser(msg.sender, name, pubKey, passwordMaster);
+        //TODO
+        accountManager.addUser(authority, name, pubKey, passwordMaster);
+        emit SubscribeAuthority(authority, pubKey);
     }
 
     function viewMyProfil() view external returns(User memory)
@@ -59,6 +76,7 @@ contract SaveMyDoc is Ownable, SaveDocStruct
     function changeMyName(string memory name) external
     {
         accountManager.setUser(msg.sender, name);
+        emit ChangeUsername(msg.sender, name);
     }
 
     function unsubscribe() external userExist(msg.sender)
@@ -67,15 +85,17 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         docManager.deleteAllDocs(msg.sender);
         docManager.delAllCopyDoc(msg.sender);
         accountManager.delUser(msg.sender);
+        emit Unsubcribe(msg.sender);
     }
 
-    function secureDocument(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) external returns (Document memory)
+    function secureDocument(string memory tokenName, string memory tokenURI, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) userExist(msg.sender) external returns (Document memory)
     {
-       uint256 tokenID;
-       Document memory document;
+        uint256 tokenID;
+        Document memory document;
 
-       tokenID = saveDocToken.mint(msg.sender, tokenURI);
-       document = docManager.createDoc(msg.sender, tokenID, tokenName, tokenMime, tokenLength, filePath, passwordEncrypted, hashNFT);
+        tokenID = saveDocToken.mint(msg.sender, tokenURI);
+        document = docManager.createDoc(msg.sender, tokenID, tokenName, tokenMime, tokenLength, filePath, passwordEncrypted, hashNFT);
+        emit SecureDocument(msg.sender, tokenID);
 
        return document;
     }
@@ -89,8 +109,8 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         {
             saveDocToken.burn(tokenID, msg.sender);
         }
+        emit DeleteDocumment(msg.sender, tokenID, forTransfer);
     }
-
 
     function getTokenURI(uint256 tokenID) external view isMyToken(tokenID) returns(string memory)
     {
@@ -102,11 +122,13 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURITmp, TypeDoc.CopyPendingTransfer);
         saveDocToken.transferFrom(msg.sender, to, tokenID);
         delMyDocument(tokenID, true);
+        emit TransferDocument(msg.sender, to, tokenID);
     }
 
     function shareDoc(uint256 tokenID, address to, string memory tokenURI) isMyToken(tokenID) userExist(to) external
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURI, TypeDoc.CopyShared);
+        emit ShareDoc(msg.sender, to, tokenID);
     }
 
     function acceptNewDoc(uint256 tokenID, string memory newTokenURI, string memory passwordEncrypted) isMyToken(tokenID) external
@@ -114,12 +136,13 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         // check si msg.sender a bien déja une copie du Document
         docManager.convertTypeDoc(msg.sender, TypeDoc.CopyPendingTransfer, TypeDoc.Original, tokenID, passwordEncrypted);
         saveDocToken.setTokenURI(tokenID, newTokenURI, msg.sender);
+        emit AcceptTransferDoc(msg.sender, tokenID);
     }
-
 
     function delCopyDocShared(uint tokenID) external isMyToken(tokenID)
     {
         docManager.delCopyDoc(msg.sender, TypeDoc.CopyShared, docManager.getIndexNFT(msg.sender, TypeDoc.CopyShared, tokenID));
+        emit DeleteMyDocCopy(msg.sender, tokenID);
     }
 
     function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) isMyToken(tokenID) userExist(certifying) external
@@ -129,6 +152,7 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         docManager.createCopyDoc(msg.sender, certifying, tokenID, tokenURI, TypeDoc.CopyCertified);
         request = CertificationRequest(msg.sender, tokenID, requests[certifying].length);
         requests[certifying].push(request);
+        emit RequestCertification(request.applicant, request.tokenID);
     }
 
     function viewMyDocs() view external returns(Document[] memory)
@@ -156,14 +180,14 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         return requests[msg.sender];
     }
 
-    function delRequest(address owner, uint256 index) private
+    function delRequest(address certifying, uint256 index) private
     {
         CertificationRequest memory substitute;
 
-        substitute = requests[owner][requests[owner].length - 1];
+        substitute = requests[certifying][requests[certifying].length - 1];
         substitute.index = index;
-        requests[owner][index] = substitute;
-        requests[owner].pop();
+        requests[certifying][index] = substitute;
+        requests[certifying].pop();
     }
 
     function certifyDocument(address applicant, uint256 tokenID, string memory hashNFT) private
@@ -188,6 +212,7 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         {
             docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
         }
+        emit AcceptCertificationRequest(msg.sender, request.applicant, request.tokenID, keepCopyDoc);
     }
 
     function rejectCertificationRequest(CertificationRequest memory request) external
@@ -195,5 +220,6 @@ contract SaveMyDoc is Ownable, SaveDocStruct
         // check si msg.sender à bien déja une copie du Document
         delRequest(msg.sender, request.index);
         docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
+        emit RejectCertificationRequest(msg.sender, request.applicant, request.tokenID);
     }
 }

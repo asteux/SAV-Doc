@@ -1,6 +1,6 @@
 const AccountManager = artifacts.require("./AccountManager.sol");
 const DocManager = artifacts.require("./DocManager.sol");
-const SavDoc = artifacts.require("./SaveMyDoc.sol");
+const SavDoc = artifacts.require("./SaveDoc.sol");
 const SavDocToken = artifacts.require("./SaveDocToken");
 
 module.exports = async (deployer) => {
