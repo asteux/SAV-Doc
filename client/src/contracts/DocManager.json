@@ -32169,12 +32169,12 @@
         }
       },
       "links": {},
-      "address": "0x8A1b4F78358D16BD235f6001b3FD4607d5bEAb1C",
-      "transactionHash": "0xd7bef9276e28a2b89d3e87c17c97e569659f7b18948015f7fdd6dbab2779a99b"
+      "address": "0x692E8eDd7c9732A7A0834308809cB09aFe314B8e",
+      "transactionHash": "0x1683e145b642dada96387e494f62865cf1bc5946ce315dc163d17b8e16e0cd13"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-31T14:30:07.227Z",
+  "updatedAt": "2021-08-01T09:53:24.045Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -68,6 +68,11 @@ contract SaveDoc is Ownable, SaveDocStruct
         return accountManager.getUser(msg.sender);
     }
 
+    function viewProfil(address _address) view external returns(User memory)
+    {
+        return accountManager.getUser(_address);
+    }
+
     function getMyPasswordMaster() view external returns(string memory)
     {
         return accountManager.getPasswordMaster(msg.sender);
