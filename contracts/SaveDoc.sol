@@ -144,7 +144,7 @@ contract SaveDoc is Ownable, SaveDocStruct
         emit AcceptTransferDoc(msg.sender, tokenID);
     }
 
-    function delCopyDocShared(uint tokenID) external isMyToken(tokenID)
+    function delCopyDocShared(uint tokenID) external
     {
         docManager.delCopyDoc(msg.sender, TypeDoc.CopyShared, docManager.getIndexNFT(msg.sender, TypeDoc.CopyShared, tokenID));
         emit DeleteMyDocCopy(msg.sender, tokenID);
