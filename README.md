@@ -2,19 +2,21 @@
 
 ## Présentation
 
-SAV-doc est un projet blockchain qui permet de sécuriser, partager et sécuriser des documents avec des NFTs.
+SAV-doc est un projet blockchain qui permet de sécuriser, partager et certifier des documents avec des NFTs.
 
 ## Status
 
-- [] Sécuriser un document
-  - [] Développement du contact ERC721 (95 %)
-  - [x] Développement de l'interface pour sécuriser un document
-    - [x] Chiffrement du document
-    - [x] Upload du document via IPFS
-    - [x] Intéraction avec les contrats (création du NFT)
-- [] Consulter un document
-- [] Partager un document
+- [x] Sécuriser un document
+- [x] Consulter un document
+- [x] Partager un document
 - [] Certifier un document
+  - [x] Contrat (100 %)
+  - [] Interface (95 %)
+- [] Transférer un document
+  - [x] Contrat (100 %)
+  - [] Interface (30 %)
+- [] Optimisation
+- [] Sécurisation
 
 ## Technologies
 
@@ -27,10 +29,10 @@ Ce projet utilise les technologies suivantes
 
 ### Smarts Contracts
 
-- AccountManager : permet de gérer les comptes utilisateurs de l'outil
-- SecMyDocToken : permet de gérer les NFT
-- PasswordManager : permet de gérer les mots de passes des utilisateurs
-- SecMyDoc : est le contrat principal, permet de gérer les documents
+- AccountManager : permet de gérer les comptes utilisateurs
+- DocManager : permet de gérer les documents
+- SaveDoc : est le contrat principal, permet de gérer les documents
+- SaveDocToken : permet de gérer les NFT
 
 ### DApp
 
