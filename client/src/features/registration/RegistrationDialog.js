@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button, Dialog, DialogActions, DialogContent,
   DialogContentText, DialogTitle, TextField
@@ -13,7 +13,14 @@ const RegistrationDialog = ({ open, handleClose }) => {
 
   const [errors, setErrors] = useState(null);
   const accounts = useSelector((state) => state.web3.accounts);
+  const userInformationsState = useSelector((state) => state.savDocContract.userInformations);
   const subscriptionState = useSelector((state) => state.savDocContract.subscription);
+
+  useEffect(() => {
+    if (handleClose && 'succeeded' === userInformationsState.status && userInformationsState.data) {
+      handleClose();
+    }
+  }, [userInformationsState, handleClose]);
 
   const validate = (formData) => {
     let errors = {};
@@ -62,7 +69,7 @@ const RegistrationDialog = ({ open, handleClose }) => {
         onClose={handleClose}
         aria-labelledby="Registration"
       >
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">Inscription</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Pour s'inscrire, vous devez définir un mot de passe maître. Ce mot de passe sera utilisé pour chiffrer tous vos documents.

@@ -81,22 +81,15 @@ const PasswordMasterDialog = ({ open, handleClose }) => {
         </DialogContent>
 
         <DialogActions>
-          {('idle' === subscriptionState.status || 'failed' === subscriptionState.status)
-            ? (
-              <>
-                <Button onClick={handleClose} color="primary">
-                  Annuler
-                </Button>
+          <>
+            <Button onClick={handleClose} color="primary">
+              Annuler
+            </Button>
 
-                <Button type="submit" form="password-master-form" color="primary">
-                  Dévérouiller
-                </Button>
-              </>
-              )
-            : (
-              <></>
-            )
-          }
+            <Button type="submit" form="password-master-form" color="primary">
+              Dévérouiller
+            </Button>
+          </>
         </DialogActions>
       </Dialog>
     </>

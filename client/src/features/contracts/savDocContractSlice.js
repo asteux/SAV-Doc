@@ -6,6 +6,48 @@ import { decryptWithPassword, decryptWithPrivateKey, encryptWithPublicKey } from
 import { dataURLtoBlob } from '../../utils/file';
 import { download } from '../../utils/ipfs';
 
+const createFileMap = (documents) => {
+  // fileMap: { [directory: string]: { name: string, directory: string, isDir: bool, size: string }[] }
+
+  const fileMap = {};
+
+  for (const doc of documents) {
+    let directory = doc.filePath.split('/')
+    if ('/' === doc.filePath) {
+      directory = [''];
+    }
+
+    for (let i = 0; i < directory.length; i++) {
+      const key = directory.slice(0, i + 1).join('/');
+      if (!Object.hasOwnProperty.call(fileMap, key)) {
+        fileMap[key] = [];
+      }
+
+      if (directory.length - 1 !== i) {
+        fileMap[key].push({
+          name: directory[i + 1],
+          directory: directory.slice(0, i + 1),
+          isDir: true,
+          size: 0,
+          createdAt: null,
+          data: null,
+        });
+      }
+    }
+
+    fileMap[directory.join('/')].push({
+      name: doc.filename,
+      directory: directory,
+      isDir: false,
+      size: doc.fileSize,
+      createdAt: parseInt(doc.dateAdd),
+      data: doc,
+    });
+  }
+
+  return fileMap;
+};
+
 const savDocContractSlice = createContractSlice(
   'savDocContract',
   {
@@ -31,12 +73,26 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    fetchDocumentsSharedState: {
+      data: [],
+      fileMap: {},
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     decryptedFiles: {},
     secureDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    shareDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     deleteDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
+    deleteSharedDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
@@ -133,6 +189,29 @@ const savDocContractSlice = createContractSlice(
         error: action.payload,
       };
     },
+    fetchDocumentsSharedSent: (state) => {
+      state.fetchDocumentsSharedState = {
+        ...state.fetchDocumentsSharedState,
+        status: 'loading',
+        error: null,
+      };
+    },
+    fetchDocumentsSharedSucceeded: (state, action) => {
+      state.fetchDocumentsSharedState = {
+        ...state.fetchDocumentsSharedState,
+        data: action.payload.documents,
+        fileMap: action.payload.fileMap,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    fetchDocumentsSharedFailed: (state, action) => {
+      state.fetchDocumentsSharedState = {
+        ...state.fetchDocumentsSharedState,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
     unencryptFileStart: (state, action) => {
       const decryptedFiles = {
         ...state.decryptedFiles,
@@ -193,6 +272,27 @@ const savDocContractSlice = createContractSlice(
         error: action.payload,
       };
     },
+    shareDocumentSent: (state) => {
+      state.shareDocument = {
+        ...state.shareDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    shareDocumentSucceeded: (state) => {
+      state.shareDocument = {
+        ...state.shareDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    shareDocumentFailed: (state, action) => {
+      state.shareDocument = {
+        ...state.shareDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
     deleteDocumentSent: (state) => {
       state.deleteDocument = {
         ...state.deleteDocument,
@@ -210,6 +310,27 @@ const savDocContractSlice = createContractSlice(
     deleteDocumentFailed: (state, action) => {
       state.deleteDocument = {
         ...state.deleteDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    deleteSharedDocumentSent: (state) => {
+      state.deleteSharedDocument = {
+        ...state.deleteSharedDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    deleteSharedDocumentSucceeded: (state) => {
+      state.deleteSharedDocument = {
+        ...state.deleteSharedDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    deleteSharedDocumentFailed: (state, action) => {
+      state.deleteSharedDocument = {
+        ...state.deleteSharedDocument,
         status: 'failed',
         error: action.payload,
       };
@@ -279,51 +400,17 @@ const savDocContractActions = {
   },
   fetchDocumentsOriginals: () => {
     return async (dispatch, getState) => {
-      const { savDocContract } = getState();
+      const { web3, savDocContract } = getState();
 
       dispatch(savDocContractSlice.actions.fetchDocumentsOriginalsSent());
 
       try {
         const documents = await savDocContract.contract.methods
           .viewMyDocs()
-          .call()
+          .call({ from: web3.accounts[0] })
         ;
 
-        const fileMap = {};
-
-        for (const doc of documents) {
-          let directory = doc.filePath.split('/')
-          if ('/' === doc.filePath) {
-            directory = [''];
-          }
-
-          for (let i = 0; i < directory.length; i++) {
-            const key = directory.slice(0, i + 1).join('/');
-            if (!Object.hasOwnProperty.call(fileMap, key)) {
-              fileMap[key] = [];
-            }
-
-            if (directory.length - 1 !== i) {
-              fileMap[key].push({
-                name: directory[i + 1],
-                directory: directory.slice(0, i + 1),
-                isDir: true,
-                size: 0,
-                createdAt: null,
-                data: null,
-              });
-            }
-          }
-
-          fileMap[directory.join('/')].push({
-            name: doc.filename,
-            directory: directory,
-            isDir: false,
-            size: doc.fileSize,
-            createdAt: parseInt(doc.dateAdd),
-            data: doc,
-          });
-        }
+        const fileMap = createFileMap(documents);
 
         // root: string[]
         // fileMap: { [directory: string]: { name: string, directory: string, isDir: bool, size: string }[] }
@@ -334,26 +421,62 @@ const savDocContractActions = {
       }
     }
   },
-  decryptedFile: (doc) => {
+  fetchDocumentsShared: () => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      dispatch(savDocContractSlice.actions.fetchDocumentsSharedSent());
+
+      try {
+        const documents = await savDocContract.contract.methods
+          .viewMyCopyDocs()
+          .call({ from: web3.accounts[0] })
+        ;
+
+        const fileMap = createFileMap(documents);
+
+        dispatch(savDocContractSlice.actions.fetchDocumentsSharedSucceeded({ documents, fileMap }));
+      } catch (error) {
+        dispatch(savDocContractSlice.actions.fetchDocumentsSharedFailed(error));
+      }
+    }
+  },
+  decryptFile: (doc) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
 
       dispatch(savDocContractSlice.actions.unencryptFileStart(doc.tokenID));
 
       try {
-        const tokenURI = await savDocContract.contract.methods
-          .getTokenURI(doc.tokenID)
-          .call({ from: web3.accounts[0] })
-        ;
+        const isOriginal = 0 === doc.typeNft || "0" === doc.typeNft;
+
+        let tokenURI;
+        if (isOriginal) {
+          tokenURI = await savDocContract.contract.methods
+            .getTokenURI(doc.tokenID)
+            .call({ from: web3.accounts[0] })
+          ;
+        } else {
+          tokenURI = doc.tokenURI;
+        }
 
         const ipfsCid = await decryptWithPrivateKey(tokenURI, web3.accounts[0]);
         const encryptedFile = await download(ipfsCid);
-        const encryptedPasswordWithMaster = await decryptWithPrivateKey(doc.passwordEncrypted, web3.accounts[0]);
-        const password = decryptWithPassword(encryptedPasswordWithMaster, savDocContract.passwordMaster);
-        const decryptedFile = decryptWithPassword(encryptedFile, password);
-        const file = dataURLtoBlob(decryptedFile);
 
-        dispatch(savDocContractSlice.actions.unencryptFileSucceeded({ tokenID: doc.tokenID, file }));
+        if (isOriginal) {
+          const encryptedPasswordWithMaster = await decryptWithPrivateKey(doc.passwordEncrypted, web3.accounts[0]);
+          const password = decryptWithPassword(encryptedPasswordWithMaster, savDocContract.passwordMaster);
+          const decryptedFile = decryptWithPassword(encryptedFile, password);
+          const file = dataURLtoBlob(decryptedFile);
+
+          dispatch(savDocContractSlice.actions.unencryptFileSucceeded({ tokenID: doc.tokenID, file }));
+        } else {
+          const decryptedFile = await decryptWithPrivateKey(encryptedFile, web3.accounts[0]);
+          const file = dataURLtoBlob(decryptedFile);
+
+          dispatch(savDocContractSlice.actions.unencryptFileSucceeded({ tokenID: doc.tokenID, file }));
+        }
+
       } catch (error) {
         dispatch(savDocContractSlice.actions.unencryptFileFailed(error));
       }
@@ -380,6 +503,27 @@ const savDocContractActions = {
       ;
     }
   },
+  shareDocument: (tokenID, to, tokenURI) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .shareDoc(tokenID, to, tokenURI)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.shareDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.shareDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.shareDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
   deleteDocument: (tokenID, forTransfer) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
@@ -401,6 +545,27 @@ const savDocContractActions = {
       ;
     }
   },
+  deleteSharedDocument: (tokenID) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .delCopyDocShared(tokenID)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.deleteSharedDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.deleteSharedDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.deleteSharedDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
   ...createContractActions(savDocContractSlice, SavDocContract),
 };
 
@@ -410,9 +575,12 @@ export const {
   fetchUserAndPassword,
   definePasswordMaster,
   fetchDocumentsOriginals,
-  decryptedFile,
+  fetchDocumentsShared,
+  decryptFile,
   secureDocument,
+  shareDocument,
   deleteDocument,
+  deleteSharedDocument,
 } = savDocContractActions;
 
 export default savDocContractSlice.reducer;

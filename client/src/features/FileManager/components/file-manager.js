@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { load } from "../file-manager-slice";
+import { load, setEnabledFileActions } from "../file-manager-slice";
 import FileManagerHeader from "./file-manager-header";
 import FileManagerContent from "./file-manager-content";
 
-const FileManager = ({ root, fileMap }) => {
+const FileManager = ({ root, fileMap, enabledFileActions }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -13,6 +13,14 @@ const FileManager = ({ root, fileMap }) => {
       dispatch(load([""], fileMap));
     }
   }, [dispatch, root, fileMap]);
+
+  useEffect(() => {
+    if (enabledFileActions) {
+      dispatch(setEnabledFileActions(enabledFileActions));
+    } else {
+      dispatch(setEnabledFileActions(['share', 'delete']));
+    }
+  }, [dispatch, enabledFileActions]);
 
   return (
     <>
