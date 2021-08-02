@@ -93,7 +93,7 @@ const Home = () => {
             <div className="position-relative overflow-hidden text-center">
               <div className="p-lg-5 my-5">
                 <Typography variant="h2" className="mb-3">SAV-Doc</Typography>
-                <Typography variant="h5" className="mb-4">Texte introduction SAV-Doc</Typography>
+                <Typography variant="h5" className="mb-4">Avec SAV Doc, utiliser un coffre-fort numérique et personnel pour sécuriser, approuver et vérifier vos documents</Typography>
                 {buttonMainAction}
               </div>
             </div>
