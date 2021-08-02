@@ -121,8 +121,7 @@ const secureFileActions = {
       dispatch(secureFileSlice.actions.showLoading('Upload du document en cours'));
 
       try {
-        // const cid = await storeBlob(encryptedFile);
-        const cid = 'bafkreidwwqgqpiqkqnttcr35gnv7uth5ew7rksug4tsqekrcxiqx7btccq';
+        const cid = await storeBlob(encryptedFile);
 
         dispatch(secureFileSlice.actions.setOriginalIpfsCid(cid));
       } catch (error) {

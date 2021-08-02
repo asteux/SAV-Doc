@@ -7,6 +7,7 @@ import themeReducer from '../common/theme/themeSlice';
 import savDocContractReducer from '../features/contracts/savDocContractSlice';
 import secureFileReducer from '../features/secureFile/secureFileSlice';
 import fileManagerReducer from '../features/FileManager/file-manager-slice';
+import sendDocumentReducer from '../features/sendDocument/sendDocumentSlice';
 
 export const history = createBrowserHistory();
 
@@ -18,6 +19,7 @@ export default configureStore({
     savDocContract: savDocContractReducer,
     secureFile: secureFileReducer,
     fileManager: fileManagerReducer,
+    sendDocument: sendDocumentReducer,
   },
   middleware: [
     ...getDefaultMiddleware({

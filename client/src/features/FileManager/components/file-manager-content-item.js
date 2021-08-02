@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, makeStyles, Menu, MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import RemoveIcon from '@material-ui/icons/Remove';
+import ShareIcon from '@material-ui/icons/Share';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { deleteFile, setCurrentDirectory, showFile } from "../file-manager-slice";
+import { deleteFile, setCurrentDirectory, shareFile, showFile } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
 const initialMenuState = {
@@ -28,6 +29,7 @@ const FileManagerContentItem = ({ data, icon }) => {
   const dispatch = useDispatch();
 
   const [menuState, setMenuState] = useState(initialMenuState);
+  const enabledFileActions = useSelector((state => state.fileManager.enabledFileActions));
   const viewMode = useSelector((state => state.fileManager.viewMode));
 
   const handleOpenMenu = (event) => {
@@ -40,6 +42,11 @@ const FileManagerContentItem = ({ data, icon }) => {
 
   const handleCloseMenu = () => {
     setMenuState(initialMenuState);
+  };
+
+  const handleShareFile = () => {
+    dispatch(shareFile(data));
+    handleCloseMenu();
   };
 
   const handleDeleteFile = () => {
@@ -66,13 +73,30 @@ const FileManagerContentItem = ({ data, icon }) => {
           ? { top: menuState.mouseY, left: menuState.mouseX }
           : undefined
       }
-    >
-      <MenuItem onClick={handleDeleteFile}>
-        <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
-          <DeleteIcon fontSize="small" />
-        </ListItemIcon>
-        <Typography variant="inherit">Supprimer</Typography>
-      </MenuItem>
+      >
+      {(enabledFileActions.includes('share'))
+        ? (
+        <MenuItem onClick={handleShareFile}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <ShareIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Partager</Typography>
+        </MenuItem>
+        )
+        : <></>
+      }
+
+      {(enabledFileActions.includes('delete'))
+        ? (
+          <MenuItem onClick={handleDeleteFile}>
+            <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+              <DeleteIcon fontSize="small" />
+            </ListItemIcon>
+            <Typography variant="inherit">Supprimer</Typography>
+          </MenuItem>
+        )
+        : <></>
+      }
     </Menu>
   );
 

@@ -4,6 +4,7 @@ const fileManagerSlice = createSlice({
   name: 'fileManager',
   initialState: {
     root: null,
+    enabledFileActions: [],
     fileMap: {},
     history: [[""]],
     historyIndex: 0,
@@ -13,6 +14,7 @@ const fileManagerSlice = createSlice({
     sortBy: 'name', // 'name' | 'size' | 'createdAt'
     sortReversedOrder: false,
     fileToShow: null,
+    fileToShare: null,
     fileToDelete: null,
   },
   reducers: {
@@ -21,6 +23,9 @@ const fileManagerSlice = createSlice({
       state.fileMap = action.payload.fileMap;
       state.history = [[state.root]];
       state.historyIndex = 0;
+    },
+    enabledFileActionsChanged: (state, action) => {
+      state.enabledFileActions = action.payload;
     },
     currentDirectoryChanged: (state, action) => {
       state.history = [...(state.history.slice(0, state.historyIndex + 1)), action.payload];
@@ -47,6 +52,9 @@ const fileManagerSlice = createSlice({
     fileToShowChanged: (state, action) => {
       state.fileToShow = action.payload;
     },
+    fileToShareChanged: (state, action) => {
+      state.fileToShare = action.payload;
+    },
     fileToDeleteChanged: (state, action) => {
       state.fileToDelete = action.payload;
     },
@@ -61,6 +69,10 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.isLoaded({ root, fileMap }));
     };
   },
+  setEnabledFileActions: (enabledFileActions) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.enabledFileActionsChanged(enabledFileActions));
+    };},
   setCurrentDirectory: (currentDirectory) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.currentDirectoryChanged(currentDirectory));
@@ -129,6 +141,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToShowChanged(null));
     };
   },
+  shareFile: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToShareChanged(fileData));
+    };
+  },
   deleteFile: (fileData) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.fileToDeleteChanged(fileData));
@@ -138,6 +155,7 @@ const fileManagerActions = {
 
 export const {
   load,
+  setEnabledFileActions,
   setCurrentDirectory,
   goToParentDirectory,
   goToPreviousDirectory,
@@ -149,6 +167,7 @@ export const {
   toggleSortReversedOrder,
   showFile,
   hideFile,
+  shareFile,
   deleteFile,
 } = fileManagerActions;
 

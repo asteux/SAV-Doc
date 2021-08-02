@@ -64,6 +64,57 @@ const App = () => {
     }
   }, [dispatch, savDocContract, accounts]);
 
+  useEffect(() => {
+    const callbacks = [];
+    if (savDocContract) {
+      // Manage savDocContract events
+      const eventSubscribeEmitter = savDocContract.events.Subscribe()
+        .on('data', async (event) => {
+          // address newUser, string name, string pubkey
+          const userAddress = event.returnValues.newUser;
+          // const name = event.returnValues.name;
+          // const publickey = event.returnValues.pubkey;
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (userAddress === accounts[0]) {
+            dispatch(fetchUserAndPassword());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventSubscribeEmitter.removeAllListeners(); });
+
+      const eventSubscribeAuthorityEmitter = savDocContract.events.SubscribeAuthority()
+        .on('data', async (event) => {
+          // address newUser, string pubkey
+          const userAddress = event.returnValues.newUser;
+          // const publickey = event.returnValues.pubkey;
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (userAddress === accounts[0]) {
+            dispatch(fetchUserAndPassword());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventSubscribeAuthorityEmitter.removeAllListeners(); });
+    }
+
+    return () => {
+      for (let i = 0; i < callbacks.length; i++) {
+        callbacks[i]();
+      }
+    }
+  }, [dispatch, web3, savDocContract]);
+
   const theme = createTheme({
     palette: {
       type: themeMode,
