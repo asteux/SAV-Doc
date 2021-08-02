@@ -3,9 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, makeStyles, Menu, MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShareIcon from '@material-ui/icons/Share';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { deleteFile, setCurrentDirectory, shareFile, showFile } from "../file-manager-slice";
+import {
+  deleteFile, manageCertificationRequest, setCurrentDirectory,
+  requestCertificationFile, shareFile, showFile
+} from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
 const initialMenuState = {
@@ -44,13 +48,23 @@ const FileManagerContentItem = ({ data, icon }) => {
     setMenuState(initialMenuState);
   };
 
+  const handleRequestCertificationFile = () => {
+    dispatch(requestCertificationFile(data.data));
+    handleCloseMenu();
+  };
+
+  const handleManageCertificationRequest = () => {
+    dispatch(manageCertificationRequest(data.data));
+    handleCloseMenu();
+  };
+
   const handleShareFile = () => {
-    dispatch(shareFile(data));
+    dispatch(shareFile(data.data));
     handleCloseMenu();
   };
 
   const handleDeleteFile = () => {
-    dispatch(deleteFile(data));
+    dispatch(deleteFile(data.data));
     handleCloseMenu();
   };
 
@@ -58,7 +72,7 @@ const FileManagerContentItem = ({ data, icon }) => {
     if (data.isDir) {
       dispatch(setCurrentDirectory([...data.directory, data.name]));
     } else {
-      dispatch(showFile(data));
+      dispatch(showFile(data.data));
     }
   };
 
@@ -74,6 +88,30 @@ const FileManagerContentItem = ({ data, icon }) => {
           : undefined
       }
       >
+      {(enabledFileActions.includes('requestCertification'))
+        ? (
+        <MenuItem onClick={handleRequestCertificationFile}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <VerifiedUserIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Demander une certification</Typography>
+        </MenuItem>
+        )
+        : null
+      }
+
+      {(enabledFileActions.includes('manageCertificationRequest'))
+        ? (
+        <MenuItem onClick={handleManageCertificationRequest}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <VerifiedUserIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Gérer la certification du document</Typography>
+        </MenuItem>
+        )
+        : null
+      }
+
       {(enabledFileActions.includes('share'))
         ? (
         <MenuItem onClick={handleShareFile}>
@@ -83,7 +121,7 @@ const FileManagerContentItem = ({ data, icon }) => {
           <Typography variant="inherit">Partager</Typography>
         </MenuItem>
         )
-        : <></>
+        : null
       }
 
       {(enabledFileActions.includes('delete'))
@@ -95,7 +133,7 @@ const FileManagerContentItem = ({ data, icon }) => {
             <Typography variant="inherit">Supprimer</Typography>
           </MenuItem>
         )
-        : <></>
+        : null
       }
     </Menu>
   );

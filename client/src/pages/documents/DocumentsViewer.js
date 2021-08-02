@@ -8,7 +8,8 @@ import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import FileManager from "../../features/FileManager/components/file-manager";
 import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
-import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsOriginals, fetchDocumentsShared } from "../../features/contracts/savDocContractSlice";
+import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared } from "../../features/contracts/savDocContractSlice";
+import ManageCertificationRequestDialog from "../../features/manageCertificationRequest/ManageCertificationRequestDialog";
 import SendDocumentDialog from "../../features/sendDocument/SendDocumentDialog";
 
 const drawerWidth = 240;
@@ -54,20 +55,26 @@ const DocumentsViewer = () => {
   const savDocContract = useSelector(state => state.savDocContract.contract);
   const fetchDocumentsOriginalsState = useSelector(state => state.savDocContract.fetchDocumentsOriginalsState);
   const fetchDocumentsSharedState = useSelector(state => state.savDocContract.fetchDocumentsSharedState);
+  const fetchDocumentsCertifiedState = useSelector(state => state.savDocContract.fetchDocumentsCertifiedState);
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
   const fileManagerAction = useSelector(state => state.fileManager.action);
-  const fileToShow = useSelector(state => state.fileManager.fileToShow);
-  const fileToShare = useSelector(state => state.fileManager.fileToShare);
-  const fileToDelete = useSelector(state => state.fileManager.fileToDelete);
+  const actionFile = useSelector(state => state.fileManager.actionFile);
 
   const [openSendDocumentDialog, setOpenSendDocumentDialog] = useState(false);
   const handleOpenSendDocumentDialog = (event) => setOpenSendDocumentDialog(true);
   const handleCloseSendDocumentDialog = (event) => setOpenSendDocumentDialog(false);
 
+  const [openManageCertificationDialog, setOpenManageCertificationDialog] = useState(false);
+  const handleOpenManageCertificationDialog = (event) => setOpenManageCertificationDialog(true);
+  const handleCloseManageCertificationDialog = (event) => setOpenManageCertificationDialog(false);
+
   const fileMap = useMemo(() => {
     switch (category) {
       case 'original':
         return fetchDocumentsOriginalsState.fileMap;
+
+      case 'certified':
+        return fetchDocumentsCertifiedState.fileMap;
 
       case 'shared':
         return fetchDocumentsSharedState.fileMap;
@@ -75,7 +82,7 @@ const DocumentsViewer = () => {
       default:
         break;
     }
-  }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState]);
+  }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState, fetchDocumentsCertifiedState]);
 
   useEffect(() => {
     const callbacks = [];
@@ -120,6 +127,67 @@ const DocumentsViewer = () => {
       ;
 
       callbacks.push(() => { eventDeleteDocummentEmitter.removeAllListeners(); });
+
+      const eventRequestCertificationEmitter = savDocContract.events.RequestCertification()
+        .on('data', async (event) => {
+          // address applicant, uint256 tokenID
+          const applicant = event.returnValues.applicant;
+          // const tokenID = event.returnValues.tokenID;
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (applicant === accounts[0]) {
+            dispatch(fetchDocumentsCertified());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventRequestCertificationEmitter.removeAllListeners(); });
+
+      const eventAcceptCertificationRequestEmitter = savDocContract.events.AcceptCertificationRequest()
+        .on('data', async (event) => {
+          // address certifying, address applicant, uint256 tokenID, bool keepCopy
+          const certifying = event.returnValues.certifying;
+          // const applicant = event.returnValues.applicant;
+          // const tokenID = event.returnValues.tokenID;
+          // const keepCopy = event.returnValues.keepCopy;
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (certifying === accounts[0]) {
+            dispatch(fetchDocumentsShared());
+            dispatch(fetchDocumentsCertified());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventAcceptCertificationRequestEmitter.removeAllListeners(); });
+
+      const eventRejectCertificationRequestEmitter = savDocContract.events.RejectCertificationRequest()
+        .on('data', async (event) => {
+          // address certifying, address applicant, uint256 tokenID
+          const certifying = event.returnValues.certifying;
+          // const applicant = event.returnValues.applicant;
+          // const tokenID = event.returnValues.tokenID;
+
+          const accounts = await web3.eth.getAccounts();
+
+          if (certifying === accounts[0]) {
+            dispatch(fetchDocumentsCertified());
+          }
+        })
+        .on('error', (event) => {
+          console.error(event);
+        })
+      ;
+
+      callbacks.push(() => { eventRejectCertificationRequestEmitter.removeAllListeners(); });
 
       const eventShareDocEmitter = savDocContract.events.ShareDoc()
         .on('data', async (event) => {
@@ -178,6 +246,10 @@ const DocumentsViewer = () => {
         dispatch(fetchDocumentsShared());
         break;
 
+      case 'certified':
+        dispatch(fetchDocumentsCertified());
+        break;
+
       default:
         break;
     }
@@ -200,36 +272,59 @@ const DocumentsViewer = () => {
   }, [dispatch, history, fileManagerAction]);
 
   useEffect(() => {
-    if (fileToShow) {
-      dispatch(decryptFile(fileToShow.data));
-    } else {
-      setFile(null);
-    }
-  }, [dispatch, fileToShow]);
+    if (actionFile && actionFile.type && actionFile.data) {
+      switch (actionFile.type) {
+        case 'show':
+          if (actionFile.data) {
+            dispatch(decryptFile(actionFile.data));
+          } else {
+            setFile(null);
+          }
+          break;
 
-  useEffect(() => {
-    if (fileToShow && decryptedFiles && decryptedFiles[fileToShow.data.tokenID]) {
-      setFile(decryptedFiles[fileToShow.data.tokenID].data);
-    }
-  }, [dispatch, fileToShow, decryptedFiles]);
+        case 'requestCertification':
+          if (actionFile.data) {
+            handleOpenSendDocumentDialog();
+          }
+          break;
 
-  useEffect(() => {
-    if (fileToShare) {
-      handleOpenSendDocumentDialog();
-    }
-  }, [dispatch, fileToShare]);
+        case 'manageCertificationRequest':
+          if (actionFile.data) {
+            handleOpenManageCertificationDialog();
+          }
+          break;
 
-  useEffect(() => {
-    if (fileToDelete) {
-      if (0 === fileToDelete.data.typeNft || '0' === fileToDelete.data.typeNft) {
-        dispatch(deleteDocument(fileToDelete.data.tokenID, false));
-      } else {
-        dispatch(deleteSharedDocument(fileToDelete.data.tokenID));
+        case 'share':
+          if (actionFile.data) {
+            handleOpenSendDocumentDialog();
+          }
+          break;
+
+        case 'delete':
+          if (actionFile.data) {
+            if (0 === actionFile.data.typeNft || '0' === actionFile.data.typeNft) {
+              dispatch(deleteDocument(actionFile.data.tokenID, false));
+            } else {
+              dispatch(deleteSharedDocument(actionFile.data.tokenID));
+            }
+          } else {
+            deleteFile(null);
+          }
+          break;
+
+        default:
+          break;
       }
-    } else {
-      deleteFile(null);
     }
-  }, [dispatch, fileToDelete]);
+  }, [dispatch, actionFile]);
+
+  useEffect(() => {
+    if (actionFile && actionFile.type && actionFile.data) {
+      if (actionFile && actionFile.data && decryptedFiles && decryptedFiles[actionFile.data.tokenID]) {
+        setFile(decryptedFiles[actionFile.data.tokenID].data);
+      }
+    }
+  }, [dispatch, actionFile, decryptedFiles]);
 
   const handleClose = () => {
     dispatch(hideFile());
@@ -264,9 +359,14 @@ const DocumentsViewer = () => {
                 <ListItemText primary="Mes documents" />
               </ListItem>
 
-              <ListItem button key="Documents" onClick={(event) => changeCategory('shared')}>
+              <ListItem button key="Documents partagés" onClick={(event) => changeCategory('shared')}>
                 <ListItemIcon><FolderIcon /></ListItemIcon>
                 <ListItemText primary="Documents partagés" />
+              </ListItem>
+
+              <ListItem button key="Documents à certifier" onClick={(event) => changeCategory('certified')}>
+                <ListItemIcon><FolderIcon /></ListItemIcon>
+                <ListItemText primary="Documents à certifier" />
               </ListItem>
             </List>
           </div>
@@ -274,9 +374,28 @@ const DocumentsViewer = () => {
 
         <main className={classes.content}>
           <Toolbar />
-          <FileManager fileMap={fileMap} enabledFileActions={('original' === category) ? ['share', 'delete'] :  ['delete']} />
+          <FileManager
+            fileMap={fileMap}
+            enabledFileActions={
+              ((category) => {
+                switch (category) {
+                  case 'original':
+                    return ['requestCertification', 'share', 'delete'];
 
-          <Backdrop className={classes.backdrop} open={!!fileToShow} onClick={handleClose}>
+                  case 'certified':
+                    return ['manageCertificationRequest'];
+
+                  case 'shared':
+                    return ['delete'];
+
+                  default:
+                    return [];
+                }
+              })(category)
+            }
+          />
+
+          <Backdrop className={classes.backdrop} open={!!actionFile && 'show' === actionFile.type && !!actionFile.data} onClick={handleClose}>
             {
               (file)
                 ? (
@@ -291,10 +410,36 @@ const DocumentsViewer = () => {
 
           </Backdrop>
 
-          {(fileToShare && fileToShare.data)
+          {(!!actionFile && 'requestCertification' === actionFile.type && !!actionFile.data)
             ? (
               <SendDocumentDialog
-                doc={fileToShare.data}
+                type="requestCertification"
+                doc={actionFile.data}
+                title="Demande de certification"
+                open={openSendDocumentDialog}
+                handleClose={handleCloseSendDocumentDialog}
+              />
+            )
+            : (<></>)
+          }
+
+          {(!!actionFile && 'manageCertificationRequest' === actionFile.type && !!actionFile.data)
+            ? (
+              <ManageCertificationRequestDialog
+                doc={actionFile.data}
+                title="Gérer la certification"
+                open={openManageCertificationDialog}
+                handleClose={handleCloseManageCertificationDialog}
+              />
+            )
+            : (<></>)
+          }
+
+          {(!!actionFile && 'share' === actionFile.type && !!actionFile.data)
+            ? (
+              <SendDocumentDialog
+                type="share"
+                doc={actionFile.data}
                 title="Partage"
                 open={openSendDocumentDialog}
                 handleClose={handleCloseSendDocumentDialog}

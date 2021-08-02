@@ -11,7 +11,7 @@ import "./SaveDocStruct.sol";
 
 contract SaveDoc is Ownable, SaveDocStruct
 {
-    mapping(address => CertificationRequest[]) private requests;
+    mapping(address => mapping(uint256 => CertificationRequest)) private requests;
     SaveDocToken private saveDocToken;
     DocManager private docManager;
     AccountManager private accountManager;
@@ -47,6 +47,18 @@ contract SaveDoc is Ownable, SaveDocStruct
     modifier userExist(address addressUser)
     {
         require(accountManager.checkIfUserExist(addressUser), "DocManager: Cette utilisateur n'existe pas.");
+        _;
+    }
+
+    modifier requestExist(address _certifying, uint256 _tokenID)
+    {
+        require(requests[_certifying][_tokenID].exist, "SavDoc: La demande de certification n'existe pas.");
+        _;
+    }
+
+    modifier requestNotExist(address _certifying, uint256 _tokenID)
+    {
+        require(!requests[_certifying][_tokenID].exist, "SavDoc: La demande de certification existe.");
         _;
     }
 
@@ -150,14 +162,15 @@ contract SaveDoc is Ownable, SaveDocStruct
         emit DeleteMyDocCopy(msg.sender, tokenID);
     }
 
-    function requestCertification(uint256 tokenID, string memory tokenURI, address certifying) isMyToken(tokenID) userExist(certifying) external
+    function requestCertification(uint256 _tokenID, string memory _tokenURI, address _certifying) isMyToken(_tokenID) userExist(_certifying) requestNotExist(_certifying, _tokenID) external
     {
-        CertificationRequest memory request;
+        docManager.createCopyDoc(msg.sender, _certifying, _tokenID, _tokenURI, TypeDoc.CopyCertified);
 
-        docManager.createCopyDoc(msg.sender, certifying, tokenID, tokenURI, TypeDoc.CopyCertified);
-        request = CertificationRequest(msg.sender, tokenID, requests[certifying].length);
-        requests[certifying].push(request);
-        emit RequestCertification(request.applicant, request.tokenID);
+        requests[_certifying][_tokenID].applicant = msg.sender;
+        requests[_certifying][_tokenID].tokenID = _tokenID;
+        requests[_certifying][_tokenID].exist = true;
+
+        emit RequestCertification(requests[_certifying][_tokenID].applicant, requests[_certifying][_tokenID].tokenID);
     }
 
     function viewMyDocs() view external returns(Document[] memory)
@@ -180,19 +193,10 @@ contract SaveDoc is Ownable, SaveDocStruct
         return docManager.getAllCopyCertified(msg.sender);
     }
 
-    function viewCertificationRequest() external view returns(CertificationRequest[] memory)
-    {
-        return requests[msg.sender];
-    }
 
-    function delRequest(address certifying, uint256 index) private
+    function delRequest(address _certifying, uint256 _tokenID) private
     {
-        CertificationRequest memory substitute;
-
-        substitute = requests[certifying][requests[certifying].length - 1];
-        substitute.index = index;
-        requests[certifying][index] = substitute;
-        requests[certifying].pop();
+        delete requests[_certifying][_tokenID];
     }
 
     function certifyDocument(address applicant, uint256 tokenID, string memory hashNFT) private
@@ -203,28 +207,29 @@ contract SaveDoc is Ownable, SaveDocStruct
         docManager.certify(msg.sender, isAuthority, applicant, tokenID, hashNFT);
     }
 
-    function acceptCertificationRequest(CertificationRequest memory request, string memory hashNFT, bool keepCopyDoc) public
+    function acceptCertificationRequest(uint256 _tokenID, string memory _hashNFT, bool _keepCopyDoc) requestExist(msg.sender, _tokenID) public
     {
         // check si msg.sender a bien déja une copie du Document
-        certifyDocument(request.applicant, request.tokenID, hashNFT);
-        delRequest(msg.sender, request.index);
+        CertificationRequest memory request = requests[msg.sender][_tokenID];
+        certifyDocument(request.applicant, request.tokenID, _hashNFT);
+        delRequest(msg.sender, request.tokenID);
 
-        if (keepCopyDoc)
-        {
+        if (_keepCopyDoc) {
             docManager.convertTypeDoc(msg.sender, TypeDoc.CopyCertified, TypeDoc.CopyShared, request.tokenID, "");
-        }
-        else
-        {
+        } else {
             docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
         }
-        emit AcceptCertificationRequest(msg.sender, request.applicant, request.tokenID, keepCopyDoc);
+
+        emit AcceptCertificationRequest(msg.sender, request.applicant, request.tokenID, _keepCopyDoc);
     }
 
-    function rejectCertificationRequest(CertificationRequest memory request) external
+    function rejectCertificationRequest(uint256 _tokenID) requestExist(msg.sender, _tokenID) external
     {
         // check si msg.sender à bien déja une copie du Document
-        delRequest(msg.sender, request.index);
+        CertificationRequest memory request = requests[msg.sender][_tokenID];
+        delRequest(msg.sender, _tokenID);
         docManager.delCopyDoc(msg.sender, TypeDoc.CopyCertified, docManager.getIndexNFT(msg.sender, TypeDoc.CopyCertified, request.tokenID));
+
         emit RejectCertificationRequest(msg.sender, request.applicant, request.tokenID);
     }
 }

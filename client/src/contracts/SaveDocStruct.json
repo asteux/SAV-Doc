@@ -1,29 +1,29 @@
 {
   "contractName": "SaveDocStruct",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SaveDocStruct.sol\":\"SaveDocStruct\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SaveDocStruct.sol\":{\"keccak256\":\"0x6dd9b8021db7423fd7885097aeccf11aec8e9378c837cbf749c9fc2fbc7da883\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9c29d674deaa06d80bd2699916327ab77460e01314c7e56585a62838f6500c8a\",\"dweb:/ipfs/QmZWDEhCKyhTpUwMttZyaKnY7bn3L62vCd2mSwSoVRuYC5\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea264697066735822122013751497729dc3d3c2c1da9eac51f5f598e6a96117f44c9bd7921ad44413b2f064736f6c63430008060033",
-  "deployedBytecode": "0x6080604052600080fdfea264697066735822122013751497729dc3d3c2c1da9eac51f5f598e6a96117f44c9bd7921ad44413b2f064736f6c63430008060033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/SaveDocStruct.sol\":\"SaveDocStruct\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/SaveDocStruct.sol\":{\"keccak256\":\"0x6569e2cd6cd90e95efe3276e3248bdc8c9d1b6ea6fd81cac2e711bf999644231\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e5eb22819cd48ff7d22c5f39fbff09f7fa0e20d0582d0d9b8de45e875cfdef33\",\"dweb:/ipfs/QmadEAvU9AeAKhAEjwrND5KJt3EMn28EmTgd77re9rhRdW\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220cb191399465217013b8ffa42291c0b7bd5c2fa7563abab31ed6b474fa9c08a4864736f6c63430008060033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220cb191399465217013b8ffa42291c0b7bd5c2fa7563abab31ed6b474fa9c08a4864736f6c63430008060033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "56:678:16:-:0;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "56:678:16:-:0;;;;;",
-  "source": "//SPDX-License-Identifier: MIT\n\npragma solidity 0.8.6;\n\ncontract SaveDocStruct\n{\n    enum TypeDoc\n    {\n        Original,\n        CopyShared,\n        CopyCertified,\n        CopyPendingTransfer\n    }\n\n    struct Document\n    {\n       uint256 tokenID;\n       uint256 fileSize;\n       string filename;\n       string fileMimeType;\n       uint256 dateAdd;\n       string filePath;\n       address[] certifying;\n       string tokenURI;\n       string passwordEncrypted;\n       TypeDoc typeNft;\n    }\n\n    struct CertificationRequest\n    {\n        address applicant;\n        uint256 tokenID;\n        uint256 index;\n    }\n\n    struct User\n    {\n        string name;\n        string publicKey;\n        bool isAuthority;\n        bool exist;\n    }\n}\n",
-  "sourcePath": "/home/traore/projects/SAV-Doc/contracts/SaveDocStruct.sol",
+  "sourceMap": "56:675:16:-:0;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "56:675:16:-:0;;;;;",
+  "source": "//SPDX-License-Identifier: MIT\n\npragma solidity 0.8.6;\n\ncontract SaveDocStruct\n{\n    enum TypeDoc\n    {\n        Original,\n        CopyShared,\n        CopyCertified,\n        CopyPendingTransfer\n    }\n\n    struct Document\n    {\n       uint256 tokenID;\n       uint256 fileSize;\n       string filename;\n       string fileMimeType;\n       uint256 dateAdd;\n       string filePath;\n       address[] certifying;\n       string tokenURI;\n       string passwordEncrypted;\n       TypeDoc typeNft;\n    }\n\n    struct CertificationRequest\n    {\n        address applicant;\n        uint256 tokenID;\n        bool exist;\n    }\n\n    struct User\n    {\n        string name;\n        string publicKey;\n        bool isAuthority;\n        bool exist;\n    }\n}\n",
+  "sourcePath": "/home/oumar/projects/SAV-Doc/contracts/SaveDocStruct.sol",
   "ast": {
     "absolutePath": "project:/contracts/SaveDocStruct.sol",
     "exportedSymbols": {
       "SaveDocStruct": [
-        3810
+        3849
       ]
     },
-    "id": 3811,
+    "id": 3850,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3765,
+        "id": 3804,
         "literals": [
           "solidity",
           "0.8",
@@ -38,9 +38,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 3810,
+        "id": 3849,
         "linearizedBaseContracts": [
-          3810
+          3849
         ],
         "name": "SaveDocStruct",
         "nameLocation": "65:13:16",
@@ -48,31 +48,31 @@
         "nodes": [
           {
             "canonicalName": "SaveDocStruct.TypeDoc",
-            "id": 3770,
+            "id": 3809,
             "members": [
               {
-                "id": 3766,
+                "id": 3805,
                 "name": "Original",
                 "nameLocation": "112:8:16",
                 "nodeType": "EnumValue",
                 "src": "112:8:16"
               },
               {
-                "id": 3767,
+                "id": 3806,
                 "name": "CopyShared",
                 "nameLocation": "130:10:16",
                 "nodeType": "EnumValue",
                 "src": "130:10:16"
               },
               {
-                "id": 3768,
+                "id": 3807,
                 "name": "CopyCertified",
                 "nameLocation": "150:13:16",
                 "nodeType": "EnumValue",
                 "src": "150:13:16"
               },
               {
-                "id": 3769,
+                "id": 3808,
                 "name": "CopyPendingTransfer",
                 "nameLocation": "173:19:16",
                 "nodeType": "EnumValue",
@@ -86,16 +86,16 @@
           },
           {
             "canonicalName": "SaveDocStruct.Document",
-            "id": 3793,
+            "id": 3832,
             "members": [
               {
                 "constant": false,
-                "id": 3772,
+                "id": 3811,
                 "mutability": "mutable",
                 "name": "tokenID",
                 "nameLocation": "241:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "233:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -104,7 +104,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3771,
+                  "id": 3810,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "233:7:16",
@@ -117,12 +117,12 @@
               },
               {
                 "constant": false,
-                "id": 3774,
+                "id": 3813,
                 "mutability": "mutable",
                 "name": "fileSize",
                 "nameLocation": "265:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "257:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -131,7 +131,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3773,
+                  "id": 3812,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "257:7:16",
@@ -144,12 +144,12 @@
               },
               {
                 "constant": false,
-                "id": 3776,
+                "id": 3815,
                 "mutability": "mutable",
                 "name": "filename",
                 "nameLocation": "289:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "282:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -158,7 +158,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3775,
+                  "id": 3814,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "282:6:16",
@@ -171,12 +171,12 @@
               },
               {
                 "constant": false,
-                "id": 3778,
+                "id": 3817,
                 "mutability": "mutable",
                 "name": "fileMimeType",
                 "nameLocation": "313:12:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "306:19:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -185,7 +185,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3777,
+                  "id": 3816,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "306:6:16",
@@ -198,12 +198,12 @@
               },
               {
                 "constant": false,
-                "id": 3780,
+                "id": 3819,
                 "mutability": "mutable",
                 "name": "dateAdd",
                 "nameLocation": "342:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "334:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -212,7 +212,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3779,
+                  "id": 3818,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "334:7:16",
@@ -225,12 +225,12 @@
               },
               {
                 "constant": false,
-                "id": 3782,
+                "id": 3821,
                 "mutability": "mutable",
                 "name": "filePath",
                 "nameLocation": "365:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "358:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -239,7 +239,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3781,
+                  "id": 3820,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "358:6:16",
@@ -252,12 +252,12 @@
               },
               {
                 "constant": false,
-                "id": 3785,
+                "id": 3824,
                 "mutability": "mutable",
                 "name": "certifying",
                 "nameLocation": "392:10:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "382:20:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -267,7 +267,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 3783,
+                    "id": 3822,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "382:7:16",
@@ -277,7 +277,7 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 3784,
+                  "id": 3823,
                   "nodeType": "ArrayTypeName",
                   "src": "382:9:16",
                   "typeDescriptions": {
@@ -289,12 +289,12 @@
               },
               {
                 "constant": false,
-                "id": 3787,
+                "id": 3826,
                 "mutability": "mutable",
                 "name": "tokenURI",
                 "nameLocation": "418:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "411:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -303,7 +303,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3786,
+                  "id": 3825,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "411:6:16",
@@ -316,12 +316,12 @@
               },
               {
                 "constant": false,
-                "id": 3789,
+                "id": 3828,
                 "mutability": "mutable",
                 "name": "passwordEncrypted",
                 "nameLocation": "442:17:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "435:24:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -330,7 +330,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3788,
+                  "id": 3827,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "435:6:16",
@@ -343,33 +343,33 @@
               },
               {
                 "constant": false,
-                "id": 3792,
+                "id": 3831,
                 "mutability": "mutable",
                 "name": "typeNft",
                 "nameLocation": "476:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "468:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_TypeDoc_$3770",
+                  "typeIdentifier": "t_enum$_TypeDoc_$3809",
                   "typeString": "enum SaveDocStruct.TypeDoc"
                 },
                 "typeName": {
-                  "id": 3791,
+                  "id": 3830,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 3790,
+                    "id": 3829,
                     "name": "TypeDoc",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 3770,
+                    "referencedDeclaration": 3809,
                     "src": "468:7:16"
                   },
-                  "referencedDeclaration": 3770,
+                  "referencedDeclaration": 3809,
                   "src": "468:7:16",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_TypeDoc_$3770",
+                    "typeIdentifier": "t_enum$_TypeDoc_$3809",
                     "typeString": "enum SaveDocStruct.TypeDoc"
                   }
                 },
@@ -379,22 +379,22 @@
             "name": "Document",
             "nameLocation": "211:8:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
+            "scope": 3849,
             "src": "204:286:16",
             "visibility": "public"
           },
           {
             "canonicalName": "SaveDocStruct.CertificationRequest",
-            "id": 3800,
+            "id": 3839,
             "members": [
               {
                 "constant": false,
-                "id": 3795,
+                "id": 3834,
                 "mutability": "mutable",
                 "name": "applicant",
                 "nameLocation": "546:9:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
+                "scope": 3839,
                 "src": "538:17:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -403,7 +403,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 3794,
+                  "id": 3833,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "538:7:16",
@@ -417,12 +417,12 @@
               },
               {
                 "constant": false,
-                "id": 3797,
+                "id": 3836,
                 "mutability": "mutable",
                 "name": "tokenID",
                 "nameLocation": "573:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
+                "scope": 3839,
                 "src": "565:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -431,7 +431,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3796,
+                  "id": 3835,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "565:7:16",
@@ -444,27 +444,27 @@
               },
               {
                 "constant": false,
-                "id": 3799,
+                "id": 3838,
                 "mutability": "mutable",
-                "name": "index",
-                "nameLocation": "598:5:16",
+                "name": "exist",
+                "nameLocation": "595:5:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
-                "src": "590:13:16",
+                "scope": 3839,
+                "src": "590:10:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3798,
-                  "name": "uint256",
+                  "id": 3837,
+                  "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "590:7:16",
+                  "src": "590:4:16",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   }
                 },
                 "visibility": "internal"
@@ -473,23 +473,23 @@
             "name": "CertificationRequest",
             "nameLocation": "503:20:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
-            "src": "496:114:16",
+            "scope": 3849,
+            "src": "496:111:16",
             "visibility": "public"
           },
           {
             "canonicalName": "SaveDocStruct.User",
-            "id": 3809,
+            "id": 3848,
             "members": [
               {
                 "constant": false,
-                "id": 3802,
+                "id": 3841,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "649:4:16",
+                "nameLocation": "646:4:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "642:11:16",
+                "scope": 3848,
+                "src": "639:11:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -497,10 +497,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3801,
+                  "id": 3840,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "642:6:16",
+                  "src": "639:6:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -510,13 +510,13 @@
               },
               {
                 "constant": false,
-                "id": 3804,
+                "id": 3843,
                 "mutability": "mutable",
                 "name": "publicKey",
-                "nameLocation": "670:9:16",
+                "nameLocation": "667:9:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "663:16:16",
+                "scope": 3848,
+                "src": "660:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -524,10 +524,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3803,
+                  "id": 3842,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "663:6:16",
+                  "src": "660:6:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -537,13 +537,13 @@
               },
               {
                 "constant": false,
-                "id": 3806,
+                "id": 3845,
                 "mutability": "mutable",
                 "name": "isAuthority",
-                "nameLocation": "694:11:16",
+                "nameLocation": "691:11:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "689:16:16",
+                "scope": 3848,
+                "src": "686:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -551,10 +551,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3805,
+                  "id": 3844,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "689:4:16",
+                  "src": "686:4:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -564,13 +564,13 @@
               },
               {
                 "constant": false,
-                "id": 3808,
+                "id": 3847,
                 "mutability": "mutable",
                 "name": "exist",
-                "nameLocation": "720:5:16",
+                "nameLocation": "717:5:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "715:10:16",
+                "scope": 3848,
+                "src": "712:10:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -578,10 +578,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3807,
+                  "id": 3846,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "715:4:16",
+                  "src": "712:4:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -591,33 +591,33 @@
               }
             ],
             "name": "User",
-            "nameLocation": "623:4:16",
+            "nameLocation": "620:4:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
-            "src": "616:116:16",
+            "scope": 3849,
+            "src": "613:116:16",
             "visibility": "public"
           }
         ],
-        "scope": 3811,
-        "src": "56:678:16",
+        "scope": 3850,
+        "src": "56:675:16",
         "usedErrors": []
       }
     ],
-    "src": "32:703:16"
+    "src": "32:700:16"
   },
   "legacyAST": {
     "absolutePath": "project:/contracts/SaveDocStruct.sol",
     "exportedSymbols": {
       "SaveDocStruct": [
-        3810
+        3849
       ]
     },
-    "id": 3811,
+    "id": 3850,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3765,
+        "id": 3804,
         "literals": [
           "solidity",
           "0.8",
@@ -632,9 +632,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 3810,
+        "id": 3849,
         "linearizedBaseContracts": [
-          3810
+          3849
         ],
         "name": "SaveDocStruct",
         "nameLocation": "65:13:16",
@@ -642,31 +642,31 @@
         "nodes": [
           {
             "canonicalName": "SaveDocStruct.TypeDoc",
-            "id": 3770,
+            "id": 3809,
             "members": [
               {
-                "id": 3766,
+                "id": 3805,
                 "name": "Original",
                 "nameLocation": "112:8:16",
                 "nodeType": "EnumValue",
                 "src": "112:8:16"
               },
               {
-                "id": 3767,
+                "id": 3806,
                 "name": "CopyShared",
                 "nameLocation": "130:10:16",
                 "nodeType": "EnumValue",
                 "src": "130:10:16"
               },
               {
-                "id": 3768,
+                "id": 3807,
                 "name": "CopyCertified",
                 "nameLocation": "150:13:16",
                 "nodeType": "EnumValue",
                 "src": "150:13:16"
               },
               {
-                "id": 3769,
+                "id": 3808,
                 "name": "CopyPendingTransfer",
                 "nameLocation": "173:19:16",
                 "nodeType": "EnumValue",
@@ -680,16 +680,16 @@
           },
           {
             "canonicalName": "SaveDocStruct.Document",
-            "id": 3793,
+            "id": 3832,
             "members": [
               {
                 "constant": false,
-                "id": 3772,
+                "id": 3811,
                 "mutability": "mutable",
                 "name": "tokenID",
                 "nameLocation": "241:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "233:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -698,7 +698,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3771,
+                  "id": 3810,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "233:7:16",
@@ -711,12 +711,12 @@
               },
               {
                 "constant": false,
-                "id": 3774,
+                "id": 3813,
                 "mutability": "mutable",
                 "name": "fileSize",
                 "nameLocation": "265:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "257:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -725,7 +725,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3773,
+                  "id": 3812,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "257:7:16",
@@ -738,12 +738,12 @@
               },
               {
                 "constant": false,
-                "id": 3776,
+                "id": 3815,
                 "mutability": "mutable",
                 "name": "filename",
                 "nameLocation": "289:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "282:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -752,7 +752,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3775,
+                  "id": 3814,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "282:6:16",
@@ -765,12 +765,12 @@
               },
               {
                 "constant": false,
-                "id": 3778,
+                "id": 3817,
                 "mutability": "mutable",
                 "name": "fileMimeType",
                 "nameLocation": "313:12:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "306:19:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -779,7 +779,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3777,
+                  "id": 3816,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "306:6:16",
@@ -792,12 +792,12 @@
               },
               {
                 "constant": false,
-                "id": 3780,
+                "id": 3819,
                 "mutability": "mutable",
                 "name": "dateAdd",
                 "nameLocation": "342:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "334:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -806,7 +806,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3779,
+                  "id": 3818,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "334:7:16",
@@ -819,12 +819,12 @@
               },
               {
                 "constant": false,
-                "id": 3782,
+                "id": 3821,
                 "mutability": "mutable",
                 "name": "filePath",
                 "nameLocation": "365:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "358:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -833,7 +833,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3781,
+                  "id": 3820,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "358:6:16",
@@ -846,12 +846,12 @@
               },
               {
                 "constant": false,
-                "id": 3785,
+                "id": 3824,
                 "mutability": "mutable",
                 "name": "certifying",
                 "nameLocation": "392:10:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "382:20:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -861,7 +861,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 3783,
+                    "id": 3822,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "382:7:16",
@@ -871,7 +871,7 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 3784,
+                  "id": 3823,
                   "nodeType": "ArrayTypeName",
                   "src": "382:9:16",
                   "typeDescriptions": {
@@ -883,12 +883,12 @@
               },
               {
                 "constant": false,
-                "id": 3787,
+                "id": 3826,
                 "mutability": "mutable",
                 "name": "tokenURI",
                 "nameLocation": "418:8:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "411:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -897,7 +897,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3786,
+                  "id": 3825,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "411:6:16",
@@ -910,12 +910,12 @@
               },
               {
                 "constant": false,
-                "id": 3789,
+                "id": 3828,
                 "mutability": "mutable",
                 "name": "passwordEncrypted",
                 "nameLocation": "442:17:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "435:24:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -924,7 +924,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3788,
+                  "id": 3827,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "435:6:16",
@@ -937,33 +937,33 @@
               },
               {
                 "constant": false,
-                "id": 3792,
+                "id": 3831,
                 "mutability": "mutable",
                 "name": "typeNft",
                 "nameLocation": "476:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3793,
+                "scope": 3832,
                 "src": "468:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_TypeDoc_$3770",
+                  "typeIdentifier": "t_enum$_TypeDoc_$3809",
                   "typeString": "enum SaveDocStruct.TypeDoc"
                 },
                 "typeName": {
-                  "id": 3791,
+                  "id": 3830,
                   "nodeType": "UserDefinedTypeName",
                   "pathNode": {
-                    "id": 3790,
+                    "id": 3829,
                     "name": "TypeDoc",
                     "nodeType": "IdentifierPath",
-                    "referencedDeclaration": 3770,
+                    "referencedDeclaration": 3809,
                     "src": "468:7:16"
                   },
-                  "referencedDeclaration": 3770,
+                  "referencedDeclaration": 3809,
                   "src": "468:7:16",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_TypeDoc_$3770",
+                    "typeIdentifier": "t_enum$_TypeDoc_$3809",
                     "typeString": "enum SaveDocStruct.TypeDoc"
                   }
                 },
@@ -973,22 +973,22 @@
             "name": "Document",
             "nameLocation": "211:8:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
+            "scope": 3849,
             "src": "204:286:16",
             "visibility": "public"
           },
           {
             "canonicalName": "SaveDocStruct.CertificationRequest",
-            "id": 3800,
+            "id": 3839,
             "members": [
               {
                 "constant": false,
-                "id": 3795,
+                "id": 3834,
                 "mutability": "mutable",
                 "name": "applicant",
                 "nameLocation": "546:9:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
+                "scope": 3839,
                 "src": "538:17:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -997,7 +997,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 3794,
+                  "id": 3833,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "538:7:16",
@@ -1011,12 +1011,12 @@
               },
               {
                 "constant": false,
-                "id": 3797,
+                "id": 3836,
                 "mutability": "mutable",
                 "name": "tokenID",
                 "nameLocation": "573:7:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
+                "scope": 3839,
                 "src": "565:15:16",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1025,7 +1025,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 3796,
+                  "id": 3835,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "565:7:16",
@@ -1038,27 +1038,27 @@
               },
               {
                 "constant": false,
-                "id": 3799,
+                "id": 3838,
                 "mutability": "mutable",
-                "name": "index",
-                "nameLocation": "598:5:16",
+                "name": "exist",
+                "nameLocation": "595:5:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3800,
-                "src": "590:13:16",
+                "scope": 3839,
+                "src": "590:10:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_uint256",
-                  "typeString": "uint256"
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3798,
-                  "name": "uint256",
+                  "id": 3837,
+                  "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "590:7:16",
+                  "src": "590:4:16",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
                   }
                 },
                 "visibility": "internal"
@@ -1067,23 +1067,23 @@
             "name": "CertificationRequest",
             "nameLocation": "503:20:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
-            "src": "496:114:16",
+            "scope": 3849,
+            "src": "496:111:16",
             "visibility": "public"
           },
           {
             "canonicalName": "SaveDocStruct.User",
-            "id": 3809,
+            "id": 3848,
             "members": [
               {
                 "constant": false,
-                "id": 3802,
+                "id": 3841,
                 "mutability": "mutable",
                 "name": "name",
-                "nameLocation": "649:4:16",
+                "nameLocation": "646:4:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "642:11:16",
+                "scope": 3848,
+                "src": "639:11:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1091,10 +1091,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3801,
+                  "id": 3840,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "642:6:16",
+                  "src": "639:6:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1104,13 +1104,13 @@
               },
               {
                 "constant": false,
-                "id": 3804,
+                "id": 3843,
                 "mutability": "mutable",
                 "name": "publicKey",
-                "nameLocation": "670:9:16",
+                "nameLocation": "667:9:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "663:16:16",
+                "scope": 3848,
+                "src": "660:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1118,10 +1118,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 3803,
+                  "id": 3842,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "663:6:16",
+                  "src": "660:6:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1131,13 +1131,13 @@
               },
               {
                 "constant": false,
-                "id": 3806,
+                "id": 3845,
                 "mutability": "mutable",
                 "name": "isAuthority",
-                "nameLocation": "694:11:16",
+                "nameLocation": "691:11:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "689:16:16",
+                "scope": 3848,
+                "src": "686:16:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1145,10 +1145,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3805,
+                  "id": 3844,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "689:4:16",
+                  "src": "686:4:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -1158,13 +1158,13 @@
               },
               {
                 "constant": false,
-                "id": 3808,
+                "id": 3847,
                 "mutability": "mutable",
                 "name": "exist",
-                "nameLocation": "720:5:16",
+                "nameLocation": "717:5:16",
                 "nodeType": "VariableDeclaration",
-                "scope": 3809,
-                "src": "715:10:16",
+                "scope": 3848,
+                "src": "712:10:16",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1172,10 +1172,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 3807,
+                  "id": 3846,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "715:4:16",
+                  "src": "712:4:16",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -1185,19 +1185,19 @@
               }
             ],
             "name": "User",
-            "nameLocation": "623:4:16",
+            "nameLocation": "620:4:16",
             "nodeType": "StructDefinition",
-            "scope": 3810,
-            "src": "616:116:16",
+            "scope": 3849,
+            "src": "613:116:16",
             "visibility": "public"
           }
         ],
-        "scope": 3811,
-        "src": "56:678:16",
+        "scope": 3850,
+        "src": "56:675:16",
         "usedErrors": []
       }
     ],
-    "src": "32:703:16"
+    "src": "32:700:16"
   },
   "compiler": {
     "name": "solc",
@@ -1205,7 +1205,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-02T09:57:01.224Z",
+  "updatedAt": "2021-08-02T20:49:48.010Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

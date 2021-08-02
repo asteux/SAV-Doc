@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { shareDocument } from '../contracts/savDocContractSlice';
+import { requestCertification, shareDocument } from '../contracts/savDocContractSlice';
 import { encryptWithPublicKey } from '../../utils/encryption';
 import { readFileAsDataURL } from '../../utils/file';
 import { storeBlob } from '../../utils/ipfs';
@@ -170,7 +170,7 @@ const sendDocumentActions = {
       }
     };
   },
-  sendTransaction: () => {
+  sendTransaction: (sendType) => {
     return async (dispatch, getState) => {
       const { sendDocument } = getState();
 
@@ -178,7 +178,18 @@ const sendDocumentActions = {
       const recipientAddress = sendDocument.recipientAddress;
       const tokenURI = sendDocument.encryptedIpfsCid;
 
-      dispatch(shareDocument(tokenID, recipientAddress, tokenURI));
+      switch (sendType) {
+        case 'requestCertification':
+          dispatch(requestCertification(tokenID, tokenURI, recipientAddress));
+          break;
+
+        case 'share':
+          dispatch(shareDocument(tokenID, recipientAddress, tokenURI));
+          break;
+
+        default:
+          break;
+      }
     };
   },
   reset: () => {

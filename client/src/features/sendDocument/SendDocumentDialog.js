@@ -20,12 +20,23 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const SendDocumentDialog = ({ doc, title, open, handleClose }) => {
+const SendDocumentDialog = ({ type, doc, title, open, handleClose }) => {
   const dispatch = useDispatch();
 
   const classes = useStyles();
 
-  const sendDocumentState = useSelector((state) => state.savDocContract.shareDocument);
+  const sendDocumentState = useSelector((state) => {
+    switch (type) {
+      case 'requestCertification':
+        return state.savDocContract.requestCertificationDocument;
+
+      case 'share':
+        return state.savDocContract.shareDocument;
+
+      default:
+        break;
+    }
+  });
   const loadingMessage = useSelector((state) => state.sendDocument.loadingMessage);
   const activeStep = useSelector((state) => state.sendDocument.activeStep);
   const originalFile = useSelector((state) => state.sendDocument.originalFile);
@@ -41,8 +52,10 @@ const SendDocumentDialog = ({ doc, title, open, handleClose }) => {
   const isLoading = null !== loadingMessage;
 
   useEffect(() => {
-    dispatch(reset());
-  }, [dispatch]);
+    if (!open) {
+      dispatch(reset());
+    }
+  }, [dispatch, open]);
 
   useEffect(() => {
     dispatch(setDoc(doc));
@@ -122,7 +135,7 @@ const SendDocumentDialog = ({ doc, title, open, handleClose }) => {
   // };
 
   const handleSendTransaction = async () => {
-    dispatch(sendTransaction());
+    dispatch(sendTransaction(type));
   };
 
   const steps = [

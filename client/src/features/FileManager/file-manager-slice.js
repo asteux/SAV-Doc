@@ -13,9 +13,10 @@ const fileManagerSlice = createSlice({
     viewMode: 'grid', // 'grid' | 'list'
     sortBy: 'name', // 'name' | 'size' | 'createdAt'
     sortReversedOrder: false,
-    fileToShow: null,
-    fileToShare: null,
-    fileToDelete: null,
+    actionFile: {
+      type: null,
+      data: null,
+    },
   },
   reducers: {
     isLoaded: (state, action) => {
@@ -50,13 +51,34 @@ const fileManagerSlice = createSlice({
       state.sortReversedOrder = !state.sortReversedOrder;
     },
     fileToShowChanged: (state, action) => {
-      state.fileToShow = action.payload;
+      state.actionFile = {
+        type: 'show',
+        data: action.payload,
+      };
+    },
+    fileToSendRequestCertificationChanged: (state, action) => {
+      state.actionFile = {
+        type: 'requestCertification',
+        data: action.payload,
+      };
+    },
+    fileToManageCertificationRequestFileChanged: (state, action) => {
+      state.actionFile = {
+        type: 'manageCertificationRequest',
+        data: action.payload,
+      };
     },
     fileToShareChanged: (state, action) => {
-      state.fileToShare = action.payload;
+      state.actionFile = {
+        type: 'share',
+        data: action.payload,
+      };
     },
     fileToDeleteChanged: (state, action) => {
-      state.fileToDelete = action.payload;
+      state.actionFile = {
+        type: 'delete',
+        data: action.payload,
+      };
     },
   },
 });
@@ -141,6 +163,16 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToShowChanged(null));
     };
   },
+  requestCertificationFile: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToSendRequestCertificationChanged(fileData));
+    };
+  },
+  manageCertificationRequest: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToManageCertificationRequestFileChanged(fileData));
+    };
+  },
   shareFile: (fileData) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.fileToShareChanged(fileData));
@@ -167,6 +199,8 @@ export const {
   toggleSortReversedOrder,
   showFile,
   hideFile,
+  requestCertificationFile,
+  manageCertificationRequest,
   shareFile,
   deleteFile,
 } = fileManagerActions;

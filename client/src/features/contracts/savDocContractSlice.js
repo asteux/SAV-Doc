@@ -79,8 +79,26 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    fetchDocumentsCertifiedState: {
+      data: [],
+      fileMap: {},
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     decryptedFiles: {},
     secureDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
+    requestCertificationDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
+    acceptCertificationRequest: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
+    rejectCertificationRequest: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
@@ -212,6 +230,29 @@ const savDocContractSlice = createContractSlice(
         error: action.payload,
       };
     },
+    fetchDocumentsCertifiedSent: (state) => {
+      state.fetchDocumentsCertifiedState = {
+        ...state.fetchDocumentsCertifiedState,
+        status: 'loading',
+        error: null,
+      };
+    },
+    fetchDocumentsCertifiedSucceeded: (state, action) => {
+      state.fetchDocumentsCertifiedState = {
+        ...state.fetchDocumentsCertifiedState,
+        data: action.payload.documents,
+        fileMap: action.payload.fileMap,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    fetchDocumentsCertifiedFailed: (state, action) => {
+      state.fetchDocumentsCertifiedState = {
+        ...state.fetchDocumentsCertifiedState,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
     unencryptFileStart: (state, action) => {
       const decryptedFiles = {
         ...state.decryptedFiles,
@@ -268,6 +309,69 @@ const savDocContractSlice = createContractSlice(
     secureDocumentFailed: (state, action) => {
       state.secureDocument = {
         ...state.secureDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    requestCertificationDocumentSent: (state) => {
+      state.requestCertificationDocument = {
+        ...state.requestCertificationDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    requestCertificationDocumentSucceeded: (state) => {
+      state.requestCertificationDocument = {
+        ...state.requestCertificationDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    requestCertificationDocumentFailed: (state, action) => {
+      state.requestCertificationDocument = {
+        ...state.requestCertificationDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    acceptCertificationRequestSent: (state) => {
+      state.acceptCertificationRequest = {
+        ...state.acceptCertificationRequest,
+        status: 'loading',
+        error: null,
+      };
+    },
+    acceptCertificationRequestSucceeded: (state) => {
+      state.acceptCertificationRequest = {
+        ...state.acceptCertificationRequest,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    acceptCertificationRequestFailed: (state, action) => {
+      state.acceptCertificationRequest = {
+        ...state.acceptCertificationRequest,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    rejectCertificationRequestSent: (state) => {
+      state.rejectCertificationRequest = {
+        ...state.rejectCertificationRequest,
+        status: 'loading',
+        error: null,
+      };
+    },
+    rejectCertificationRequestSucceeded: (state) => {
+      state.rejectCertificationRequest = {
+        ...state.rejectCertificationRequest,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    rejectCertificationRequestFailed: (state, action) => {
+      state.rejectCertificationRequest = {
+        ...state.rejectCertificationRequest,
         status: 'failed',
         error: action.payload,
       };
@@ -441,6 +545,26 @@ const savDocContractActions = {
       }
     }
   },
+  fetchDocumentsCertified: () => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      dispatch(savDocContractSlice.actions.fetchDocumentsCertifiedSent());
+
+      try {
+        const documents = await savDocContract.contract.methods
+          .viewDocCertified()
+          .call({ from: web3.accounts[0] })
+        ;
+
+        const fileMap = createFileMap(documents);
+
+        dispatch(savDocContractSlice.actions.fetchDocumentsCertifiedSucceeded({ documents, fileMap }));
+      } catch (error) {
+        dispatch(savDocContractSlice.actions.fetchDocumentsCertifiedFailed(error));
+      }
+    }
+  },
   decryptFile: (doc) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
@@ -498,6 +622,69 @@ const savDocContractActions = {
         .once('error', (error) => {
           if (!error.code || 4001 !== error.code) {
             dispatch(savDocContractSlice.actions.secureDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
+  requestCertification: (tokenID, tokenURI, certifying) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .requestCertification(tokenID, tokenURI, certifying)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.requestCertificationDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.requestCertificationDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.requestCertificationDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
+  acceptCertificationRequest: (tokenID, hashNFT, keepCopyDoc) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .acceptCertificationRequest(tokenID, hashNFT, keepCopyDoc)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.acceptCertificationRequestSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.acceptCertificationRequestSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.acceptCertificationRequestFailed(error));
+          }
+        })
+      ;
+    }
+  },
+  rejectCertificationRequest: (tokenID) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .rejectCertificationRequest(tokenID)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.rejectCertificationRequestSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.rejectCertificationRequestSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.rejectCertificationRequestFailed(error));
           }
         })
       ;
@@ -576,8 +763,12 @@ export const {
   definePasswordMaster,
   fetchDocumentsOriginals,
   fetchDocumentsShared,
+  fetchDocumentsCertified,
   decryptFile,
   secureDocument,
+  requestCertification,
+  acceptCertificationRequest,
+  rejectCertificationRequest,
   shareDocument,
   deleteDocument,
   deleteSharedDocument,

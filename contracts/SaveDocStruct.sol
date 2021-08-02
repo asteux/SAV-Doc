@@ -30,7 +30,7 @@ contract SaveDocStruct
     {
         address applicant;
         uint256 tokenID;
-        uint256 index;
+        bool exist;
     }
 
     struct User
