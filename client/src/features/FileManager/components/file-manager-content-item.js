@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, makeStyles, Menu, MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
+import InfoIcon from '@material-ui/icons/Info';
 import RemoveIcon from '@material-ui/icons/Remove';
 import ShareIcon from '@material-ui/icons/Share';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
@@ -8,7 +9,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
   deleteFile, manageCertificationRequest, setCurrentDirectory,
-  requestCertificationFile, shareFile, showFile
+  requestCertificationFile, shareFile, showFile, showInformations
 } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
@@ -46,6 +47,11 @@ const FileManagerContentItem = ({ data, icon }) => {
 
   const handleCloseMenu = () => {
     setMenuState(initialMenuState);
+  };
+
+  const handleRequestShowInformations = () => {
+    dispatch(showInformations(data.data));
+    handleCloseMenu();
   };
 
   const handleRequestCertificationFile = () => {
@@ -88,6 +94,18 @@ const FileManagerContentItem = ({ data, icon }) => {
           : undefined
       }
       >
+      {(enabledFileActions.includes('showInformations'))
+        ? (
+        <MenuItem onClick={handleRequestShowInformations}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <InfoIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Afficher les informations</Typography>
+        </MenuItem>
+        )
+        : null
+      }
+
       {(enabledFileActions.includes('requestCertification'))
         ? (
         <MenuItem onClick={handleRequestCertificationFile}>

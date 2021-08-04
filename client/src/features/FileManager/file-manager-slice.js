@@ -56,6 +56,12 @@ const fileManagerSlice = createSlice({
         data: action.payload,
       };
     },
+    fileToShowInformationsChanged: (state, action) => {
+      state.actionFile = {
+        type: 'showInformations',
+        data: action.payload,
+      };
+    },
     fileToSendRequestCertificationChanged: (state, action) => {
       state.actionFile = {
         type: 'requestCertification',
@@ -163,6 +169,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToShowChanged(null));
     };
   },
+  showInformations: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToShowInformationsChanged(fileData));
+    };
+  },
   requestCertificationFile: (fileData) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.fileToSendRequestCertificationChanged(fileData));
@@ -199,6 +210,7 @@ export const {
   toggleSortReversedOrder,
   showFile,
   hideFile,
+  showInformations,
   requestCertificationFile,
   manageCertificationRequest,
   shareFile,

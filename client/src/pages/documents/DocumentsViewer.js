@@ -9,6 +9,7 @@ import FileManager from "../../features/FileManager/components/file-manager";
 import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
 import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared } from "../../features/contracts/savDocContractSlice";
+import DocumentInformationsDialog from "../../features/documentInformations/DocumentInformationsDialog";
 import ManageCertificationRequestDialog from "../../features/manageCertificationRequest/ManageCertificationRequestDialog";
 import SendDocumentDialog from "../../features/sendDocument/SendDocumentDialog";
 
@@ -59,6 +60,10 @@ const DocumentsViewer = () => {
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
   const fileManagerAction = useSelector(state => state.fileManager.action);
   const actionFile = useSelector(state => state.fileManager.actionFile);
+
+  const [openDocumentInformationsDialog, setOpenDocumentInformationsDialog] = useState(false);
+  const handleOpenDocumentInformationsDialog = (event) => setOpenDocumentInformationsDialog(true);
+  const handleCloseDocumentInformationsDialog = (event) => setOpenDocumentInformationsDialog(false);
 
   const [openSendDocumentDialog, setOpenSendDocumentDialog] = useState(false);
   const handleOpenSendDocumentDialog = (event) => setOpenSendDocumentDialog(true);
@@ -282,6 +287,12 @@ const DocumentsViewer = () => {
           }
           break;
 
+        case 'showInformations':
+          if (actionFile.data) {
+            handleOpenDocumentInformationsDialog();
+          }
+          break;
+
         case 'requestCertification':
           if (actionFile.data) {
             handleOpenSendDocumentDialog();
@@ -380,13 +391,13 @@ const DocumentsViewer = () => {
               ((category) => {
                 switch (category) {
                   case 'original':
-                    return ['requestCertification', 'share', 'delete'];
+                    return ['showInformations', 'requestCertification', 'share', 'delete'];
 
                   case 'certified':
-                    return ['manageCertificationRequest'];
+                    return ['showInformations', 'manageCertificationRequest'];
 
                   case 'shared':
-                    return ['delete'];
+                    return ['showInformations', 'delete'];
 
                   default:
                     return [];
@@ -409,6 +420,17 @@ const DocumentsViewer = () => {
             }
 
           </Backdrop>
+
+          {(!!actionFile && 'showInformations' === actionFile.type && !!actionFile.data)
+            ? (
+              <DocumentInformationsDialog
+                doc={actionFile.data}
+                open={openDocumentInformationsDialog}
+                handleClose={handleCloseDocumentInformationsDialog}
+              />
+            )
+            : (<></>)
+          }
 
           {(!!actionFile && 'requestCertification' === actionFile.type && !!actionFile.data)
             ? (
