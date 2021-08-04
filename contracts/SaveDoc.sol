@@ -203,6 +203,11 @@ contract SaveDoc is Ownable, SaveDocStruct
         return docManager.getAllCopyCertified(msg.sender);
     }
 
+    function viewCertificationRequest(uint256 _tokenID) requestExist(msg.sender, _tokenID) view external returns(CertificationRequest memory)
+    {
+        return requests[msg.sender][_tokenID];
+    }
+
 
     function delRequest(address _certifying, uint256 _tokenID) private
     {

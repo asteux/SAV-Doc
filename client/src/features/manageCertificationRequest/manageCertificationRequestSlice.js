@@ -8,6 +8,7 @@ const manageCertificationRequestSlice = createSlice({
   initialState: {
     activeStep: 0,
     doc: null,
+    certificationRequest: null,
     originalFile: null,
   },
   reducers: {
@@ -20,9 +21,13 @@ const manageCertificationRequestSlice = createSlice({
     docChanged: (state, action) => {
       state.activeStep = 0;
       state.doc = null;
+      state.certificationRequest = null;
       state.originalFile = null;
 
       state.doc = action.payload;
+    },
+    certificationRequestChanged: (state, action) => {
+      state.certificationRequest = action.payload;
     },
     setOriginalFile: (state, action) => {
       state.originalFile = action.payload;
@@ -30,6 +35,7 @@ const manageCertificationRequestSlice = createSlice({
     reset: (state) => {
       state.activeStep = 0;
       state.doc = null;
+      state.certificationRequest = null;
       state.originalFile = null;
     }
   }
@@ -49,6 +55,11 @@ const manageCertificationRequestActions = {
   setDoc: (doc) => {
     return (dispatch) => {
       dispatch(manageCertificationRequestSlice.actions.docChanged(doc));
+    };
+  },
+  setCertificationRequest: (certificationRequest) => {
+    return (dispatch) => {
+      dispatch(manageCertificationRequestSlice.actions.certificationRequestChanged(certificationRequest));
     };
   },
   setOriginalFile: (file) => {
@@ -89,6 +100,7 @@ export const {
   previousStep,
   nextStep,
   setDoc,
+  setCertificationRequest,
   setOriginalFile,
   sendAcceptCertificationRequest,
   sendRejectCertificationRequest,

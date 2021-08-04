@@ -7,7 +7,10 @@ import {
 
 import { decryptFile } from "../contracts/savDocContractSlice";
 import FileViewer from "../FileViewer/components/file-viewer";
-import { nextStep, reset, sendAcceptCertificationRequest, sendRejectCertificationRequest, setDoc, setOriginalFile } from "./manageCertificationRequestSlice";
+import {
+  nextStep, reset, sendAcceptCertificationRequest, sendRejectCertificationRequest,
+  setDoc, setOriginalFile, setCertificationRequest
+} from "./manageCertificationRequestSlice";
 
 const useStyles = makeStyles((theme) => ({
   stepper: {
@@ -40,7 +43,10 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
     }
   });
 
+  const accounts = useSelector((state) => state.web3.accounts);
+  const savDocContract = useSelector((state) => state.savDocContract.contract);
   const activeStep = useSelector((state) => state.manageCertificationRequest.activeStep);
+  const certificationRequest = useSelector((state) => state.manageCertificationRequest.certificationRequest);
   const originalFile = useSelector((state) => state.manageCertificationRequest.originalFile);
 
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
@@ -54,6 +60,19 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
   useEffect(() => {
     dispatch(setDoc(doc));
   }, [dispatch, doc]);
+
+  useEffect(() => {
+    (async () => {
+      if (doc) {
+        try {
+          const certifRequest = await savDocContract.methods.viewCertificationRequest(doc.tokenID).call({ from: accounts[0] });
+          dispatch(setCertificationRequest(certifRequest));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })();
+  }, [dispatch, doc, accounts, savDocContract]);
 
   useEffect(() => {
     if (doc && decryptedFiles && decryptedFiles[doc.tokenID]) {
@@ -98,6 +117,15 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
           <DialogContentText className="text-center">
             Pour certifier un document, commencer par le dévérouiller.
           </DialogContentText>
+
+          {(!!certificationRequest)
+            ? (
+              <DialogContentText className="text-center">
+                La demande a été envoye par {certificationRequest.applicant}
+              </DialogContentText>
+            )
+            : <></>
+          }
         </DialogContent>
 
         <DialogActions>
@@ -112,8 +140,17 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
         <DialogContent>
           <div className="mb-3 text-center">
             <DialogContentText>
-              Voici le document que vous pouvez certifier
+              Voici le document que vous pouvez certifier.
             </DialogContentText>
+
+            {(!!certificationRequest)
+              ? (
+                <DialogContentText>
+                  La demande a été envoye par {certificationRequest.applicant}
+                </DialogContentText>
+              )
+              : <></>
+            }
 
             <FormControlLabel
               control={
