@@ -156,7 +156,7 @@ const DocumentsViewer = () => {
         .on('data', async (event) => {
           // address certifying, address applicant, uint256 tokenID, bool keepCopy
           const certifying = event.returnValues.certifying;
-          // const applicant = event.returnValues.applicant;
+          const applicant = event.returnValues.applicant;
           // const tokenID = event.returnValues.tokenID;
           // const keepCopy = event.returnValues.keepCopy;
 
@@ -165,6 +165,8 @@ const DocumentsViewer = () => {
           if (certifying === accounts[0]) {
             dispatch(fetchDocumentsShared());
             dispatch(fetchDocumentsCertified());
+          } else if (applicant === accounts[0]) {
+            dispatch(fetchDocumentsOriginals());
           }
         })
         .on('error', (event) => {
