@@ -27,17 +27,18 @@ const FileManagerContent = () => {
 
   const components = useMemo(() => {
     return (directoryContent)
-        ? directoryContent.map((item) => {
-          let content = <></>;
+        ? directoryContent.reduce((components, item) => {
           if (!querySearch || item.name.includes(querySearch)) {
-            content = (item.isDir)
+            const content = (item.isDir)
               ? <FileManagerFolder data={item} />
               : <FileManagerFile data={item} />
             ;
+
+            components.push(content);
           }
 
-          return <>{content}</>;
-        })
+          return components;
+        }, [])
         : []
     ;
   }, [directoryContent, querySearch]);

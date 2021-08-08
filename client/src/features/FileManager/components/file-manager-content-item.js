@@ -22,6 +22,9 @@ export const useStyles = makeStyles((theme) => ({
   link: {
     cursor: 'pointer',
   },
+  filename: {
+    overflowWrap: 'break-word',
+  },
   icon: {
     width: '100%',
     height: 'auto',
@@ -164,7 +167,7 @@ const FileManagerContentItem = ({ data, icon }) => {
           <TableRow key={data.name}>
             <TableCell component="th" padding="checkbox" scope="row">{icon}</TableCell>
             <TableCell>
-              <Typography className={classes.link} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>{data.name}</Typography>
+              <Typography className={`${classes.filename} ${classes.link}`} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>{data.name}</Typography>
             </TableCell>
             <TableCell>{(!data.isDir) ? humanFileSize(data.size, true) : (<RemoveIcon />)}</TableCell>
             <TableCell>{(!data.isDir) ? (new Date(data.createdAt * 1000)).toLocaleString() : (<RemoveIcon />)}</TableCell>
@@ -176,7 +179,7 @@ const FileManagerContentItem = ({ data, icon }) => {
     default: // = grid
       content = (
         <>
-          <div className={classes.link} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>
+          <div className={`${classes.filename} ${classes.link}`} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>
             {icon}
             <Typography className="text-center">{data.name}</Typography>
           </div>
