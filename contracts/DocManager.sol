@@ -13,7 +13,7 @@ contract DocManager is Ownable, SaveDocStruct
 
     modifier addressesAreDifferent(address from, address to)
     {
-        require(from != to, "SaveMyDoc: L'address source et de destination sont identique");
+        require(from != to, "DocManager: L'address source et de destination sont identique");
         _;
     }
 
@@ -32,14 +32,14 @@ contract DocManager is Ownable, SaveDocStruct
             }
         }
 
-        require(found, "Cet NFT ne vous appartient pas !");
+        require(found, "DocManager: Cet NFT ne vous appartient pas !");
         return index;
     }
 
-    function createDoc(address ownerNFT, uint256 tokenID, string memory tokenName, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT)onlyOwner() external returns (Document memory)
+    function createDoc(address ownerNFT, uint256 tokenID, string memory tokenName, string memory tokenMime, uint256 tokenLength, string memory filePath, string memory passwordEncrypted, string memory hashNFT) onlyOwner() external returns (Document memory)
     {
         //check que l'utilisateur existe
-       require(!isOfficielDoc(hashNFT), "TokenManager: Ce document correspond a un NFT officiel.");
+       require(!isOfficielDoc(hashNFT), "DocManager: Ce document correspond a un NFT officiel.");
        Document memory nft;
        address[] memory certifyings;
 
@@ -75,6 +75,7 @@ contract DocManager is Ownable, SaveDocStruct
     {
         uint256 index = getIndexNFT(ownerDoc, TypeDoc.Original, tokenID);
 
+        // delete les mot les hash du hashdocs si le document est officiel
         documents[ownerDoc][TypeDoc.Original][index] = documents[ownerDoc][TypeDoc.Original][documents[ownerDoc][TypeDoc.Original].length - 1];
         documents[ownerDoc][TypeDoc.Original].pop();
         return true;
@@ -157,15 +158,27 @@ contract DocManager is Ownable, SaveDocStruct
 
     function certify(address certifying, bool isAuthority, address dest, uint256 tokenID, string memory hashNFT) onlyOwner() external
     {
-        // check certifiant existe
         uint256 index;
+        uint256 length;
+        uint256 i;
 
         if (isAuthority)
         {
             hashDocs[hashNFT] = true;
         }
         index = getIndexNFT(dest, TypeDoc.Original, tokenID);
-        documents[dest][TypeDoc.Original][index].certifying.push(certifying);
+        length = documents[dest][TypeDoc.Original][index].certifying.length;
+        for (i = 0; i < length; i++)
+        {
+            if (documents[dest][TypeDoc.Original][index].certifying[i] == certifying)
+            {
+                i = length;
+            }
+        }
+        if (i == length)
+        {
+            documents[dest][TypeDoc.Original][index].certifying.push(certifying);
+        }
     }
 
     function isOfficielDoc(string memory hashNFT) private onlyOwner() view returns(bool)

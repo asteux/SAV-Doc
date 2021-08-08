@@ -35,4 +35,14 @@ contract SaveDocToken is ERC721URIStorage, Ownable
         require(ownerOf(tokenID) == ownerToken, "SaveDocToken: Cet NFT ne vous appartient pas !");
         _burn(tokenID);
     }
+
+    function transfer(address from, address to, uint256 tokenID) public onlyOwner()
+    {
+        _transfer(from, to, tokenID);
+    }
+
+    function exist(uint256 tokenID) view onlyOwner() external returns(bool)
+    {
+        return _exists(tokenID);
+    }
 }
