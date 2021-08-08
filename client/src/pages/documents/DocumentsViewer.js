@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppBar, Backdrop, CircularProgress, Drawer, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Backdrop, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { useHistory } from "react-router";
 
@@ -42,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.tooltip + 1,
   },
+  backdropClose: {
+    position: 'fixed',
+    top: '0.5rem',
+    right: '0.5rem',
+  }
 }));
 
 const DocumentsViewer = () => {
@@ -332,11 +338,14 @@ const DocumentsViewer = () => {
   }, [dispatch, actionFile]);
 
   useEffect(() => {
+    let file = null;
     if (actionFile && actionFile.type && actionFile.data) {
       if (actionFile && actionFile.data && decryptedFiles && decryptedFiles[actionFile.data.tokenID]) {
-        setFile(decryptedFiles[actionFile.data.tokenID].data);
+        file = decryptedFiles[actionFile.data.tokenID].data;
       }
     }
+
+    setFile(file);
   }, [dispatch, actionFile, decryptedFiles]);
 
   const handleClose = () => {
@@ -409,10 +418,14 @@ const DocumentsViewer = () => {
           />
 
           <Backdrop className={classes.backdrop} open={!!actionFile && 'show' === actionFile.type && !!actionFile.data} onClick={handleClose}>
+            <IconButton className={classes.backdropClose} aria-label="delete">
+              <CloseIcon fontSize="large" onClick={handleClose} />
+            </IconButton>
+
             {
               (file)
                 ? (
-                  <div onClick={(event) => event.stopPropagation()}>
+                  <div onClick={(event) => event.stopPropagation()} style={{ width: '100%', margin: '1rem' }}>
                     <FileViewer file={file} />
                   </div>
                 )
