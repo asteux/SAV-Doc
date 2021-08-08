@@ -28,6 +28,19 @@ export default configureStore({
       serializableCheck: {
         ignoredActions: [
           'web3/loadWeb3',
+          'savDocContract/setContract',
+          'savDocContract/unencryptFileSucceeded',
+          'secureFile/setOriginalFile',
+          'sendDocument/setOriginalFile',
+          'manageCertificationRequest/setOriginalFile',
+        ],
+        ignoredPaths: [
+          'web3.web3',
+          'savDocContract.contract',
+          'savDocContract.decryptedFiles',
+          'secureFile.originalFile',
+          'sendDocument.originalFile',
+          'manageCertificationRequest.originalFile',
         ],
       }
     }),
