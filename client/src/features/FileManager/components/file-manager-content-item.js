@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, makeStyles, Menu, MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import InfoIcon from '@material-ui/icons/Info';
@@ -29,6 +29,17 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
   },
+  certifiedIcon: {
+    color: theme.palette.success.main,
+  },
+  certifiedIconGrid: {
+    position: 'absolute',
+    bottom: '2px',
+    right: '16px',
+  },
+  certifiedIconList: {
+    marginBottom: '3px',
+  },
 }));
 
 const FileManagerContentItem = ({ data, icon }) => {
@@ -39,6 +50,8 @@ const FileManagerContentItem = ({ data, icon }) => {
   const [menuState, setMenuState] = useState(initialMenuState);
   const enabledFileActions = useSelector((state => state.fileManager.enabledFileActions));
   const viewMode = useSelector((state => state.fileManager.viewMode));
+
+  const isCertified = useMemo(() => !!data.data && !!data.data.certifying && Array.isArray(data.data.certifying) && 0 < data.data.certifying.length, [data]);
 
   const handleOpenMenu = (event) => {
     event.preventDefault();
@@ -167,7 +180,13 @@ const FileManagerContentItem = ({ data, icon }) => {
           <TableRow key={data.name}>
             <TableCell component="th" padding="checkbox" scope="row">{icon}</TableCell>
             <TableCell>
-              <Typography className={`${classes.filename} ${classes.link}`} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>{data.name}</Typography>
+              <Typography className={`${classes.filename} ${classes.link}`} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>
+                {(isCertified)
+                  ? <VerifiedUserIcon className={`${classes.certifiedIcon} ${classes.certifiedIconList}`} />
+                  : <></>
+                }
+                {data.name}
+              </Typography>
             </TableCell>
             <TableCell>{(!data.isDir) ? humanFileSize(data.size, true) : (<RemoveIcon />)}</TableCell>
             <TableCell>{(!data.isDir) ? (new Date(data.createdAt * 1000)).toLocaleString() : (<RemoveIcon />)}</TableCell>
@@ -180,7 +199,13 @@ const FileManagerContentItem = ({ data, icon }) => {
       content = (
         <>
           <div className={`${classes.filename} ${classes.link}`} onDoubleClick={handleDoubleClick} onContextMenu={handleOpenMenu}>
-            {icon}
+            <div className="position-relative">
+              {icon}
+              {(isCertified)
+                ? <VerifiedUserIcon fontSize="large" className={`${classes.certifiedIcon} ${classes.certifiedIconGrid}`} />
+                : <></>
+              }
+            </div>
             <Typography className="text-center">{data.name}</Typography>
           </div>
         </>
