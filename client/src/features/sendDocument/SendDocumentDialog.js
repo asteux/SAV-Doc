@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, Step, StepLabel, Stepper, Typography } from '@material-ui/core';
 
-import { encryptAndUploadFile, nextStep, previousStep, reset, sendTransaction, setDoc, setOriginalFile } from './sendDocumentSlice';
+import { encryptAndUploadFile, nextStep, reset, sendTransaction, setDoc, setOriginalFile } from './sendDocumentSlice';
 import { decryptFile } from "../contracts/savDocContractSlice";
 import EthereumAddressForm from "./components/EthereumAddressForm";
 import FileViewer from "../FileViewer/components/file-viewer";
@@ -117,10 +117,6 @@ const SendDocumentDialog = ({ type, doc, title, open, handleClose }) => {
       dispatch(nextStep());
     }
   }, [dispatch, encryptedFile, encryptedPasswordFile, encryptedIpfsCid, sendDocumentState]);
-
-  const handleBack = () => {
-    dispatch(previousStep());
-  };
 
   const handleDecryptFile = () => {
     dispatch(decryptFile(doc));

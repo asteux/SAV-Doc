@@ -160,7 +160,7 @@ const secureFileActions = {
 
       const tokenURI = secureFile.encryptedIpfsCid;
       const directory = '/';
-      const fileName = secureFile.originalFile.name.replace(/^.*?([^\\\/]*)$/, '$1')
+      const fileName = secureFile.originalFile.name.replace(/^.*?([^\\/]*)$/, '$1')
       const fileMimeType = (await getFileType(secureFile.originalFile)).mime ?? secureFile.originalFile.type ?? 'application/octet-stream';
       const fileSize = secureFile.originalFile.size;
       const password = secureFile.encryptedPasswordFile;

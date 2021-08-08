@@ -15,7 +15,6 @@ const PasswordMasterDialog = ({ open, handleClose }) => {
   const [errors, setErrors] = useState(null);
   const accounts = useSelector((state) => state.web3.accounts);
   const userEncryptedPasswordMasterState = useSelector((state) => state.savDocContract.userEncryptedPasswordMaster);
-  const subscriptionState = useSelector((state) => state.savDocContract.subscription);
 
   const validate = async(formData) => {
     let errors = {};
