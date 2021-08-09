@@ -9,20 +9,14 @@ SAV-doc est un projet blockchain qui permet de sécuriser, partager et certifier
 - [x] Sécuriser un document
 - [x] Consulter un document
 - [x] Partager un document
-- [] Certifier un document
-  - [x] Contrat (100 %)
-  - [] Interface (95 %)
-- [] Transférer un document
-  - [x] Contrat (100 %)
-  - [] Interface (30 %)
-- [] Optimisation
-- [] Sécurisation
+- [x] Certifier un document
+- [x] Transférer un document
 
 ## Technologies
 
 Ce projet utilise les technologies suivantes
 
-- Truffle (avec trubble unbox react)
+- Truffle (avec Truffle unbox react)
 - Solidity 0.8
 - Stockage IPFS via [NFT.Storage](https://nft.storage/)
 - [Infura](https://infura.io/) pour le déploiement des contrats
@@ -85,7 +79,7 @@ Pour mettre à jour la documentation, exécuter la commande suivante
 
 ```bash
 # ./
-yarn doc  
+yarn doc
 ```
 
 ## Déploiement
@@ -110,4 +104,4 @@ heroku create --buildpack mars/create-react-app
 git subtree push --prefix client/ heroku main
 ```
 
-Pour une mise à jour, il suffit de ré-exécuter la dernière commande. 
+Pour une mise à jour, il suffit de ré-exécuter la dernière commande.
