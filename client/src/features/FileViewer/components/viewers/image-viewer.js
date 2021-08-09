@@ -13,7 +13,7 @@ const ImageViewer = ({ file, fileType, height }) => {
   return (
     <>
       <div className="text-center" style={{ maxHeight: (height) ? `${height}px` : null }}>
-        <Image src={src} />
+        <Image src={src} style={{ maxWidth: '100%',  maxHeight: (height) ? `${height}px` : null }} />
       </div>
     </>
   );
