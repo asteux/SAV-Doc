@@ -20,8 +20,6 @@ modifier isMyToken(uint256 tokenID)
 }
 ```
 
-
-
 ## Guard Check
 
 On utilise le mot clè `require` pour vérifier certain paramètre de fonctions.
@@ -33,7 +31,4 @@ require(_address != address(0), "Cette addresse n'existe pas !");
 ```
 ```sol
 require(getIndexNFT(ownerCopyNFT, typeNft, tokenID) == -1, "DocManager: Le destinaire a deja une copie du document");
-```
-```sol      
-require(!isOfficielDoc(hashNFT), "DocManager: Ce document correspond a un NFT officiel.");
 ```
