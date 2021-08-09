@@ -9,7 +9,7 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
-  deleteFile, manageCertificationRequest, setCurrentDirectory,
+  acceptTransferFile, deleteFile, manageCertificationRequest, setCurrentDirectory,
   requestCertificationFile, shareFile, showFile, showInformations, transferFile
 } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
@@ -88,6 +88,11 @@ const FileManagerContentItem = ({ data, icon }) => {
 
   const handleTransferFile = () => {
     dispatch(transferFile(data.data));
+    handleCloseMenu();
+  };
+
+  const handle1AcceptTransferFile = () => {
+    dispatch(acceptTransferFile(data.data));
     handleCloseMenu();
   };
 
@@ -171,6 +176,18 @@ const FileManagerContentItem = ({ data, icon }) => {
             <SendIcon fontSize="small" />
           </ListItemIcon>
           <Typography variant="inherit">Transférer</Typography>
+        </MenuItem>
+        )
+        : null
+      }
+
+      {(enabledFileActions.includes('acceptTransfer'))
+        ? (
+        <MenuItem onClick={handle1AcceptTransferFile}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <SendIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Récupérer le document</Typography>
         </MenuItem>
         )
         : null

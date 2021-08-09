@@ -116,6 +116,10 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    acceptTransferDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     deleteDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
@@ -447,6 +451,27 @@ const savDocContractSlice = createContractSlice(
     transferDocumentFailed: (state, action) => {
       state.transferDocument = {
         ...state.transferDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    acceptTransferDocumentSent: (state) => {
+      state.acceptTransferDocument = {
+        ...state.acceptTransferDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    acceptTransferDocumentSucceeded: (state) => {
+      state.acceptTransferDocument = {
+        ...state.acceptTransferDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    acceptTransferDocumentFailed: (state, action) => {
+      state.acceptTransferDocument = {
+        ...state.acceptTransferDocument,
         status: 'failed',
         error: action.payload,
       };
@@ -806,6 +831,27 @@ const savDocContractActions = {
       ;
     }
   },
+  acceptTransferDocument: (tokenID, tokenURI, encryptedPassword) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .acceptNewDoc(tokenID, tokenURI, encryptedPassword)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.acceptTransferDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.acceptTransferDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.acceptTransferDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
   deleteDocument: (tokenID, forTransfer) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
@@ -867,6 +913,7 @@ export const {
   rejectCertificationRequest,
   shareDocument,
   transferDocument,
+  acceptTransferDocument,
   deleteDocument,
   deleteSharedDocument,
 } = savDocContractActions;

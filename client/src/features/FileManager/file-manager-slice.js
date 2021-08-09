@@ -86,6 +86,12 @@ const fileManagerSlice = createSlice({
         data: action.payload,
       };
     },
+    fileToAcceptTransferChanged: (state, action) => {
+      state.actionFile = {
+        type: 'acceptTransfer',
+        data: action.payload,
+      };
+    },
     fileToDeleteChanged: (state, action) => {
       state.actionFile = {
         type: 'delete',
@@ -200,6 +206,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToTransferChanged(fileData));
     };
   },
+  acceptTransferFile: (fileData) => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.fileToAcceptTransferChanged(fileData));
+    };
+  },
   deleteFile: (fileData) => {
     return (dispatch) => {
       dispatch(fileManagerSlice.actions.fileToDeleteChanged(fileData));
@@ -226,6 +237,7 @@ export const {
   manageCertificationRequest,
   shareFile,
   transferFile,
+  acceptTransferFile,
   deleteFile,
 } = fileManagerActions;
 

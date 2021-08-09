@@ -9,6 +9,7 @@ import secureFileReducer from '../features/secureFile/secureFileSlice';
 import fileManagerReducer from '../features/FileManager/file-manager-slice';
 import sendDocumentReducer from '../features/sendDocument/sendDocumentSlice';
 import manageCertificationRequestReducer from '../features/manageCertificationRequest/manageCertificationRequestSlice';
+import acceptTransferReducer from '../features/acceptTransfer/acceptTransferSlice';
 
 export const history = createBrowserHistory();
 
@@ -22,6 +23,7 @@ export default configureStore({
     fileManager: fileManagerReducer,
     sendDocument: sendDocumentReducer,
     manageCertificationRequest: manageCertificationRequestReducer,
+    acceptTransfer: acceptTransferReducer,
   },
   middleware: [
     ...getDefaultMiddleware({
@@ -33,6 +35,7 @@ export default configureStore({
           'secureFile/setOriginalFile',
           'sendDocument/setOriginalFile',
           'manageCertificationRequest/setOriginalFile',
+          'acceptTransfer/setOriginalFile',
         ],
         ignoredPaths: [
           'web3.web3',
@@ -41,6 +44,7 @@ export default configureStore({
           'secureFile.originalFile',
           'sendDocument.originalFile',
           'manageCertificationRequest.originalFile',
+          'acceptTransfer.originalFile',
         ],
       }
     }),

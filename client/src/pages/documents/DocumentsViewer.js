@@ -13,6 +13,7 @@ import FileManager from "../../features/FileManager/components/file-manager";
 import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
 import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared, fetchDocumentsTransfered } from "../../features/contracts/savDocContractSlice";
+import AcceptTransferDialog from "../../features/acceptTransfer/AcceptTransferDialog";
 import DocumentInformationsDialog from "../../features/documentInformations/DocumentInformationsDialog";
 import ManageCertificationRequestDialog from "../../features/manageCertificationRequest/ManageCertificationRequestDialog";
 import SendDocumentDialog from "../../features/sendDocument/SendDocumentDialog";
@@ -82,6 +83,10 @@ const DocumentsViewer = () => {
   const [openManageCertificationDialog, setOpenManageCertificationDialog] = useState(false);
   const handleOpenManageCertificationDialog = (event) => setOpenManageCertificationDialog(true);
   const handleCloseManageCertificationDialog = (event) => setOpenManageCertificationDialog(false);
+
+  const [openAcceptTransferDialog, setOpenAcceptTransferDialog] = useState(false);
+  const handleOpenAcceptTransferDialog = (event) => setOpenAcceptTransferDialog(true);
+  const handleCloseAcceptTransferDialog = (event) => setOpenAcceptTransferDialog(false);
 
   const fileMap = useMemo(() => {
     switch (category) {
@@ -278,6 +283,26 @@ const DocumentsViewer = () => {
 
     callbacks.push(() => { eventTransferDocumentEmitter.removeAllListeners(); });
 
+    const eventAcceptTransferDocEmitter = savDocContract.events.AcceptTransferDoc()
+      .on('data', async (event) => {
+        // address newOwner, uint256 tokenID
+        const newOwnerAddress = event.returnValues.newOwner;
+        // const tokenID = event.returnValues.tokenID;
+
+        const accounts = await web3.eth.getAccounts();
+
+        if (newOwnerAddress === accounts[0]) {
+          dispatch(fetchDocumentsOriginals());
+          dispatch(fetchDocumentsTransfered());
+        }
+      })
+      .on('error', (event) => {
+        console.error(event);
+      })
+    ;
+
+    callbacks.push(() => { eventAcceptTransferDocEmitter.removeAllListeners(); });
+
     return () => {
       for (let i = 0; i < callbacks.length; i++) {
         callbacks[i]();
@@ -362,6 +387,12 @@ const DocumentsViewer = () => {
         case 'transfer':
           if (actionFile.data) {
             handleOpenSendDocumentDialog();
+          }
+          break;
+
+        case 'acceptTransfer':
+          if (actionFile.data) {
+            handleOpenAcceptTransferDialog();
           }
           break;
 
@@ -489,7 +520,7 @@ const DocumentsViewer = () => {
                     return ['showInformations', 'delete'];
 
                   case 'transfered':
-                    return ['showInformations'];
+                    return ['showInformations', 'acceptTransfer'];
 
                   default:
                     return [];
@@ -574,6 +605,18 @@ const DocumentsViewer = () => {
                 title="Transférer"
                 open={openSendDocumentDialog}
                 handleClose={handleCloseSendDocumentDialog}
+              />
+            )
+            : (<></>)
+          }
+
+          {(openAcceptTransferDialog && !!actionFile && 'acceptTransfer' === actionFile.type && !!actionFile.data)
+            ? (
+              <AcceptTransferDialog
+                doc={actionFile.data}
+                title="Récupération du document"
+                open={openAcceptTransferDialog}
+                handleClose={handleCloseAcceptTransferDialog}
               />
             )
             : (<></>)
