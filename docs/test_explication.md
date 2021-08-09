@@ -1,120 +1,66 @@
 # Explication des tests
 
-Les tests n'ont pas été réalisés mais voici une partie de liste des tests que l'on a prévue de faire.
+Les tests on principalement été réalisés avec le smart contract SaveDoc car il regroupe les fonctions principales du Dapp.
 
-## Contrat AccountManager
+## Contrat SaveDoc
 
-### Méthode `addUser`
+### Méthode `Subscribe`
 
-- Vérifier que le `User` a bien ajouté
+- Vérifie que le `User` a bien ajouté
 - Vérifier que les informations de `User` sont correctes
-- Vérifier que l'on peut pas créer un `User` avec une adresse qui n'est pas la sienne
 
-### Méthode `addAuthority`
+### Méthode `ChangeMyName`
 
-- Vérifier que le `Authority` a bien ajoutée
-- Vérifier que les informations de `Authority` sont correctes
-- Vérifier que seul l'owner peut ajouter des `Authority`  
+- Vérifie que le `User` a bien un nouveau `name`
 
-### Méthode `getUser`
 
-- Vérifier que la valeur renvoyé est bien la bonne
+### Méthode `SecureDocument`
 
-### Méthode `delUser`
+- Vérifie que le `Document` a bien été enregistré
+- Vérifie que les informations du `Document` sont correctes
 
-- Vérifier que l'utilisateur a bien été supprimée
 
-### Méthode `isAuthority`
+### Méthode `TransferDoc`
 
-- Vérifier que la valeur renvoyé est bien la bonne
+- Vérifie que le nouveau propriétaire du `TokenID` est bien le destinataire
+- Vérifie que l'ancien propriétaire n'a plus accès au `Document`
+- Vérifie que le destinataire à bien le `Document` en attente de validation du transfer
 
-## Contrat SecMyDocToken
+### Méthode `AcceptNewDoc`
 
-### Méthode `addItem`
+- Vérifie que le `Document` n'est plus en attente de validation
+- Vérifie que le destinataire a bien reçu le `Document`
+- Vérifie que les informations du `Document` sont correctes
 
-- Vérifier que l'ajout d'un NFT se fait uniquement via le contract `SecMyDoc`
-- Vérifier qu'un nouveau NFT est créé
-- Vérifier que le `tokenURI` du token est bien modifié
-- Vérifier que l'évènement `Transfer` à bien été envoyé avec les bonnes informations
+### Méthode `ShareDoc`
 
-### Méthode `delItem`
+- Vérifie que le destinataire a bien reçu une copie du `Document`
+- Vérifie que les informations de la copie du `Document` sont correctes
 
-- Vérifier que la suppression d'un NFT se fait uniquement via le contract `SecMyDoc`
-- Vérifier que le NFT est bien burn
-- Vérifier que l'évènement `Transfer` à bien été envoyé avec les bonnes informations
+### Méthode `DeleteDocShared`
 
-## Contrat PasswordManager
+- Vérifie que la copie du `Document` n'existe plus
 
-### Méthode `addEncryptedPasswords`
+### Méthode `RequestCertification`
 
-- Vérifier que la valeur a bien été ajoutée
+- Vérifie que le destinataire à bien reçu une `RequestCertification`
+- Vérifie que les informations du `Document` à certifié sont correctes
 
-### Méthode `getEncryptedPassword`
+### Méthode `AcceptCertificationRequest`
 
-- Vérifier que la valeur renvoyé est bien la bonne
+- Vérifie que la demande de certification a bien été supprimée après avoir été accepté la `RequestCertification`
+- Vérifie que le `Document` a bien été certifié
 
-### Méthode `delEncryptedPassword`
+### Méthode `RejectCertificationRequest`
 
-- Vérifier que la valeur a bien été supprimée
+- Vérifie que la demande de certification a bien été supprimée après avoir été refusé la `RequestCertification`
 
-### Méthode `addPasswordMaster`
+### Méthode `DeleteDocument`
 
-- Vérifier que la valeur a bien été modifiée
+- Vérifie que le `Document` n'existe plus
+- Vérifie que le `TokenID` à bien été burn
 
-### Méthode `getPasswordMaster`
 
-- Vérifier que la valeur renvoyé est bien la bonne
+### Méthode `Unsubscribe`
 
-## Contrat SecMyDoc
-
-### Méthode `getCountNFT`
-
-- Vérifier que la valeur est bien la bonne
-
-### Méthode `createNFT`
-
-- Vérifier que le NFT a bien été "minté"
-- Vérifier que l'auteur de la transaction est bien le propriétaire du NFT "minté"
-- Vérifier que les informations du document ont bien été sauvegardé
-- Vérifier que le nombre de NFT du propriétaire a bien augmenté de 1
-- Vérifier qu'un évènement à bien été envoyé avec les bonnes informations (pour notifier de la suppression du document et NFT)
-
-### Méthode `createNFTCertified`
-
-- Vérifier tout ce qui & été vérifié pour la méthode `createNFT`
-- Vérifier que le document a bien été certifier par l'auteur de la transaction
-
-### Méthode `getNFTs`
-
-- Vérifier que les NFTs renvoyés appartiennent bien à l'auteur de la transaction
-
-### Méthode `getNFT`
-
-- Vérifier que le NFT contient les bonnes valeurs
-
-### Méthode `getTokenURI`
-
-- Vérifier que la valeur renvoyé est bien la bonne
-
-### Méthode `deleteNFT`
-
-- Vérifier que le NFT a bien été "burné"
-- Vérifier que le NFT qui a été supprimé est le bon
-- Vérifier que seul le propriétaire du NFT puisse le supprimer
-- Vérifier que le nombre de NFT du propriétaire a bien diminué de 1
-- Vérifier qu'un évènement à bien été envoyé avec les bonnes informations (pour notifier de la suppression du document et NFT)
-
-### Méthode `requestCertification`
-
-- Vérifier que l'auteur est bien propriétaire du document
-- Vérifier que la requête de certification contient les bonnes informations
-- Vérifier qu'un événement qui indique l'auteur, le destinataire et le document concerné par cette demande de certification
-
-### Méthode `getRequests`
-
-- Vérifier que les Requests renvoyés appartiennent bien à l'auteur de la transaction
-
-### Méthode `acceptRequest`
-
-- Vérifier que seul le destinataire de la requête puisse l'accepté
-- Vérifier que le document a bien été certifier par le destinataire de la transaction
+- Vérifie que le `User` n'existe plus
