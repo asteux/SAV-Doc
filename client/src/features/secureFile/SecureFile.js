@@ -202,8 +202,8 @@ const SecureFile = () => {
         <header>
           <Typography variant="h4" className="text-center mb-3">Sécuriser un document</Typography>
           <Stepper className={classes.stepper} alternativeLabel activeStep={activeStep}>
-            {steps.map((label) => (
-              <Step key={label}>
+            {steps.map((label, index) => (
+              <Step key={`secure-file-label-${index}-${label}`}>
                 <StepLabel>{label}</StepLabel>
               </Step>
             ))}

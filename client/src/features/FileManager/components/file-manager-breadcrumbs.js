@@ -46,12 +46,12 @@ const FileManagerBreadcrumbs = () => {
 
           return (index !== currentDirectory.length - 1)
             ? (
-              <Link key={path} className={classes.link} color="inherit" href="#" onClick={(event) => handleLinkClick(event, currentDirectory.slice(0, index + 1))}>
+              <Link  key={`file-manager-breadcrumbs-${index}-${path}`} className={classes.link} color="inherit" href="#" onClick={(event) => handleLinkClick(event, currentDirectory.slice(0, index + 1))}>
                 {content}
               </Link>
             )
             : (
-              <Typography key={path} color="textPrimary">{content}</Typography>
+              <Typography  key={`file-manager-breadcrumbs-${index}-${path}`} color="textPrimary">{content}</Typography>
             )
           ;
         })}

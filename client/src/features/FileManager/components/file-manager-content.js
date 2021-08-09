@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
 
@@ -58,11 +58,11 @@ const FileManagerContent = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {components.map((component) => {
+              {components.map((component, index) => {
                 return (
-                  <>
+                  <Fragment key={`file-manager-item-${index}`}>
                     {component}
-                  </>
+                  </Fragment>
                 );
               })}
             </TableBody>
@@ -74,9 +74,9 @@ const FileManagerContent = () => {
     default: // = grid
       content = (
         <Grid container>
-          {components.map((component) => {
+          {components.map((component, index) => {
             return (
-              <Grid item xs={6} sm={4} md={3} lg={2} xl={1}>
+              <Grid key={`file-manager-item-${index}`} item xs={6} sm={4} md={3} lg={2} xl={1}>
                 {component}
               </Grid>
             );

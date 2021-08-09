@@ -535,8 +535,8 @@ const DocumentsViewer = () => {
           />
 
           <Backdrop className={classes.backdrop} open={!!actionFile && 'show' === actionFile.type && !!actionFile.data} onClick={handleClose}>
-            <IconButton className={classes.backdropClose} aria-label="delete">
-              <CloseIcon fontSize="large" onClick={handleClose} />
+            <IconButton className={classes.backdropClose} aria-label="delete" onClick={handleClose}>
+              <CloseIcon fontSize="large" />
             </IconButton>
 
             {

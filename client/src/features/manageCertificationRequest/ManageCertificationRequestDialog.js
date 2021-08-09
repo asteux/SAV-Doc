@@ -256,8 +256,8 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
       >
         <DialogTitle id="form-dialog-title">{title} - {steps[activeStep]}</DialogTitle>
         <Stepper className={classes.stepper} alternativeLabel activeStep={activeStep}>
-          {steps.map((label) => (
-            <Step key={label}>
+          {steps.map((label, index) => (
+            <Step key={`manage-certification-request-${index}-${label}`}>
               <StepLabel>{label}</StepLabel>
             </Step>
           ))}

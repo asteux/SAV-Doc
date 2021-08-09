@@ -30,15 +30,15 @@ const DocumentInformationsDialog = ({ doc, open, handleClose }) => {
       { key: 'Type de document', value: doc.fileMimeType },
       { key: 'Taille du document', value: humanFileSize(doc.fileSize, true) },
       { key: 'Date de création', value: (new Date(doc.dateAdd * 1000)).toLocaleString() },
-      { key: 'est certifié ?', value: (<Typography variant="button" gutterBottom className={[classes.labelBoolean, (isCertified) ? classes.labelBooleanSuccess : classes.labelBooleanDanger]}>{ (isCertified) ? 'Oui' : 'Non'}</Typography>) },
+      { key: 'est certifié ?', value: (<Typography variant="button" gutterBottom className={`${classes.labelBoolean} ${(isCertified) ? classes.labelBooleanSuccess : classes.labelBooleanDanger}`}>{ (isCertified) ? 'Oui' : 'Non'}</Typography>) },
     ];
 
     if (isCertified) {
       rows.push(
         { key: 'Certifiants', value: (
           <List>
-            {doc.certifying.map((address) => (
-              <ListItem>
+            {doc.certifying.map((address, index) => (
+              <ListItem key={`certifying-${index}-${address}`}>
                 <ListItemText className="text-right" primary={address} />
               </ListItem>
             ))}
@@ -64,8 +64,8 @@ const DocumentInformationsDialog = ({ doc, open, handleClose }) => {
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
+                {rows.map((row, index) => (
+                  <TableRow key={`row-${index}-${row.name}`}>
                     <TableCell component="th" scope="row">
                       {row.key}
                     </TableCell>

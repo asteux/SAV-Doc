@@ -232,8 +232,8 @@ const AcceptTransferDialog = ({ type, doc, title, open, handleClose }) => {
       >
         <DialogTitle id="form-dialog-title">{title} - {steps[activeStep]}</DialogTitle>
         <Stepper className={classes.stepper} alternativeLabel activeStep={activeStep}>
-          {steps.map((label) => (
-            <Step key={label}>
+          {steps.map((label, index) => (
+            <Step key={`accept-transfer-label-${index}-${label}`}>
               <StepLabel>{label}</StepLabel>
             </Step>
           ))}
