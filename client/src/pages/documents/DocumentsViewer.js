@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppBar, Backdrop, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
+import { AppBar, Backdrop, Badge, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { useHistory } from "react-router";
@@ -94,6 +94,12 @@ const DocumentsViewer = () => {
         break;
     }
   }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState, fetchDocumentsCertifiedState]);
+
+  useEffect(() => {
+    dispatch(fetchDocumentsOriginals());
+    dispatch(fetchDocumentsShared());
+    dispatch(fetchDocumentsCertified());
+  }, [dispatch]);
 
   useEffect(() => {
     const callbacks = [];
@@ -382,12 +388,30 @@ const DocumentsViewer = () => {
               </ListItem>
 
               <ListItem button key="Documents partagés" onClick={(event) => changeCategory('shared')}>
-                <ListItemIcon><FolderIcon /></ListItemIcon>
+                <ListItemIcon>
+                  <Badge
+                    badgeContent={fetchDocumentsSharedState.data.length}
+                    color="secondary"
+                    invisible={0 === fetchDocumentsSharedState.data.length}
+                  >
+                    <FolderIcon />
+                  </Badge>
+                </ListItemIcon>
+
                 <ListItemText primary="Documents partagés" />
               </ListItem>
 
               <ListItem button key="Documents à certifier" onClick={(event) => changeCategory('certified')}>
-                <ListItemIcon><FolderIcon /></ListItemIcon>
+                <ListItemIcon>
+                  <Badge
+                    badgeContent={fetchDocumentsCertifiedState.data.length}
+                    color="secondary"
+                    invisible={0 === fetchDocumentsCertifiedState.data.length}
+                  >
+                    <FolderIcon />
+                  </Badge>
+                </ListItemIcon>
+
                 <ListItemText primary="Documents à certifier" />
               </ListItem>
             </List>
