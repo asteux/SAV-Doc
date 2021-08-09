@@ -1,4 +1,4 @@
-#Sécurité
+# Sécurité
 
 La plus part des failles de sécurité commun aux Dapps ne sont pas applicable à notre application car nous n'utilisons pas de transfert d'ether.
 
@@ -11,11 +11,11 @@ Nous somme protéger par défaut contre cette vulnérabilité car nous ne utilis
 
 Nous somme protégé contre cette vulnérabilité car nous n'effectuons pas de calcul arithmétique.
 
-###Default Visibilities
+### Default Visibilities
 
 Nous avons spécifié la visibilité de toutes les fonctions dans les contracts pour ce protéger contre la vulnérabilité `Default Visibilities`
 
-###Autre
+### Autre
 
 - Restriction des accès en utilisant la librairie `Ownable` ou des modifiers comme `isMyToken`
 
