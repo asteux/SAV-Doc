@@ -79,6 +79,15 @@ Et démarrer le client
 yarn start
 ```
 
+## Documentation
+
+Pour mettre à jour la documentation, exécuter la commande suivante
+
+```bash
+# ./
+yarn doc  
+```
+
 ## Déploiement
 
 ### Déploiement des Smarts Contracts

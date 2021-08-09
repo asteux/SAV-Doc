@@ -6,6 +6,13 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.2.0",
     "@truffle/hdwallet-provider": "^1.4.1",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "solidity-docgen": "^0.5.13"
+  },
+  "devDependencies": {
+    "solc-0.8": "npm:solc@^0.8.6"
+  },
+  "scripts": {
+    "doc": "solidity-docgen -o ./docs/contracts --solc-module solc-0.8"
   }
 }
