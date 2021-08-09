@@ -5,11 +5,11 @@ La plus part des failles de sécurité commun aux Dapps ne sont pas applicable �
 
 ### Reetrancy
 
-- Nous somme protégé par défaut contre cette vulnérabilité car nous ne utilisons faisons pas de transfert d'ether.
+- Nous somme protégés par défaut contre cette vulnérabilité car nous ne utilisons faisons pas de transfert d'ether.
 
 ### Arithmetic Over/Under Flows
 
-- Nous somme protégé contre cette vulnérabilité car nous n'effectuons pas de calcul arithmétique.
+- Nous somme protégés contre cette vulnérabilité car nous n'effectuons pas de calcul arithmétique.
 
 ### Default Visibilities
 
@@ -32,7 +32,7 @@ modifier isMyToken(uint256 tokenID) {
 }
 ```
 
-- Protection contre les fraudes des documents officiel via une vérification des hashs
+- Protection contre les fraudes des documents officiels via une vérification des hashs
 
 Exemple:
 ```sol      
