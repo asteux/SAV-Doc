@@ -85,6 +85,12 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    fetchDocumentsTransferedState: {
+      data: [],
+      fileMap: {},
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     decryptedFiles: {},
     secureDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -249,6 +255,29 @@ const savDocContractSlice = createContractSlice(
     fetchDocumentsCertifiedFailed: (state, action) => {
       state.fetchDocumentsCertifiedState = {
         ...state.fetchDocumentsCertifiedState,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    fetchDocumentsTransferedSent: (state) => {
+      state.fetchDocumentsTransferedState = {
+        ...state.fetchDocumentsTransferedState,
+        status: 'loading',
+        error: null,
+      };
+    },
+    fetchDocumentsTransferedSucceeded: (state, action) => {
+      state.fetchDocumentsTransferedState = {
+        ...state.fetchDocumentsTransferedState,
+        data: action.payload.documents,
+        fileMap: action.payload.fileMap,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    fetchDocumentsTransferedFailed: (state, action) => {
+      state.fetchDocumentsTransferedState = {
+        ...state.fetchDocumentsTransferedState,
         status: 'failed',
         error: action.payload,
       };
@@ -565,6 +594,26 @@ const savDocContractActions = {
       }
     }
   },
+  fetchDocumentsTransfered: () => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      dispatch(savDocContractSlice.actions.fetchDocumentsTransferedSent());
+
+      try {
+        const documents = await savDocContract.contract.methods
+          .viewDocPendingTransfer()
+          .call({ from: web3.accounts[0] })
+        ;
+
+        const fileMap = createFileMap(documents);
+
+        dispatch(savDocContractSlice.actions.fetchDocumentsTransferedSucceeded({ documents, fileMap }));
+      } catch (error) {
+        dispatch(savDocContractSlice.actions.fetchDocumentsTransferedFailed(error));
+      }
+    }
+  },
   decryptFile: (doc) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
@@ -764,6 +813,7 @@ export const {
   fetchDocumentsOriginals,
   fetchDocumentsShared,
   fetchDocumentsCertified,
+  fetchDocumentsTransfered,
   decryptFile,
   secureDocument,
   requestCertification,

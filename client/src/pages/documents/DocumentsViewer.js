@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppBar, Backdrop, Badge, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
+import SendIcon from '@material-ui/icons/Send';
 import ShareIcon from '@material-ui/icons/Share';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { useHistory } from "react-router";
@@ -11,7 +12,7 @@ import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import FileManager from "../../features/FileManager/components/file-manager";
 import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
-import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared } from "../../features/contracts/savDocContractSlice";
+import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared, fetchDocumentsTransfered } from "../../features/contracts/savDocContractSlice";
 import DocumentInformationsDialog from "../../features/documentInformations/DocumentInformationsDialog";
 import ManageCertificationRequestDialog from "../../features/manageCertificationRequest/ManageCertificationRequestDialog";
 import SendDocumentDialog from "../../features/sendDocument/SendDocumentDialog";
@@ -65,6 +66,7 @@ const DocumentsViewer = () => {
   const fetchDocumentsOriginalsState = useSelector(state => state.savDocContract.fetchDocumentsOriginalsState);
   const fetchDocumentsSharedState = useSelector(state => state.savDocContract.fetchDocumentsSharedState);
   const fetchDocumentsCertifiedState = useSelector(state => state.savDocContract.fetchDocumentsCertifiedState);
+  const fetchDocumentsTransferedState = useSelector(state => state.savDocContract.fetchDocumentsTransferedState);
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
   const fileManagerAction = useSelector(state => state.fileManager.action);
   const actionFile = useSelector(state => state.fileManager.actionFile);
@@ -92,15 +94,19 @@ const DocumentsViewer = () => {
       case 'shared':
         return fetchDocumentsSharedState.fileMap;
 
+      case 'transfered':
+        return fetchDocumentsTransferedState.fileMap;
+
       default:
         break;
     }
-  }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState, fetchDocumentsCertifiedState]);
+  }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState, fetchDocumentsCertifiedState, fetchDocumentsTransferedState]);
 
   useEffect(() => {
     dispatch(fetchDocumentsOriginals());
     dispatch(fetchDocumentsShared());
     dispatch(fetchDocumentsCertified());
+    dispatch(fetchDocumentsTransfered());
   }, [dispatch]);
 
   useEffect(() => {
@@ -271,6 +277,10 @@ const DocumentsViewer = () => {
         dispatch(fetchDocumentsCertified());
         break;
 
+      case 'transsfered':
+        dispatch(fetchDocumentsTransfered());
+        break;
+
       default:
         break;
     }
@@ -416,6 +426,20 @@ const DocumentsViewer = () => {
 
                 <ListItemText primary="Documents à certifier" />
               </ListItem>
+
+              <ListItem button key="Documents en attente de transfert" onClick={(event) => changeCategory('transfered')}>
+                <ListItemIcon>
+                  <Badge
+                    badgeContent={fetchDocumentsTransferedState.data.length}
+                    color="secondary"
+                    invisible={0 === fetchDocumentsTransferedState.data.length}
+                  >
+                    <SendIcon />
+                  </Badge>
+                </ListItemIcon>
+
+                <ListItemText primary="Documents en attente de transfert" />
+              </ListItem>
             </List>
           </div>
         </Drawer>
@@ -435,6 +459,9 @@ const DocumentsViewer = () => {
 
                   case 'shared':
                     return ['showInformations', 'delete'];
+
+                  case 'transfered':
+                    return ['showInformations'];
 
                   default:
                     return [];
