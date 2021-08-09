@@ -33,10 +33,10 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
   const manageCertificationState = useSelector((state) => {
     switch (choice) {
       case 'acceptCertification':
-        return state.manageCertificationRequest.acceptCertificationRequest;
+        return state.savDocContract.acceptCertificationRequest;
 
       case 'rejectCertification':
-        return state.manageCertificationRequest.rejectCertificationRequest;
+        return state.savDocContract.rejectCertificationRequest;
 
       default:
         break;
@@ -50,6 +50,16 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
   const originalFile = useSelector((state) => state.manageCertificationRequest.originalFile);
 
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch, savDocContract, accounts]);
 
   useEffect(() => {
     if (!open) {

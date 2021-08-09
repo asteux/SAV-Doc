@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar, Button, Container, Grid, Link, makeStyles,
@@ -7,7 +7,7 @@ import {
 import { Image } from "react-bootstrap";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PasswordMasterDialog from "../../features/password-master/PasswordMasterDialog";
 import RegistrationDialog from "../../features/registration/RegistrationDialog";
 
@@ -31,9 +31,13 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const accounts = useSelector((state) => state.web3.accounts);
+  const savDocContract = useSelector((state) => state.savDocContract.contract);
   const userInformationsState = useSelector((state) => state.savDocContract.userInformations);
   const passwordMaster = useSelector((state) => state.savDocContract.passwordMaster);
 
@@ -51,6 +55,13 @@ const Home = () => {
   const [openRegistrationDialog, setOpenRegistrationDialog] = useState(false);
   const handleOpenRegistrationDialog = (event) => setOpenRegistrationDialog(true);
   const handleCloseRegistrationDialog = (event) => setOpenRegistrationDialog(false);
+
+  useEffect(() => {
+    if (savDocContract && accounts) {
+      handleCloseLoginDialog();
+      handleCloseRegistrationDialog();
+    }
+  }, [dispatch, savDocContract, accounts]);
 
   const buttonMainAction = (registered)
     ? (

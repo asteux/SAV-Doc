@@ -24,6 +24,8 @@ const AcceptTransferDialog = ({ type, doc, title, open, handleClose }) => {
 
   const classes = useStyles();
 
+  const accounts = useSelector((state) => state.web3.accounts);
+  const savDocContract = useSelector(state => state.savDocContract.contract);
   const acceptTransferDocumentState = useSelector((state) => state.savDocContract.acceptTransferDocument);
   const loadingMessage = useSelector((state) => state.acceptTransfer.loadingMessage);
   const activeStep = useSelector((state) => state.acceptTransfer.activeStep);
@@ -36,6 +38,16 @@ const AcceptTransferDialog = ({ type, doc, title, open, handleClose }) => {
   const decryptedFiles = useSelector(state => state.savDocContract.decryptedFiles);
 
   const isLoading = null !== loadingMessage;
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch, savDocContract, accounts]);
 
   useEffect(() => {
     if (!open) {

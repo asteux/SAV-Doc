@@ -40,6 +40,8 @@ const SendDocumentDialog = ({ type, doc, title, open, handleClose }) => {
         break;
     }
   });
+
+  const accounts = useSelector((state) => state.web3.accounts);
   const loadingMessage = useSelector((state) => state.sendDocument.loadingMessage);
   const activeStep = useSelector((state) => state.sendDocument.activeStep);
   const originalFile = useSelector((state) => state.sendDocument.originalFile);
@@ -53,6 +55,16 @@ const SendDocumentDialog = ({ type, doc, title, open, handleClose }) => {
   const recipientUser = useSelector((state) => state.sendDocument.recipientUser);
 
   const isLoading = null !== loadingMessage;
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch, accounts]);
 
   useEffect(() => {
     if (!open) {

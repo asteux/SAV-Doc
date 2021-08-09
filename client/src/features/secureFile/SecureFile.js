@@ -27,6 +27,7 @@ const SecureFile = () => {
   const classes = useStyles();
 
   const accounts = useSelector((state) => state.web3.accounts);
+  const savDocContract = useSelector(state => state.savDocContract.contract);
   const passwordMaster = useSelector((state) => state.savDocContract.passwordMaster);
   const secureDocumentState = useSelector((state) => state.savDocContract.secureDocument);
   const loadingMessage = useSelector((state) => state.secureFile.loadingMessage);
@@ -42,7 +43,7 @@ const SecureFile = () => {
 
   useEffect(() => {
     dispatch(reset());
-  }, [dispatch]);
+  }, [dispatch, savDocContract, accounts]);
 
   useEffect(() => {
     if (null !== originalFile) {

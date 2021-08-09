@@ -5,7 +5,7 @@ import blue from '@material-ui/core/colors/blue';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
-import { loadSavDocContract, fetchUserAndPassword } from './features/contracts/savDocContractSlice';
+import { loadSavDocContract, fetchUserAndPassword, definePasswordMaster } from './features/contracts/savDocContractSlice';
 
 import "./App.css";
 import Home from "./pages/home/Home";
@@ -62,6 +62,7 @@ const App = () => {
   useEffect(() => {
     if (savDocContract && accounts) {
       dispatch(fetchUserAndPassword());
+      dispatch(definePasswordMaster(null));
     }
   }, [dispatch, savDocContract, accounts]);
 

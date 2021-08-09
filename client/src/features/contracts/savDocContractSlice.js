@@ -169,6 +169,7 @@ const savDocContractSlice = createContractSlice(
     fetchUserInformationsFailed: (state, action) => {
       state.userInformations = {
         ...state.userInformations,
+        data: null,
         status: 'failed',
         error: action.payload,
       };
@@ -191,6 +192,7 @@ const savDocContractSlice = createContractSlice(
     fetchUserPasswordMasterFailed: (state, action) => {
       state.userEncryptedPasswordMaster = {
         ...state.userEncryptedPasswordMaster,
+        data: null,
         status: 'failed',
         error: action.payload,
       };
@@ -217,6 +219,8 @@ const savDocContractSlice = createContractSlice(
     fetchDocumentsOriginalsFailed: (state, action) => {
       state.fetchDocumentsOriginalsState = {
         ...state.fetchDocumentsOriginalsState,
+        data: [],
+        fileMap: {},
         status: 'failed',
         error: action.payload,
       };
@@ -240,6 +244,8 @@ const savDocContractSlice = createContractSlice(
     fetchDocumentsSharedFailed: (state, action) => {
       state.fetchDocumentsSharedState = {
         ...state.fetchDocumentsSharedState,
+        data: [],
+        fileMap: {},
         status: 'failed',
         error: action.payload,
       };
@@ -263,6 +269,8 @@ const savDocContractSlice = createContractSlice(
     fetchDocumentsCertifiedFailed: (state, action) => {
       state.fetchDocumentsCertifiedState = {
         ...state.fetchDocumentsCertifiedState,
+        data: [],
+        fileMap: {},
         status: 'failed',
         error: action.payload,
       };
@@ -286,6 +294,8 @@ const savDocContractSlice = createContractSlice(
     fetchDocumentsTransferedFailed: (state, action) => {
       state.fetchDocumentsTransferedState = {
         ...state.fetchDocumentsTransferedState,
+        data: [],
+        fileMap: {},
         status: 'failed',
         error: action.payload,
       };

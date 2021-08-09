@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
 import FileManager from "../../features/FileManager/components/file-manager";
-import { deleteFile, hideFile, setAction } from "../../features/FileManager/file-manager-slice";
+import { deleteFile, hideFile, resetActionFile, setAction } from "../../features/FileManager/file-manager-slice";
 import FileViewer from "../../features/FileViewer/components/file-viewer";
 import { decryptFile, deleteDocument, deleteSharedDocument, fetchDocumentsCertified, fetchDocumentsOriginals, fetchDocumentsShared, fetchDocumentsTransfered } from "../../features/contracts/savDocContractSlice";
 import AcceptTransferDialog from "../../features/acceptTransfer/AcceptTransferDialog";
@@ -63,6 +63,7 @@ const DocumentsViewer = () => {
   const [category, setCategory] = useState('original');
   const [file, setFile] = useState(null);
   const web3 = useSelector(state => state.web3.web3);
+  const accounts = useSelector(state => state.web3.accounts);
   const savDocContract = useSelector(state => state.savDocContract.contract);
   const fetchDocumentsOriginalsState = useSelector(state => state.savDocContract.fetchDocumentsOriginalsState);
   const fetchDocumentsSharedState = useSelector(state => state.savDocContract.fetchDocumentsSharedState);
@@ -108,11 +109,15 @@ const DocumentsViewer = () => {
   }, [category, fetchDocumentsOriginalsState, fetchDocumentsSharedState, fetchDocumentsCertifiedState, fetchDocumentsTransferedState]);
 
   useEffect(() => {
-    dispatch(fetchDocumentsOriginals());
-    dispatch(fetchDocumentsShared());
-    dispatch(fetchDocumentsCertified());
-    dispatch(fetchDocumentsTransfered());
-  }, [dispatch]);
+    if (savDocContract && accounts) {
+      dispatch(fetchDocumentsOriginals());
+      dispatch(fetchDocumentsShared());
+      dispatch(fetchDocumentsCertified());
+      dispatch(fetchDocumentsTransfered());
+
+      dispatch(resetActionFile());
+    }
+  }, [dispatch, savDocContract, accounts]);
 
   useEffect(() => {
     const callbacks = [];

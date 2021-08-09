@@ -98,6 +98,12 @@ const fileManagerSlice = createSlice({
         data: action.payload,
       };
     },
+    actionFileReseted: (state) => {
+      state.actionFile = {
+        type: null,
+        data: null,
+      };
+    },
   },
 });
 
@@ -216,6 +222,11 @@ const fileManagerActions = {
       dispatch(fileManagerSlice.actions.fileToDeleteChanged(fileData));
     };
   },
+  resetActionFile: () => {
+    return (dispatch) => {
+      dispatch(fileManagerSlice.actions.actionFileReseted());
+    };
+  },
 };
 
 export const {
@@ -239,6 +250,7 @@ export const {
   transferFile,
   acceptTransferFile,
   deleteFile,
+  resetActionFile,
 } = fileManagerActions;
 
 export default fileManagerSlice.reducer;

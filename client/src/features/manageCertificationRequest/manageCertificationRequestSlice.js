@@ -34,7 +34,7 @@ const manageCertificationRequestSlice = createSlice({
     },
     reset: (state) => {
       state.activeStep = 0;
-      state.doc = null;
+      // state.doc = null;
       state.certificationRequest = null;
       state.originalFile = null;
     }
