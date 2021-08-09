@@ -11,6 +11,10 @@ import { useSelector } from "react-redux";
 import PasswordMasterDialog from "../../features/password-master/PasswordMasterDialog";
 import RegistrationDialog from "../../features/registration/RegistrationDialog";
 
+import SavDocSecurisationImage from '../../assets/savdoc-securisation.png';
+import SavDocPartageImage from '../../assets/savdoc-transfert.png';
+import SavDocCertificationImage from '../../assets/savdoc-certification.png';
+
 const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
@@ -93,7 +97,7 @@ const Home = () => {
             <div className="position-relative overflow-hidden text-center">
               <div className="p-lg-5 my-5">
                 <Typography variant="h2" className="mb-3">SAV-Doc</Typography>
-                <Typography variant="h5" className="mb-4">Avec SAV Doc, utiliser un coffre-fort numérique et personnel pour sécuriser, approuver et vérifier vos documents</Typography>
+                <Typography variant="h5" className="mb-4">Avec SAV Doc, utiliser un coffre-fort numérique personnel pour sécuriser, approuver et vérifier vos documents</Typography>
                 {buttonMainAction}
               </div>
             </div>
@@ -105,13 +109,14 @@ const Home = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} md={7} className="order-last order-md-first">
                 <div className="d-flex align-items-center justify-content-center h-100">
-                  <Image src="" alt="coffre fort" rounded />
+                  <Image src={SavDocSecurisationImage} alt="coffre fort" rounded />
                 </div>
               </Grid>
 
               <Grid item xs={12} md={5}>
-                <Typography variant="h4">Sécuriser</Typography>
-                <Typography>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque suscipit nisl euismod mauris interdum, quis vehicula est faucibus. Aliquam vitae sollicitudin sapien. Pellentesque sed varius urna. Cras quam nisl, dapibus quis gravida sed, pretium sed felis. Cras congue ultrices nisl vel faucibus. Nam at facilisis mi. Duis aliquet, leo nec auctor volutpat, risus magna blandit dolor, sed venenatis magna ex cursus mi. Sed eu nibh sit amet tortor convallis viverra. Pellentesque placerat egestas viverra. Nulla magna odio, cursus vitae fermentum eget, mattis id ex. Cras orci quam, placerat a tellus sit amet, imperdiet varius quam. Phasellus aliquam nisi ut sagittis pulvinar. Sed suscipit molestie turpis, id cursus ipsum faucibus at.</Typography>
+                <Typography className="mb-3" variant="h4">Sécuriser</Typography>
+                <Typography variant="h5">Avec SAV Doc, vous pouvez stocker un document de manière sécurisé et confidentiel.</Typography>
+                <Typography variant="h5">Vous êtes la seule personne qui est propriètaire du document et qui peut le consulter.</Typography>
               </Grid>
             </Grid>
           </Container>
@@ -121,13 +126,13 @@ const Home = () => {
           <Container fixed>
             <Grid container spacing={2}>
               <Grid item xs={12} md={5}>
-                <Typography variant="h4">Partager</Typography>
-                <Typography>Nunc ornare consectetur enim, quis viverra tellus iaculis ut. Phasellus sodales nisl a arcu tempor pharetra. Integer feugiat tellus sagittis lacus accumsan suscipit. Fusce accumsan risus eu enim maximus varius. Quisque varius gravida dapibus. Morbi eget lorem et arcu ornare congue vitae id massa. Integer in porttitor enim. Ut posuere vulputate lorem, sit amet volutpat mauris elementum quis. Aliquam non lectus placerat, cursus urna ac, blandit nisl. Donec ac justo varius, vehicula quam nec, scelerisque nulla. Mauris nec nunc at urna auctor accumsan id sed nisl. Aenean ullamcorper porttitor lectus in imperdiet. In varius leo mollis massa auctor lobortis ac non ipsum. Maecenas dignissim feugiat malesuada.</Typography>
+                <Typography className="mb-3" variant="h4">Partager</Typography>
+                <Typography variant="h5">Vous pouvez transmettre et partager de manière sécurisé et confidentiel un document</Typography>
               </Grid>
 
               <Grid item xs={12} md={7}>
                 <div className="d-flex align-items-center justify-content-center h-100">
-                  <Image src="" alt="partage" rounded />
+                  <Image src={SavDocPartageImage} alt="partage" rounded />
                 </div>
               </Grid>
             </Grid>
@@ -139,13 +144,13 @@ const Home = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} md={7} className="order-last order-md-first">
                 <div className="d-flex align-items-center justify-content-center h-100">
-                  <Image src="" alt="document certifié" rounded />
+                  <Image src={SavDocCertificationImage} alt="document certifié" rounded />
                 </div>
               </Grid>
 
               <Grid item xs={12} md={5}>
-                <Typography variant="h4">Certifier</Typography>
-                <Typography>Praesent vel sapien non ipsum interdum aliquam in sed libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis at felis nec sem sollicitudin viverra. Praesent a volutpat nisi. Vivamus sem tortor, accumsan a orci vel, sollicitudin consectetur leo. Sed lobortis ultricies purus, ut pharetra massa scelerisque lacinia. Nulla facilisi. Pellentesque nulla ante, dignissim scelerisque massa non, vestibulum pellentesque magna. Praesent tristique tincidunt vestibulum. Sed at faucibus velit. Donec rutrum augue in volutpat sollicitudin. Nam molestie purus sagittis quam lacinia, in lobortis sapien suscipit. Nullam sodales, sapien vel auctor luctus, elit justo elementum orci, ornare finibus tellus libero vel neque. Aenean placerat nibh eget fringilla maximus. Nunc posuere purus ac sodales volutpat. Quisque pellentesque, turpis nec porttitor efficitur, neque elit maximus lacus, ut hendrerit nibh tortor a sem.</Typography>
+                <Typography className="mb-3" variant="h4">Certifier</Typography>
+                <Typography variant="h5">Vous pouvez aussi envoyer des demandes de signatures. Le document sera partagé uniquement aux différents signataires</Typography>
               </Grid>
             </Grid>
           </Container>
@@ -154,6 +159,12 @@ const Home = () => {
         <div className="py-5">
           <Container fixed className="text-center">
             {buttonMainAction}
+            {/* <div className="position-relative overflow-hidden text-center">
+              <div className="p-lg-5 my-5">
+                <Typography variant="h5" className="mb-4">SAV Doc, la solution 100 % décentralisée</Typography>
+                {buttonMainAction}
+              </div>
+            </div> */}
           </Container>
         </div>
       </main>
