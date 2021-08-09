@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppBar, Backdrop, Badge, CircularProgress, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
+import ShareIcon from '@material-ui/icons/Share';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import { useHistory } from "react-router";
 
 import ToggleThemeModeButton from '../../common/theme/ToggleThemeModeButton';
@@ -394,7 +396,7 @@ const DocumentsViewer = () => {
                     color="secondary"
                     invisible={0 === fetchDocumentsSharedState.data.length}
                   >
-                    <FolderIcon />
+                    <ShareIcon />
                   </Badge>
                 </ListItemIcon>
 
@@ -408,7 +410,7 @@ const DocumentsViewer = () => {
                     color="secondary"
                     invisible={0 === fetchDocumentsCertifiedState.data.length}
                   >
-                    <FolderIcon />
+                    <VerifiedUserIcon />
                   </Badge>
                 </ListItemIcon>
 
