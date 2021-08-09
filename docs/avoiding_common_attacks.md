@@ -5,15 +5,20 @@ La plus part des failles de sécurité commun aux Dapps ne sont pas applicable �
 
 ### Reetrancy
 
-Nous somme protéger par défaut contre cette vulnérabilité car nous ne utilisons faisons pas de transfert d'ether.
+- Nous somme protégé par défaut contre cette vulnérabilité car nous ne utilisons faisons pas de transfert d'ether.
 
 ### Arithmetic Over/Under Flows
 
-Nous somme protégé contre cette vulnérabilité car nous n'effectuons pas de calcul arithmétique.
+- Nous somme protégé contre cette vulnérabilité car nous n'effectuons pas de calcul arithmétique.
 
 ### Default Visibilities
 
-Nous avons spécifié la visibilité de toutes les fonctions dans les contracts pour ce protéger contre la vulnérabilité `Default Visibilities`
+- Nous avons spécifié la visibilité de toutes les fonctions dans les contracts pour ce protéger contre la vulnérabilité `Default Visibilities`
+
+Exemple:
+```sol
+function addPasswordMaster(address userAddress, string memory hashPasswordMaster) private addressIsValid(userAddress) userExist(userAddress)
+```
 
 ### Autre
 
