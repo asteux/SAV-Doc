@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router';
+import blue from '@material-ui/core/colors/blue';
 
 import { loadWeb3, updateAccounts } from './common/web3/web3Slice';
 import { loadThemeMode } from './common/theme/themeSlice';
@@ -115,9 +116,29 @@ const App = () => {
     }
   }, [dispatch, web3, savDocContract]);
 
+  const lightPalette = {
+    primary: {
+      main: blue[700],
+    },
+    secondary: {
+      main: '#d27619',
+    },
+  };
+
+  const darkPalette = {
+    primary: {
+      main: blue[200],
+    },
+    secondary: {
+      main: '#f9bf90',
+    },
+  };
+
   const theme = createTheme({
     palette: {
       type: themeMode,
+      ...(('light' === themeMode) ? lightPalette : {}),
+      ...(('dark' === themeMode) ? darkPalette : {}),
     }
   });
 
