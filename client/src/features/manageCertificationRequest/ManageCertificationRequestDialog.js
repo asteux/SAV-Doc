@@ -195,7 +195,7 @@ const ManageCertificationRequestDialog = ({ doc, title, open, handleClose }) => 
 
                   <div className="mt-3 text-center">
                     <DialogContentText>
-                      Envoie du document en cours
+                      Envoi du document en cours
                     </DialogContentText>
                   </div>
                 </DialogContent>
