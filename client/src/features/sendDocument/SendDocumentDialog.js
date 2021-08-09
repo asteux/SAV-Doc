@@ -33,6 +33,9 @@ const SendDocumentDialog = ({ type, doc, title, open, handleClose }) => {
       case 'share':
         return state.savDocContract.shareDocument;
 
+      case 'transfer':
+        return state.savDocContract.transferDocument;
+
       default:
         break;
     }

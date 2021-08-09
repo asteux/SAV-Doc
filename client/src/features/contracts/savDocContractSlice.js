@@ -112,6 +112,10 @@ const savDocContractSlice = createContractSlice(
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
     },
+    transferDocument: {
+      status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+      error: null
+    },
     deleteDocument: {
       status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
       error: null
@@ -422,6 +426,27 @@ const savDocContractSlice = createContractSlice(
     shareDocumentFailed: (state, action) => {
       state.shareDocument = {
         ...state.shareDocument,
+        status: 'failed',
+        error: action.payload,
+      };
+    },
+    transferDocumentSent: (state) => {
+      state.transferDocument = {
+        ...state.transferDocument,
+        status: 'loading',
+        error: null,
+      };
+    },
+    transferDocumentSucceeded: (state) => {
+      state.transferDocument = {
+        ...state.transferDocument,
+        status: 'succeeded',
+        error: null,
+      };
+    },
+    transferDocumentFailed: (state, action) => {
+      state.transferDocument = {
+        ...state.transferDocument,
         status: 'failed',
         error: action.payload,
       };
@@ -760,6 +785,27 @@ const savDocContractActions = {
       ;
     }
   },
+  transferDocument: (to, tokenID, tokenURI) => {
+    return async (dispatch, getState) => {
+      const { web3, savDocContract } = getState();
+
+      savDocContract.contract.methods
+        .transferDoc(to, tokenID, tokenURI)
+        .send({ from: web3.accounts[0] })
+        .once('transactionHash', () => {
+          dispatch(savDocContractSlice.actions.transferDocumentSent());
+        })
+        .once('receipt', () => {
+          dispatch(savDocContractSlice.actions.transferDocumentSucceeded());
+        })
+        .once('error', (error) => {
+          if (!error.code || 4001 !== error.code) {
+            dispatch(savDocContractSlice.actions.transferDocumentFailed(error));
+          }
+        })
+      ;
+    }
+  },
   deleteDocument: (tokenID, forTransfer) => {
     return async (dispatch, getState) => {
       const { web3, savDocContract } = getState();
@@ -820,6 +866,7 @@ export const {
   acceptCertificationRequest,
   rejectCertificationRequest,
   shareDocument,
+  transferDocument,
   deleteDocument,
   deleteSharedDocument,
 } = savDocContractActions;

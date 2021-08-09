@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { requestCertification, shareDocument } from '../contracts/savDocContractSlice';
+import { requestCertification, shareDocument, transferDocument } from '../contracts/savDocContractSlice';
 import { encryptWithPublicKey } from '../../utils/encryption';
 import { readFileAsDataURL } from '../../utils/file';
 import { storeBlob } from '../../utils/ipfs';
@@ -185,6 +185,10 @@ const sendDocumentActions = {
 
         case 'share':
           dispatch(shareDocument(tokenID, recipientAddress, tokenURI));
+          break;
+
+        case 'transfer':
+          dispatch(transferDocument(recipientAddress, tokenID, tokenURI));
           break;
 
         default:

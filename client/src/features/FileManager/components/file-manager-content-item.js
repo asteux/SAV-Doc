@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ListItemIcon, makeStyles, Menu, MenuItem, TableCell, TableRow, Typography } from "@material-ui/core";
 import InfoIcon from '@material-ui/icons/Info';
 import RemoveIcon from '@material-ui/icons/Remove';
+import SendIcon from '@material-ui/icons/Send';
 import ShareIcon from '@material-ui/icons/Share';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
   deleteFile, manageCertificationRequest, setCurrentDirectory,
-  requestCertificationFile, shareFile, showFile, showInformations
+  requestCertificationFile, shareFile, showFile, showInformations, transferFile
 } from "../file-manager-slice";
 import { humanFileSize } from "../../../utils/file";
 
@@ -85,6 +86,11 @@ const FileManagerContentItem = ({ data, icon }) => {
     handleCloseMenu();
   };
 
+  const handleTransferFile = () => {
+    dispatch(transferFile(data.data));
+    handleCloseMenu();
+  };
+
   const handleDeleteFile = () => {
     dispatch(deleteFile(data.data));
     handleCloseMenu();
@@ -153,6 +159,18 @@ const FileManagerContentItem = ({ data, icon }) => {
             <ShareIcon fontSize="small" />
           </ListItemIcon>
           <Typography variant="inherit">Partager</Typography>
+        </MenuItem>
+        )
+        : null
+      }
+
+      {(enabledFileActions.includes('transfer'))
+        ? (
+        <MenuItem onClick={handleTransferFile}>
+          <ListItemIcon className="mr-2" style={{ minWidth: 'initial' }}>
+            <SendIcon fontSize="small" />
+          </ListItemIcon>
+          <Typography variant="inherit">Transférer</Typography>
         </MenuItem>
         )
         : null

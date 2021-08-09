@@ -256,6 +256,28 @@ const DocumentsViewer = () => {
       callbacks.push(() => { eventDeleteMyDocCopyEmitter.removeAllListeners(); });
     }
 
+    const eventTransferDocumentEmitter = savDocContract.events.TransferDocument()
+      .on('data', async (event) => {
+        // address from, address to, uint256 tokenID
+        const fromAddress = event.returnValues.from;
+        const toAddress = event.returnValues.to;
+        // const tokenID = event.returnValues.tokenID;
+
+        const accounts = await web3.eth.getAccounts();
+
+        if (fromAddress === accounts[0]) {
+          dispatch(fetchDocumentsOriginals());
+        } else if (toAddress === accounts[0]) {
+          dispatch(fetchDocumentsTransfered());
+        }
+      })
+      .on('error', (event) => {
+        console.error(event);
+      })
+    ;
+
+    callbacks.push(() => { eventTransferDocumentEmitter.removeAllListeners(); });
+
     return () => {
       for (let i = 0; i < callbacks.length; i++) {
         callbacks[i]();
@@ -332,6 +354,12 @@ const DocumentsViewer = () => {
           break;
 
         case 'share':
+          if (actionFile.data) {
+            handleOpenSendDocumentDialog();
+          }
+          break;
+
+        case 'transfer':
           if (actionFile.data) {
             handleOpenSendDocumentDialog();
           }
@@ -452,7 +480,7 @@ const DocumentsViewer = () => {
               ((category) => {
                 switch (category) {
                   case 'original':
-                    return ['showInformations', 'requestCertification', 'share', 'delete'];
+                    return ['showInformations', 'requestCertification', 'share', 'transfer', 'delete'];
 
                   case 'certified':
                     return ['showInformations', 'manageCertificationRequest'];
@@ -489,7 +517,7 @@ const DocumentsViewer = () => {
 
           </Backdrop>
 
-          {(!!actionFile && 'showInformations' === actionFile.type && !!actionFile.data)
+          {(openDocumentInformationsDialog && !!actionFile && 'showInformations' === actionFile.type && !!actionFile.data)
             ? (
               <DocumentInformationsDialog
                 doc={actionFile.data}
@@ -500,7 +528,7 @@ const DocumentsViewer = () => {
             : (<></>)
           }
 
-          {(!!actionFile && 'requestCertification' === actionFile.type && !!actionFile.data)
+          {(openSendDocumentDialog && !!actionFile && 'requestCertification' === actionFile.type && !!actionFile.data)
             ? (
               <SendDocumentDialog
                 type="requestCertification"
@@ -513,7 +541,7 @@ const DocumentsViewer = () => {
             : (<></>)
           }
 
-          {(!!actionFile && 'manageCertificationRequest' === actionFile.type && !!actionFile.data)
+          {(openManageCertificationDialog && !!actionFile && 'manageCertificationRequest' === actionFile.type && !!actionFile.data)
             ? (
               <ManageCertificationRequestDialog
                 doc={actionFile.data}
@@ -525,12 +553,25 @@ const DocumentsViewer = () => {
             : (<></>)
           }
 
-          {(!!actionFile && 'share' === actionFile.type && !!actionFile.data)
+          {(openSendDocumentDialog && !!actionFile && 'share' === actionFile.type && !!actionFile.data)
             ? (
               <SendDocumentDialog
                 type="share"
                 doc={actionFile.data}
                 title="Partage"
+                open={openSendDocumentDialog}
+                handleClose={handleCloseSendDocumentDialog}
+              />
+            )
+            : (<></>)
+          }
+
+          {(openSendDocumentDialog && !!actionFile && 'transfer' === actionFile.type && !!actionFile.data)
+            ? (
+              <SendDocumentDialog
+                type="transfer"
+                doc={actionFile.data}
+                title="Transférer"
                 open={openSendDocumentDialog}
                 handleClose={handleCloseSendDocumentDialog}
               />
