@@ -194,19 +194,13 @@ contract SaveDoc is Ownable, SaveDocStruct
 
     /**
      * @notice Delete a secured document by tokenID
-     * @dev Delete a secured document of sender by tokenID (emits a DeleteDocumment event)
+     * @dev Delete a secured document of sender by tokenID (see _delMyDocument function) (emits a DeleteDocumment event)
      * @param tokenID ID of token
      * @param forTransfer true to burn token
      */
     function delMyDocument(uint256 tokenID, bool forTransfer) external isMyToken(tokenID)
     {
-        docManager.deleteDoc(msg.sender, tokenID);
-
-        if (!forTransfer)
-        {
-            saveDocToken.burn(tokenID, msg.sender);
-        }
-        emit DeleteDocumment(msg.sender, tokenID, forTransfer);
+        _delMyDocument(msg.sender, tokenID, forTransfer);
     }
 
     /**
@@ -215,7 +209,7 @@ contract SaveDoc is Ownable, SaveDocStruct
      * @param tokenID ID of token
      * @param forTransfer true to burn token
      */
-    function delMyDocument(address ownerDoc, uint256 tokenID, bool forTransfer) private
+    function _delMyDocument(address ownerDoc, uint256 tokenID, bool forTransfer) private
     {
         docManager.deleteDoc(ownerDoc, tokenID);
 
@@ -248,7 +242,7 @@ contract SaveDoc is Ownable, SaveDocStruct
     {
         docManager.createCopyDoc(msg.sender, to, tokenID, tokenURITmp, TypeDoc.CopyPendingTransfer);
         saveDocToken.transfer(msg.sender, to, tokenID);
-        delMyDocument(msg.sender, tokenID, true);
+        _delMyDocument(msg.sender, tokenID, true);
         emit TransferDocument(msg.sender, to, tokenID);
     }
 
