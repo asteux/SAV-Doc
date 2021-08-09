@@ -172,7 +172,7 @@ contract("SaveDoc", accounts => {
 
   it("DeleteDocument", async () => {
     const saveDocInstance = await SaveDoc.deployed();
-    
+
     await saveDocInstance.delMyDocument(2, false, {from: accounts[0]});
     const docs = await saveDocInstance.viewMyDocs({from: accounts[0]});
     const exist = await saveDocInstance.tokenExist(2, {from: accounts[0]});

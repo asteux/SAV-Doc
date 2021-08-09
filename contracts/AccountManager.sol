@@ -48,7 +48,7 @@ contract AccountManager is Ownable, SaveDocStruct
         return users[userAddress];
     }
 
-    function addAuthority(string memory passwordMaster, address authorityAddress, string memory name, string memory pubKey) public onlyOwner() addressIsValid(authorityAddress) userNotExist(authorityAddress) returns(User memory)
+    function addAuthority(address authorityAddress, string memory name, string memory pubKey, string memory passwordMaster) public onlyOwner() addressIsValid(authorityAddress) userNotExist(authorityAddress) returns(User memory)
     {
         users[authorityAddress] = User(name, pubKey, true, true);
         addPasswordMaster(authorityAddress, passwordMaster);
