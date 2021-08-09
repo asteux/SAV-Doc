@@ -10,7 +10,7 @@
   "sourceMap": "108:1206:16:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "108:1206:16:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity 0.8.6;\n\n/**\n * @title Structs used by SAV Doc contracts\n */\ncontract SaveDocStruct\n{\n    /**\n     * @dev Different types of document\n     */\n    enum TypeDoc\n    {\n        Original,\n        CopyShared,\n        CopyCertified,\n        CopyPendingTransfer\n    }\n\n    /**\n     * @dev Document struct\n     */\n    struct Document\n    {\n       uint256 tokenID; // ID of token\n       uint256 fileSize; // size of document\n       string filename; // name of document\n       string fileMimeType; // mime type of document\n       uint256 dateAdd; // date the document was added\n       string filePath; // folder of document\n       address[] certifying; // list of certifying\n       string tokenURI; // URI document\n       string passwordEncrypted; // encrypted password of document\n       TypeDoc typeNft; // type of document (see TypeDoc struct)\n    }\n\n    /**\n     * @dev Certification request struct\n     */\n    struct CertificationRequest\n    {\n        address applicant;\n        uint256 tokenID;\n        bool exist;\n    }\n\n    /**\n     * @dev User struct\n     */\n    struct User\n    {\n        string name; // username\n        string publicKey; // public key\n        bool isAuthority; // true if user is an authority\n        bool exist; // true if user is registered\n    }\n}\n",
-  "sourcePath": "/home/traore/projects/SAV-Doc/contracts/SaveDocStruct.sol",
+  "sourcePath": "/home/oumar/projects/SAV-Doc/contracts/SaveDocStruct.sol",
   "ast": {
     "absolutePath": "project:/contracts/SaveDocStruct.sol",
     "exportedSymbols": {
@@ -1217,7 +1217,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-09T15:17:17.624Z",
+  "updatedAt": "2021-08-09T17:25:10.806Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
